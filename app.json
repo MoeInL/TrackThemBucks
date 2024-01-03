@@ -1,27 +1,19 @@
 {
   "expo": {
-    "name": "TrackThemBucks",
-    "slug": "TrackThemBucks",
+    "name": "Watch Wallet",
+    "slug": "Watch Wallet",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/Images/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/Images/splash.png",
-      "backgroundColor": "#7F3DFF",
-      "resizeMode": "contain"
+      "image": "./assets/Images/LaunchScreen.png",
+      "resizeMode": "cover"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
       "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/Images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
     }
   }
 }
