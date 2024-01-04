@@ -60,6 +60,7 @@ export default function SignUp({navigation}){
             setEmail("")
             setPassword("")
             setName("")
+            navigation.navigate("SetupNavigation")
         }
     }
 

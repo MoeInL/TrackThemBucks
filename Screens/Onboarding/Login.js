@@ -16,8 +16,8 @@ export default function Login({navigation}){
         const unsubscribe = navigation.addListener('blur', () => {
             setEmail("")
             setPassword("")
-            emailValid(true)
-            passValid(true)
+            setEmailValid(true)
+            setPassValid(true)
         });
     
         return unsubscribe;
@@ -39,7 +39,7 @@ export default function Login({navigation}){
         if(proceed){
             setEmail("")
             setPassword("")
-            setName("")
+            navigation.navigate("SetupNavigation")
         }
     }
 
@@ -52,7 +52,7 @@ export default function Login({navigation}){
                 <Text style = {styles.txtStyle}>Forgot Password?</Text>
             </TouchableOpacity>
 
-           <View style = {styles.txtContainer}>
+            <View style = {styles.txtContainer}>
             <Text style = {styles.txt}>Don't have an account?</Text>
 
             <TouchableOpacity onPress={()=> navigation.navigate("SignUp")}>

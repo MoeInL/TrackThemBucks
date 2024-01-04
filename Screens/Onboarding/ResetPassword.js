@@ -33,12 +33,12 @@ export default function ForgotPassword({navigation}){
             setPasswordValid(false)
         }
         else
-            console.log("Done")
+            navigation.navigate("Login")
     }
 
     return(
         <View style = {styles.screenStyle}>
-            <CustomTextInput placeholder = "New Password" onChangeText={(text) => pass = text} isValid={true} value={pass}/>
+            <CustomTextInput placeholder = "New Password" onChangeText={(text) => setPass(text)} isValid={true} value={pass}/>
             <CustomTextInput placeholder = "Retype new Password" onChangeText={(text) => setPassword(text)} isValid={passwordValid} value={password}/>
             <CustomButton text = "Continue" onPress={isEqual}/>
         </View>

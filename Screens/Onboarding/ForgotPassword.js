@@ -11,7 +11,7 @@ export default function ForgotPassword({navigation}){
     useEffect(() => {
         const unsubscribe = navigation.addListener('blur', () => {
             setEmail("")
-            emailValid(true)
+            setEmailValid(true)
         });
     
         return unsubscribe;
