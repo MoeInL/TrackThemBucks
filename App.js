@@ -31,7 +31,7 @@ export default function App() {
   function SetupNavigation() {
     return (
       <Stack.Navigator>
-        <Stack.Screen name="SetupAccount" component={SetupAccount} options={{headerShown:false}}/>
+        <Stack.Screen name="SetupAccount" component={SetupAccount} options={{headerShown:true}}/>
       </Stack.Navigator>
     )
   }

@@ -1,9 +1,12 @@
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Alert } from "react-native";
 import { useState, useEffect } from "react";
 
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
 import CustomTextInput from "../../Components/OnboardingComponents/CustomTextInput";
 import PasswordBox from "../../Components/OnboardingComponents/PasswordBox";
+import LoadingOverlay from "../../Components/AuthUI/LoadingOverlay";
+
+import { loginUser } from "../../Requests/auth";
 
 export default function Login({navigation}){
     const [email, setEmail] = useState("")
@@ -11,6 +14,8 @@ export default function Login({navigation}){
 
     const [emailValid, setEmailValid] = useState(true)
     const [passValid, setPassValid] = useState(true)
+
+    const [isAuthenticating, setIsAuthenticating] = useState(false)
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('blur', () => {
@@ -21,7 +26,26 @@ export default function Login({navigation}){
         });
     
         return unsubscribe;
-      }, [navigation]);
+    }, [navigation]);
+
+    async function logInHandler(email, password){
+        let proceed = true;
+        setIsAuthenticating(true)
+
+        try{
+            const token = await loginUser(email, password)
+        }catch(error){
+            Alert.alert(
+                'Authentication Failed', 
+                'Could not log you in. Please check your credentials.'
+            )
+            console.log(error.message)
+            setIsAuthenticating(false)
+            proceed = false
+        }
+
+        proceed? navigation.navigate("SetupNavigation"): null
+    }
 
     function confirmLogin(){
         let proceed = true;
@@ -39,8 +63,13 @@ export default function Login({navigation}){
         if(proceed){
             setEmail("")
             setPassword("")
-            navigation.navigate("SetupNavigation")
+            
+            logInHandler(email, password)
         }
+    }
+
+    if(isAuthenticating){
+        return <LoadingOverlay message = 'Logging in...'/>
     }
 
     return(

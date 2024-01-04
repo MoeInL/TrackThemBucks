@@ -1,12 +1,16 @@
 import {View, Text, StyleSheet} from "react-native";
 import { useState, useEffect } from "react";
 
+import LoadingOverlay from "../../Components/AuthUI/LoadingOverlay";
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
 import CustomTextInput from "../../Components/OnboardingComponents/CustomTextInput";
+
+import { loginUser } from "../../Requests/auth";
 
 export default function ForgotPassword({navigation}){
     const [email, setEmail] = useState("")
     const [emailValid, setEmailValid] = useState(true)
+    const [isAuthenticating, setIsAuthenticating] = useState(false)
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('blur', () => {
@@ -15,7 +19,26 @@ export default function ForgotPassword({navigation}){
         });
     
         return unsubscribe;
-      }, [navigation]);
+    }, [navigation]);
+
+    async function checkEmail(email){
+        let proceed = true;
+        setIsAuthenticating(true)
+
+        try{
+            const token = await loginUser(email)
+        }catch(error){
+            Alert.alert(
+                'Authentication Failed', 
+                'Could not log you in. Please check your credentials.'
+            )
+            console.log(error.message)
+            setIsAuthenticating(false)
+            proceed = false
+        }
+
+        proceed? navigation.navigate("SetupNavigation"): null
+    }
 
     function confirmInput(){
         if(email === "" || email.includes("@") === false){

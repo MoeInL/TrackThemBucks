@@ -1,9 +1,12 @@
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Alert } from "react-native";
 import { useState, useEffect } from "react";
 
+import LoadingOverlay from "../../Components/AuthUI/LoadingOverlay";
 import CustomTextInput from "../../Components/OnboardingComponents/CustomTextInput";
 import CustomCheckBox from "../../Components/OnboardingComponents/CustomCheckBox";
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
+
+import { creatUser } from "../../Requests/auth";
 
 export default function SignUp({navigation}){
     const [name, setName] = useState("")
@@ -14,6 +17,8 @@ export default function SignUp({navigation}){
     const [nameValid, setNameValid] = useState(true)
     const [emailValid, setEmailValid] = useState(true)
     const [passwordValid, setPasswordValid] = useState(true)
+
+    const [isAuthenticating, setIsAuthenticating] = useState(false)
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('blur', () => {
@@ -27,13 +32,42 @@ export default function SignUp({navigation}){
         });
     
         return unsubscribe;
-      }, [navigation]);
+    }, [navigation]);
 
     function chkBoxPressed(){
         setPressed(!pressed)
     }
 
+    async function signUpHandler(email, name, password){
+        let proceed = true;
+        setIsAuthenticating(true)
+
+        try{
+            const token = await creatUser(email, name, password)
+        }catch(error){
+            if(error === "auth/invalid-email"){
+                Alert.alert(
+                    'Creating Account Failed', 
+                    'Please use a valid email.'
+                )
+            }else{
+                Alert.alert(
+                    'Creating Account Failed', 
+                    'Could not sign you up. Please try again later.'
+                )
+                setIsAuthenticating(false)
+                proceed = false
+            }
+        }
+
+        proceed? navigation.navigate("SetupNavigation"): null
+    }
+
     function confirmSignUp(){
+        setEmailValid(true)
+        setPasswordValid(true)
+        setNameValid(true)
+
         let proceed = true;
 
         if(!pressed){
@@ -46,12 +80,13 @@ export default function SignUp({navigation}){
             proceed = false
         } 
 
-        if(email === "" || email.includes("@") === false){
+        if(email === "" || email.includes("@") === false || email.length <= 5){
             setEmailValid(false)
             proceed = false
         }
 
-        if(password === ""){
+        if(password === "" || password.length < 10 || /[A-Z]/.test(password) === false || /[0-9]/.test(password) === false || /[!@#$%^&*]/.test(password) === false)
+        {
             setPasswordValid(false)
             proceed = false
         }
@@ -60,15 +95,43 @@ export default function SignUp({navigation}){
             setEmail("")
             setPassword("")
             setName("")
-            navigation.navigate("SetupNavigation")
+
+            signUpHandler(email, name, password)
         }
+    }
+
+    if(isAuthenticating){
+        return <LoadingOverlay message = 'Creating user...'/>
     }
 
     return(
         <View style = {styles.ScreenStyle}>
-            <CustomTextInput placeholder = "Name" onChangeText={(text) => setName(text)} isValid={nameValid} value={name}/>
-            <CustomTextInput placeholder = "Email" onChangeText={(text) => setEmail(text)} isValid={emailValid} value={email}/>
-            <CustomTextInput placeholder = "Password" onChangeText={(text) => setPassword(text)} isValid={passwordValid} value={password}/>
+            <CustomTextInput 
+                placeholder = "Name" 
+                onChangeText={(text) => setName(text)} 
+                isValid={nameValid} 
+                value={name}
+                hasError={nameValid}
+                errorTxt = "* Name cannot be empty"
+            />
+
+            <CustomTextInput 
+                placeholder = "Email" 
+                onChangeText={(text) => setEmail(text)} 
+                isValid={emailValid} 
+                value={email}
+                hasError={emailValid}
+                errorTxt = "* Email is invalid"
+            />
+
+            <CustomTextInput 
+                placeholder = "Password" 
+                onChangeText={(text) => setPassword(text)} 
+                isValid={passwordValid} 
+                value={password}
+                hasError={passwordValid}
+                errorTxt = "* Must be 10 characters long, contains uppercase letters, numbers, special character"
+            />
 
             <View>
                 <CustomCheckBox 

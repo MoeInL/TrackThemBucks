@@ -1,6 +1,6 @@
-import {View, TextInput, StyleSheet} from "react-native";
+import {View, Text, TextInput, StyleSheet} from "react-native";
 
-export default function CustomTextInput({placeholder, onChangeText, isValid, value}){
+export default function CustomTextInput({placeholder, onChangeText, isValid, value, errorTxt}){
     return(
         <View style = {isValid? styles.componentStyle: styles.invalidInput}>
             <TextInput 
@@ -9,13 +9,13 @@ export default function CustomTextInput({placeholder, onChangeText, isValid, val
                 style = {isValid? styles.textInputStyle: [styles. textInputStyle, {color: "red"}]}
                 value= {value}
             />
+            {!isValid? <Text style = {styles.errorTxtStyle}>{errorTxt}</Text>: null}
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     componentStyle:{
-        height: 56,
         borderRadius: 16,
         paddingHorizontal: 16,
         paddingVertical: 8,
@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
     },
 
     invalidInput:{
-        height: 56,
         borderRadius: 16,
         paddingHorizontal: 16,
         paddingVertical: 8,
@@ -36,6 +35,11 @@ const styles = StyleSheet.create({
 
     textInputStyle: {
        height: 40,
+    },
+
+    errorTxtStyle: {
+        color: "red",
+        fontSize: 12,
     }
 })
 
