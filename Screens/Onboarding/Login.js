@@ -49,6 +49,14 @@ export default function Login({navigation}){
             <TouchableOpacity style = {styles.container} onPress={()=> navigation.navigate("ForgotPassword")}>
                 <Text style = {styles.txtStyle}>Forgot Password?</Text>
             </TouchableOpacity>
+
+           <View style = {styles.txtContainer}>
+            <Text style = {styles.txt}>Don't have an account?</Text>
+
+            <TouchableOpacity onPress={()=> navigation.navigate("SignUp")}>
+                <Text style = {styles.hyperlinkTxt}>Sign Up</Text>
+            </TouchableOpacity>
+           </View>
         </View>
     )
 }
@@ -69,5 +77,26 @@ const styles = StyleSheet.create({
         color: "#7F3DFF",
         fontSize: 18,
         fontWeight: "600",
+    },
+
+    txtContainer: {
+        flexDirection: "row",
+        justifyContent: "center",
+        gap: 5,
+        flex: 1,
+        alignItems: "flex-end",
+    },
+
+    txt: {
+        fontSize: 16,
+        fontWeight: "500",
+        color: "##91919F",
+    },
+
+    hyperlinkTxt:{
+        fontSize: 16,
+        fontWeight: "500",
+        color: "#7F3DFF",
+        textDecorationLine: "underline",
     }
 })
