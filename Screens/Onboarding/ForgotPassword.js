@@ -1,11 +1,11 @@
-import {View, Text, StyleSheet} from "react-native";
+import {View, Text, StyleSheet, Alert} from "react-native";
 import { useState, useEffect } from "react";
 
 import LoadingOverlay from "../../Components/AuthUI/LoadingOverlay";
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
 import CustomTextInput from "../../Components/OnboardingComponents/CustomTextInput";
 
-import { loginUser } from "../../Requests/auth";
+import { verifyEmail } from "../../Requests/auth";
 
 export default function ForgotPassword({navigation}){
     const [email, setEmail] = useState("")
@@ -26,18 +26,17 @@ export default function ForgotPassword({navigation}){
         setIsAuthenticating(true)
 
         try{
-            const token = await loginUser(email)
+            const token = await verifyEmail(email)
         }catch(error){
             Alert.alert(
                 'Authentication Failed', 
-                'Could not log you in. Please check your credentials.'
+                'Please enter a valid email.'
             )
-            console.log(error.message)
+           
             setIsAuthenticating(false)
             proceed = false
         }
-
-        proceed? navigation.navigate("SetupNavigation"): null
+        proceed? navigation.navigate("ResetPassword"): null
     }
 
     function confirmInput(){
@@ -45,8 +44,11 @@ export default function ForgotPassword({navigation}){
             setEmailValid(false)
         }
         else
-            navigation.navigate("ResetPassword")
+           checkEmail(email)
     }
+
+    if(isAuthenticating)
+        return <LoadingOverlay/>
 
     return(
         <View style = {styles.screenStyle}>

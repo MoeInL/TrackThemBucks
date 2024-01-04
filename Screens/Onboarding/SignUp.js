@@ -45,19 +45,13 @@ export default function SignUp({navigation}){
         try{
             const token = await creatUser(email, name, password)
         }catch(error){
-            if(error === "auth/invalid-email"){
-                Alert.alert(
-                    'Creating Account Failed', 
-                    'Please use a valid email.'
-                )
-            }else{
-                Alert.alert(
-                    'Creating Account Failed', 
-                    'Could not sign you up. Please try again later.'
-                )
-                setIsAuthenticating(false)
-                proceed = false
-            }
+            if(error.code === 'ERR_BAD_REQUEST'){
+                Alert.alert('Creating Account Failed','Please use a valid email.')
+            }else
+                Alert.alert('Creating Account Failed','Could not sign you up. Please try again later.')
+            
+            setIsAuthenticating(false)
+            proceed = false
         }
 
         proceed? navigation.navigate("SetupNavigation"): null

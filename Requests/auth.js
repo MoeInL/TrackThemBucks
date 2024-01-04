@@ -24,12 +24,3 @@ export async function loginUser(email, password){
     await authenticate('signInWithPassword', email, password)
 }
 
-export async function resetPassword(email){
-    const url = `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${API_KEY}`
-    const response = await axios.post(url, {
-        email: email,
-        requestType: "PASSWORD_RESET"
-    })
-
-    return response
-}

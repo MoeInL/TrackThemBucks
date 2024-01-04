@@ -39,7 +39,7 @@ export default function Login({navigation}){
                 'Authentication Failed', 
                 'Could not log you in. Please check your credentials.'
             )
-            console.log(error.message)
+        md
             setIsAuthenticating(false)
             proceed = false
         }
