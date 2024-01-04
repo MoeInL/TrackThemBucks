@@ -1,74 +1,69 @@
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import CustomTextInput from "../../Components/OnboardingComponents/CustomTextInput";
 import CustomCheckBox from "../../Components/OnboardingComponents/CustomCheckBox";
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
 
 export default function SignUp({navigation}){
-    const [pressed, setPressed] = useState(false)
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [nameConfirmed, setNameConfirmed] = useState(true)
-    const [emailConfirmed, setEmailConfirmed] = useState(true)
-    const [passConfirmed, setPassConfirmed] = useState(true)
 
-    function setNameText(text){
-        if(text !== ""){
-            setName(text)
-        }
-    }
+    const [pressed, setPressed] = useState(false)
+    const [nameValid, setNameValid] = useState(true)
+    const [emailValid, setEmailValid] = useState(true)
+    const [passwordValid, setPasswordValid] = useState(true)
 
-    function setEmailText(text){
-        if(text !== "" && text.includes("@") && text.length > 5){
-            setEmail(text)
-        }
-    }
-
-    function setPasswordText(text){
-        if(text !== ""){
-            setPassword(text)
-        }
-    }
-
-    function confirmSignUp(){
-        let proceed = true
-
-        if(name === ""){
-            setNameConfirmed(false)
-            proceed = false
-        }
-        if(email === ""){
-            setEmailConfirmed(false)
-            proceed = false
-        }
-        if(password === ""){
-            setPassConfirmed(false)
-            proceed = false
-        }
-        if(!pressed){
-            alert("Please agree to the terms and conditions")
-            proceed = false
-        }
-        if(proceed){
-            console.log("we can proceed")
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('blur', () => {
             setEmail("")
             setPassword("")
             setName("")
-        }
-        
-    }
+        });
+    
+        return unsubscribe;
+      }, [navigation]);
 
     function chkBoxPressed(){
         setPressed(!pressed)
     }
 
+    function confirmSignUp(){
+        let proceed = true;
+
+        if(!pressed){
+            alert("Please agree to the terms and conditions") 
+            proceed = false
+        }
+
+        if(name === ""){
+            setNameValid(false)
+            proceed = false
+        } 
+
+        if(email === "" || email.includes("@") === false){
+            setEmailValid(false)
+            proceed = false
+        }
+
+        if(password === ""){
+            setPasswordValid(false)
+            proceed = false
+        }
+
+        if(proceed){
+            setEmail("")
+            setPassword("")
+            setName("")
+        }
+    }
+
     return(
         <View style = {styles.ScreenStyle}>
-            <CustomTextInput placeholder = "Name" onChangeText={setNameText} isValid = {nameConfirmed}/>
-            <CustomTextInput placeholder = "Email" onChangeText={setEmailText} isValid = {emailConfirmed}/>
-            <CustomTextInput placeholder = "Password" onChangeText={setPasswordText} isValid = {passConfirmed}/>
+            <CustomTextInput placeholder = "Name" onChangeText={(text) => setName(text)} isValid={nameValid} value={name}/>
+            <CustomTextInput placeholder = "Email" onChangeText={(text) => setEmail(text)} isValid={emailValid} value={email}/>
+            <CustomTextInput placeholder = "Password" onChangeText={(text) => setPassword(text)} isValid={passwordValid} value={password}/>
 
             <View>
                 <CustomCheckBox 

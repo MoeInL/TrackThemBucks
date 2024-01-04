@@ -1,0 +1,54 @@
+import {View, StyleSheet, Alert} from "react-native";
+import { useState, useEffect } from "react";
+
+import CustomButton from "../../Components/OnboardingComponents/CustomButton";
+import CustomTextInput from "../../Components/OnboardingComponents/CustomTextInput";
+
+export default function ForgotPassword({navigation}){
+    const [password, setPassword] = useState("")
+    const [pass, setPass] = useState("")
+    const [passwordValid, setPasswordValid] = useState(true)
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('blur', () => {
+            setPass("")
+            setPassword("")
+        });
+    
+        return unsubscribe;
+      }, [navigation]);
+
+    function isEqual(){
+        if(pass === password){
+            confirmInput()
+        }
+        else{
+          Alert.alert("Passwords do not match")
+        }
+    }
+
+    function confirmInput(){
+        if(password === ""){
+            setPasswordValid(false)
+        }
+        else
+            console.log("Done")
+    }
+
+    return(
+        <View style = {styles.screenStyle}>
+            <CustomTextInput placeholder = "New Password" onChangeText={(text) => pass = text} isValid={true} value={pass}/>
+            <CustomTextInput placeholder = "Retype new Password" onChangeText={(text) => setPassword(text)} isValid={passwordValid} value={password}/>
+            <CustomButton text = "Continue" onPress={isEqual}/>
+        </View>
+    )
+}
+
+const styles = StyleSheet.create({
+    screenStyle: {
+        flex: 1,
+        padding: "5%",
+        marginTop: 50,
+        gap: 20,
+    },
+})

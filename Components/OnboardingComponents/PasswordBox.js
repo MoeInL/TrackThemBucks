@@ -3,13 +3,8 @@ import { useEffect, useState } from "react";
 
 import PressableEye from "./PressableEye";
 
-export default function PasswordBox({placeholder, onChangeText, isValid}){
+export default function PasswordBox({placeholder, onChangeText, isValid, value}){
     const [hidden, setHidden] = useState(true)
-
-    useEffect(() => {
-        isValid = true
-    }
-    , [])
 
     function toggleHidden(){
         setHidden(!hidden)
@@ -22,6 +17,7 @@ export default function PasswordBox({placeholder, onChangeText, isValid}){
                 onChangeText = {onChangeText}
                 style = {isValid? styles.textInputStyle: [styles. textInputStyle, {color: "red"}]}
                 secureTextEntry = {hidden}
+                value = {value}
             />
 
             <PressableEye hidden = {hidden} onPress={toggleHidden}/>

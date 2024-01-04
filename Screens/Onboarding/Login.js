@@ -1,5 +1,5 @@
-import { View, StyleSheet, Text } from "react-native";
-import { useState } from "react";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { useState, useEffect } from "react";
 
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
 import CustomTextInput from "../../Components/OnboardingComponents/CustomTextInput";
@@ -8,45 +8,47 @@ import PasswordBox from "../../Components/OnboardingComponents/PasswordBox";
 export default function Login({navigation}){
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [emailConfirmed, setEmailConfirmed] = useState(true)
-    const [passConfirmed, setPassConfirmed] = useState(true)
 
-    function setEmailText(text){
-        if(text !== "")
-            setEmail(text)
-    }
+    const [emailValid, setEmailValid] = useState(true)
+    const [passValid, setPassValid] = useState(true)
 
-    function setPasswordText(text){
-        if(text !== "")
-            setPassword(text)
-    }
-
-    function confirmLogin(){
-        let proceed = true
-
-        if(email === ""){
-            setEmailConfirmed(false)
-            proceed = false
-        }
-        if(password === ""){
-            setPassConfirmed(false)
-            proceed = false
-        }
-        if(proceed){
-            console.log("we can proceed")
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('blur', () => {
             setEmail("")
             setPassword("")
+        });
+    
+        return unsubscribe;
+      }, [navigation]);
+
+    function confirmLogin(){
+        let proceed = true;
+
+        if(email === "" || email.includes("@") === false){
+            setEmailValid(false)
+            proceed = false
+        }
+
+        if(password === ""){
+            setPassValid(false)
+            proceed = false
+        }
+
+        if(proceed){
+            setEmail("")
+            setPassword("")
+            setName("")
         }
     }
 
     return(
         <View style = {styles.screenStyle}>
-            <CustomTextInput placeholder = "Email" isValid = {emailConfirmed} onChangeText={setEmailText}/>
-            <PasswordBox placeholder = "Password" isValid={passConfirmed} onChangeText={setPasswordText}/>
+            <CustomTextInput placeholder = "Email" isValid = {emailValid} onChangeText={(text) => setEmail(text)} value={email}/>
+            <PasswordBox placeholder = "Password" isValid={passValid} onChangeText={(text) => setPassword(text)} value = {password}/>
             <CustomButton text = "Login" onPress={confirmLogin}/>
-            <View style = {styles.container}>
+            <TouchableOpacity style = {styles.container} onPress={()=> navigation.navigate("ForgotPassword")}>
                 <Text style = {styles.txtStyle}>Forgot Password?</Text>
-            </View>
+            </TouchableOpacity>
         </View>
     )
 }

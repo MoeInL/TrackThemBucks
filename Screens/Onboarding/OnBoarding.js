@@ -4,10 +4,10 @@ import { useState } from "react";
 import ImageSlideShow from "../../Components/OnboardingComponents/ImageSlideShow";
 import TitleText from "../../Components/OnboardingComponents/TitleText";
 import SmallText from "../../Components/OnboardingComponents/SmallText";
-import Dots from "../../Components/OnboardingComponents/dots";
+import Dots from "../../Components/OnboardingComponents/Dots";
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
 
-export default function OnBoarding1({navigation}) {
+export default function OnBoarding({navigation}) {
     const images= [require("../../assets/Images/Illustration1.png"), require("../../assets/Images/Illustration2.png"), require("../../assets/Images/Illustration3.png")]
     const titleText = ["Gain total control of your money", "Know where your money goes", "Planning ahead"]
     const smallText = ["Become your own money manager and make every cent count", "Track your transaction easily, with categories and financial report" ,"Setup your budget for each category so you in control"]
