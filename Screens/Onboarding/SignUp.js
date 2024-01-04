@@ -20,6 +20,10 @@ export default function SignUp({navigation}){
             setEmail("")
             setPassword("")
             setName("")
+            setEmailValid(true)
+            setPasswordValid(true)
+            setNameValid(true)
+            setPressed(false)
         });
     
         return unsubscribe;

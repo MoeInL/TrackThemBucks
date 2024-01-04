@@ -16,6 +16,8 @@ export default function Login({navigation}){
         const unsubscribe = navigation.addListener('blur', () => {
             setEmail("")
             setPassword("")
+            emailValid(true)
+            passValid(true)
         });
     
         return unsubscribe;
@@ -90,7 +92,7 @@ const styles = StyleSheet.create({
     txt: {
         fontSize: 16,
         fontWeight: "500",
-        color: "##91919F",
+        color: "#91919F",
     },
 
     hyperlinkTxt:{

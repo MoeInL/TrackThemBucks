@@ -13,6 +13,7 @@ export default function ForgotPassword({navigation}){
         const unsubscribe = navigation.addListener('blur', () => {
             setPass("")
             setPassword("")
+            setPasswordValid(true)
         });
     
         return unsubscribe;
