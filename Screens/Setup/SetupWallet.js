@@ -2,12 +2,12 @@ import {View, Text, StyleSheet} from 'react-native';
 
 import CustomButton from '../../Components/OnboardingComponents/CustomButton';
 
-export default function SetupAccount({navigation}) {
+export default function SetupWallet({navigation}) {
     return(
         <View style = {styles.screenStyle}>
             <View style = {styles.txtContainer}>
-                <Text style = {styles.headerText}>Let's setup your account!</Text>
-                <Text>Account can be your bank, credit card or your wallet.</Text>
+                <Text style = {styles.headerText}>Let's setup your wallet!</Text>
+                <Text>Account can be your bank, online credit or your wallet.</Text>
             </View>
 
             <CustomButton text={"Let's go"} onPress={() => navigation.navigate("AddAccount")}/>

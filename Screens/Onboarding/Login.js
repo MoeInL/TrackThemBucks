@@ -74,7 +74,7 @@ export default function Login({navigation}){
 
     return(
         <View style = {styles.screenStyle}>
-            <CustomTextInput placeholder = "Email" isValid = {emailValid} onChangeText={(text) => setEmail(text)} value={email}/>
+            <CustomTextInput placeholder = "Email" isValid = {emailValid} onChangeText={(text) => setEmail(text)} value={email} mode={"email"}/>
             <PasswordBox placeholder = "Password" isValid={passValid} onChangeText={(text) => setPassword(text)} value = {password}/>
             <CustomButton text = "Login" onPress={confirmLogin}/>
             <TouchableOpacity style = {styles.container} onPress={()=> navigation.navigate("ForgotPassword")}>

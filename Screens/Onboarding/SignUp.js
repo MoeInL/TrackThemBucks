@@ -116,6 +116,7 @@ export default function SignUp({navigation}){
                 value={email}
                 hasError={emailValid}
                 errorTxt = "* Email is invalid"
+                mode={"email"}
             />
 
             <CustomTextInput 

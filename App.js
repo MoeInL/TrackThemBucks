@@ -9,8 +9,8 @@ import Login from "./Screens/Onboarding/Login";
 import ForgotPassword from "./Screens/Onboarding/ForgotPassword";
 import ResetPassword from "./Screens/Onboarding/ResetPassword";
 
-import SetupAccount from './Screens/Setup/SetupAccount';
-import AddAccount from './Screens/Setup/AddAccount';
+import SetupWallet from './Screens/Setup/SetupWallet';
+import AddWallet from './Screens/Setup/AddAccount';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,9 +32,9 @@ export default function App() {
   function SetupNavigation() {
     return (
       <Stack.Navigator>
-        <Stack.Screen name="Setup Account" component={SetupAccount} options={{headerShown:false}}/>
-        <Stack.Screen name="AddAccount" component={AddAccount} options={{
-          title: "Add Account",
+        <Stack.Screen name="Setup Account" component={SetupWallet} options={{headerShown:false}}/>
+        <Stack.Screen name="AddAccount" component={AddWallet} options={{
+          title: "Add Wallet",
           headerStyle: {backgroundColor:'#7F3DFF'},
           headerTintColor: 'white',
           headerShadowVisible: false,

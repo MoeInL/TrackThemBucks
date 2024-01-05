@@ -1,12 +1,16 @@
 import {View, Text, StyleSheet} from 'react-native';
 import { useState } from 'react';
+
 import CustomButton from '../../Components/OnboardingComponents/CustomButton';
 import CustomTextInput from '../../Components/OnboardingComponents/CustomTextInput';
+import DropDownBox from '../../Components/SetupComponents/DropDownBox';
 
-export default function AddAccount({navigation}) {
+export default function AddWallet({navigation}) {
     const [name, setName] = useState("")
     const [accountType, setAccountType] = useState("")
     const [balance, setBalance] = useState("")
+
+    const [isPressed, setIsPressed] = useState(false)
 
     return(
         <>
@@ -17,9 +21,19 @@ export default function AddAccount({navigation}) {
 
             <View style = {styles.containerView}>
                 <CustomTextInput placeholder="Name" isValid={true} onChangeText={(text) => setName(text)}/>
-                <CustomTextInput placeholder="Account Type" isValid={true}/>
-                <CustomTextInput placeholder="Balance" isValid={true} onChangeText={(text) => setBalance(text)}/>
-                <CustomButton text={"Add Account"} onPress={() => navigation.navigate("AddAccount")}/>
+                <DropDownBox 
+                    title="Account Type" 
+                    children={[["Bank",0], ["Paypall",1], ["Venmo",2], ["Cashapp",3]]}
+                    isPressed={isPressed}
+                    onPress={() => setIsPressed(!isPressed)}
+                />
+                {!isPressed? <CustomTextInput 
+                    placeholder="Balance" 
+                    isValid={true} 
+                    onChangeText={(text) => setBalance(text)}
+                    keyBoard="numeric"
+                />: null}
+                {!isPressed? <CustomButton text={"Add Account"} onPress={() => navigation.navigate("AddAccount")}/>: null}
             </View>
 
         </>
