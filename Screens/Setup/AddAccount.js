@@ -1,5 +1,8 @@
-import {View, Text, StyleSheet} from 'react-native';
-import { useState } from 'react';
+import {View, Text, StyleSheet, ALert, Alert} from 'react-native';
+import { useState,useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { pushNameToRedux, pushAccountTypeToRedux, pushBalanceToredux } from '../../States/WalletInfoSlice';
+import { pushToBackend } from '../../Requests/https';
 
 import CustomButton from '../../Components/OnboardingComponents/CustomButton';
 import CustomTextInput from '../../Components/OnboardingComponents/CustomTextInput';
@@ -9,8 +12,37 @@ export default function AddWallet({navigation}) {
     const [name, setName] = useState("")
     const [accountType, setAccountType] = useState("")
     const [balance, setBalance] = useState("")
-
     const [isPressed, setIsPressed] = useState(false)
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        setIsPressed(false)
+    }, [accountType])
+
+    function AddAccount(){
+        dispatch(pushNameToRedux(name))
+        dispatch(pushBalanceToredux(balance))
+        dispatch(pushAccountTypeToRedux(accountType))
+        pushToFirebase()
+    }
+
+    async function pushToFirebase() {
+        let proceed = true;
+        
+        try {
+            await pushToBackend({
+                name: name,
+                accountType: accountType,
+                balance: balance,
+            })
+        } catch (error) {
+            Alert.alert("Error", "Could not connect to server. Please try again later.")
+            proceed = false
+        }
+
+        proceed? navigation.navigate("SetupSuccess"): null
+    }
 
     return(
         <>
@@ -30,10 +62,11 @@ export default function AddWallet({navigation}) {
                 />
 
                 <DropDownBox 
-                    title="Account Type" 
+                    title={accountType === ""? "Account Type": accountType} 
                     children={[["Bank",0], ["Paypall",1], ["Venmo",2], ["Cashapp",3]]}
                     isPressed={isPressed}
                     onPress={() => setIsPressed(!isPressed)}
+                    onPick={(text) => setAccountType(text)}
                 />
 
                 {!isPressed? <CustomTextInput 
@@ -48,7 +81,7 @@ export default function AddWallet({navigation}) {
 
                 {!isPressed? <CustomButton 
                     text={"Add Account"} 
-                    onPress={() => navigation.navigate("AddAccount")}
+                    onPress={AddAccount}
                 />: null}
             </View>
 

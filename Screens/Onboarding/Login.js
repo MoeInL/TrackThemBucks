@@ -39,7 +39,6 @@ export default function Login({navigation}){
                 'Authentication Failed', 
                 'Could not log you in. Please check your credentials.'
             )
-        md
             setIsAuthenticating(false)
             proceed = false
         }

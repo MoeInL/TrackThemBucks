@@ -1,14 +1,22 @@
 import {Text, StyleSheet, TouchableOpacity, View} from "react-native";
+import {useState} from 'react';
 
 import { AntDesign } from '@expo/vector-icons'; 
 
-export default function CustomButton({title, children, isPressed, onPress}){
+export default function CustomButton({title, children, isPressed, onPress, onPick}){
+    const [childChosen, setChildChosen] = useState(false)
+
+    function chooseChild(child){
+        setChildChosen(true)
+        onPick(child)
+    }
+
     function dropBoxMenu(){
         return(
             <View style = {styles.menuStyle}>
                 {children.map((child) => {
                     return(
-                        <TouchableOpacity style = {styles.childrenContainer} key={child[1]}>
+                        <TouchableOpacity style = {styles.childrenContainer} key={child[1]} onPress={() =>chooseChild(child[0])}> 
                             <Text>{child[0]}</Text>
                         </TouchableOpacity>
                     )
@@ -20,7 +28,7 @@ export default function CustomButton({title, children, isPressed, onPress}){
     return(
         <View>
             <TouchableOpacity onPress={onPress} style ={styles.containerStyle}>
-                <Text style = {styles.textInputStyle}>{title}</Text>
+                <Text style = {childChosen? styles.textInputStyleChosen: styles.textInputStyle}>{title}</Text>
                 {isPressed? <AntDesign name="caretup" style = {styles.textInputStyle} size={16} marginTop = {2}/>:
                     <AntDesign name="caretdown" style = {styles.textInputStyle} size={16}/>}
             </TouchableOpacity>
@@ -44,6 +52,11 @@ const styles = StyleSheet.create({
     textInputStyle: {
         opacity: 0.64,
         color: "grey",
+    },
+
+    textInputStyleChosen: {
+        opacity: 1,
+        color: "black",
     },
 
     menuStyle: {
