@@ -105,6 +105,8 @@ export default function SignUp({navigation}){
                     placeholder: "Name",
                     onChangeText: (text) => setName(text),
                     value: name,
+                    autoCapitalize: "words",
+                    maxLength: 10
                 }}
                 isValid = {nameValid}
                 errorTxt = {"* Name is invalid"}
