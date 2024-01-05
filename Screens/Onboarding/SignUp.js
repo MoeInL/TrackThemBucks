@@ -1,5 +1,6 @@
 import { View, StyleSheet, Text, TouchableOpacity, Alert } from "react-native";
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 import LoadingOverlay from "../../Components/AuthUIComponents/LoadingOverlay";
 import CustomTextInput from "../../Components/OnboardingComponents/CustomTextInput";
@@ -7,6 +8,7 @@ import CustomCheckBox from "../../Components/OnboardingComponents/CustomCheckBox
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
 
 import { creatUser } from "../../Requests/auth";
+import { pushTokenToRedux } from "../../States/UserInfoSlice";
 
 export default function SignUp({navigation}){
     const [name, setName] = useState("")
@@ -19,6 +21,7 @@ export default function SignUp({navigation}){
     const [passwordValid, setPasswordValid] = useState(true)
 
     const [isAuthenticating, setIsAuthenticating] = useState(false)
+    const dispatch = useDispatch()
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('blur', () => {
@@ -44,6 +47,7 @@ export default function SignUp({navigation}){
 
         try{
             const token = await creatUser(email, name, password)
+            dispatch(pushTokenToRedux(token))
         }catch(error){
             if(error.code === 'ERR_BAD_REQUEST'){
                 Alert.alert('Creating Account Failed','Please use a valid email.')

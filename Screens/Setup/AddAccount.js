@@ -1,7 +1,7 @@
-import {View, Text, StyleSheet, ALert, Alert} from 'react-native';
+import {View, Text, StyleSheet, Alert} from 'react-native';
 import { useState,useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { pushNameToRedux, pushAccountTypeToRedux, pushBalanceToredux } from '../../States/WalletInfoSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { pushNameToRedux, pushAccountTypeToRedux, pushBalanceToredux, displayReduxState } from '../../States/UserInfoSlice';
 import { pushToBackend } from '../../Requests/https';
 
 import CustomButton from '../../Components/OnboardingComponents/CustomButton';
@@ -15,6 +15,7 @@ export default function AddWallet({navigation}) {
     const [isPressed, setIsPressed] = useState(false)
 
     const dispatch = useDispatch()
+    const information = useSelector((state) => state.userInfoData)
 
     useEffect(() => {
         setIsPressed(false)
@@ -27,15 +28,11 @@ export default function AddWallet({navigation}) {
         pushToFirebase()
     }
 
-    async function pushToFirebase() {
+    function pushToFirebase() {
         let proceed = true;
         
         try {
-            await pushToBackend({
-                name: name,
-                accountType: accountType,
-                balance: balance,
-            })
+            pushToBackend(information)
         } catch (error) {
             Alert.alert("Error", "Could not connect to server. Please try again later.")
             proceed = false

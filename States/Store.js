@@ -1,8 +1,8 @@
 import {configureStore} from '@reduxjs/toolkit';
-import WalletInfoSlice from './WalletInfoSlice';
+import userInfoSlice from './UserInfoSlice';
 
 export const store = configureStore({
     reducer: {
-        walletInfoData: WalletInfoSlice,
+        userInfoData: userInfoSlice,
     }
 })

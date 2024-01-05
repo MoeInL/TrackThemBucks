@@ -1,5 +1,6 @@
 import { View, StyleSheet, Text, TouchableOpacity, Alert } from "react-native";
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
 import CustomTextInput from "../../Components/OnboardingComponents/CustomTextInput";
@@ -7,6 +8,7 @@ import PasswordBox from "../../Components/OnboardingComponents/PasswordBox";
 import LoadingOverlay from "../../Components/AuthUIComponents/LoadingOverlay";
 
 import { loginUser } from "../../Requests/auth";
+import { pushTokenToRedux } from "../../States/UserInfoSlice";
 
 export default function Login({navigation}){
     const [email, setEmail] = useState("")
@@ -16,6 +18,7 @@ export default function Login({navigation}){
     const [passValid, setPassValid] = useState(true)
 
     const [isAuthenticating, setIsAuthenticating] = useState(false)
+    const dispatch = useDispatch()
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('blur', () => {
@@ -34,6 +37,7 @@ export default function Login({navigation}){
 
         try{
             const token = await loginUser(email, password)
+            dispatch(pushTokenToRedux(token))
         }catch(error){
             Alert.alert(
                 'Authentication Failed', 
