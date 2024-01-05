@@ -1,16 +1,13 @@
 import {View, Text, TextInput, StyleSheet} from "react-native";
 
-export default function CustomTextInput({placeholder, onChangeText, isValid, value, errorTxt, keyBoard, mode}){
+export default function CustomTextInput({inputConfig, isValid, errorTxt}){
     return(
         <View style = {isValid? styles.componentStyle: styles.invalidInput}>
             <TextInput 
-                placeholder = {placeholder} 
-                onChangeText = {onChangeText}
+                {...inputConfig} 
                 style = {isValid? styles.textInputStyle: [styles. textInputStyle, {color: "red"}]}
-                value= {value}
-                keyboardType = {keyBoard === null? "default": keyBoard}
-                inputMode = {mode === null? "text": mode}
             />
+
             {!isValid? <Text style = {styles.errorTxtStyle}>{errorTxt}</Text>: null}
         </View>
     )

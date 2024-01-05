@@ -57,7 +57,16 @@ export default function ForgotPassword({navigation}){
                 <Text style = {styles.txtStyle}>Enter your email and we’ll send you a link to reset your password.</Text>
             </View>
 
-            <CustomTextInput placeholder = "Email" onChangeText={(text) => setEmail(text)} isValid={emailValid} value={email} mode={"email"}/>
+            <CustomTextInput 
+                inputConfig={{
+                    placeholder: "Email", 
+                    onChangeText: (text) => setEmail(text),
+                    value: email,
+                    mode: "email"
+                }}
+                isValid={emailValid}
+            />
+            
             <CustomButton text = "Continue" onPress={confirmInput}/>
         </View>
     )

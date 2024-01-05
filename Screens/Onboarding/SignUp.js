@@ -101,32 +101,35 @@ export default function SignUp({navigation}){
     return(
         <View style = {styles.ScreenStyle}>
             <CustomTextInput 
-                placeholder = "Name" 
-                onChangeText={(text) => setName(text)} 
-                isValid={nameValid} 
-                value={name}
-                hasError={nameValid}
-                errorTxt = "* Name cannot be empty"
+                inputConfig = {{
+                    placeholder: "Name",
+                    onChangeText: (text) => setName(text),
+                    value: name,
+                }}
+                isValid = {nameValid}
+                errorTxt = {"* Name is invalid"}
             />
 
             <CustomTextInput 
-                placeholder = "Email" 
-                onChangeText={(text) => setEmail(text)} 
-                isValid={emailValid} 
-                value={email}
-                hasError={emailValid}
-                errorTxt = "* Email is invalid"
-                mode={"email"}
+                inputConfig = {{
+                    placeholder:  "Email", 
+                    onChangeText: (text) => setEmail(text),
+                    value: email,
+                    inputMode: "email"
+                }}
+                isValid = {emailValid}
+                errorTxt = {"* Email is invalid"}
             />
 
             <CustomTextInput 
-                placeholder = "Password" 
-                onChangeText={(text) => setPassword(text)} 
-                isValid={passwordValid} 
-                value={password}
-                hasError={passwordValid}
+                inputConfig = {{
+                    placeholder: "Password", 
+                    onChangeText: (text) => setPassword(text),
+                    value: password
+                }}
                 errorTxt = "* Must be 10 characters long, contains uppercase letters, numbers, special character"
-            />
+                isValid={passwordValid} 
+           />
 
             <View>
                 <CustomCheckBox 

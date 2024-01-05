@@ -1,9 +1,9 @@
 import {View, TextInput, StyleSheet} from "react-native";
-import { useEffect, useState } from "react";
+import {useState } from "react";
 
 import PressableEye from "./PressableEye";
 
-export default function PasswordBox({placeholder, onChangeText, isValid, value}){
+export default function PasswordBox({inputConfig, isValid}){
     const [hidden, setHidden] = useState(true)
 
     function toggleHidden(){
@@ -13,11 +13,9 @@ export default function PasswordBox({placeholder, onChangeText, isValid, value})
     return(
         <View style = {isValid? styles.componentStyle: styles.invalidInput}>
             <TextInput 
-                placeholder = {placeholder} 
-                onChangeText = {onChangeText}
+                {...inputConfig}
                 style = {isValid? styles.textInputStyle: [styles. textInputStyle, {color: "red"}]}
                 secureTextEntry = {hidden}
-                value = {value}
             />
 
             <PressableEye hidden = {hidden} onPress={toggleHidden}/>
@@ -52,6 +50,7 @@ const styles = StyleSheet.create({
 
     textInputStyle: {
        height: 40,
+       flex: 1,
     }
 })
 

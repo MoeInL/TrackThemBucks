@@ -74,19 +74,38 @@ export default function Login({navigation}){
 
     return(
         <View style = {styles.screenStyle}>
-            <CustomTextInput placeholder = "Email" isValid = {emailValid} onChangeText={(text) => setEmail(text)} value={email} mode={"email"}/>
-            <PasswordBox placeholder = "Password" isValid={passValid} onChangeText={(text) => setPassword(text)} value = {password}/>
+            <CustomTextInput 
+                inputConfig={{
+                    placeholder: "Email",
+                    onChangeText: (text) => setEmail(text),
+                    value: email,
+                    mode: "email"
+                }}
+                isValid = {emailValid} 
+                errorTxt={"Please enter a valid email."}
+            />
+
+            <PasswordBox 
+                inputConfig = {{
+                    placeholder: "Password",
+                    onChangeText: (text) => setPassword(text),
+                    value: password,
+                }}
+                isValid={passValid} 
+            />
+
             <CustomButton text = "Login" onPress={confirmLogin}/>
+
             <TouchableOpacity style = {styles.container} onPress={()=> navigation.navigate("ForgotPassword")}>
                 <Text style = {styles.txtStyle}>Forgot Password?</Text>
             </TouchableOpacity>
 
             <View style = {styles.txtContainer}>
-            <Text style = {styles.txt}>Don't have an account?</Text>
+                <Text style = {styles.txt}>Don't have an account?</Text>
 
-            <TouchableOpacity onPress={()=> navigation.navigate("SignUp")}>
-                <Text style = {styles.hyperlinkTxt}>Sign Up</Text>
-            </TouchableOpacity>
+                <TouchableOpacity onPress={()=> navigation.navigate("SignUp")}>
+                    <Text style = {styles.hyperlinkTxt}>Sign Up</Text>
+                </TouchableOpacity>
            </View>
         </View>
     )

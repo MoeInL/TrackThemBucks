@@ -3,8 +3,6 @@ import {Text, StyleSheet, TouchableOpacity, View} from "react-native";
 import { AntDesign } from '@expo/vector-icons'; 
 
 export default function CustomButton({title, children, isPressed, onPress}){
-    let key = 0;
-
     function dropBoxMenu(){
         return(
             <View style = {styles.menuStyle}>

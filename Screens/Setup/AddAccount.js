@@ -16,24 +16,40 @@ export default function AddWallet({navigation}) {
         <>
             <View style = {styles.screenStyle}>
                 <Text style = {styles.txtStyle}>Balance</Text>
-                <Text style = {styles.moneyStyle}>$00.0</Text>
+                <Text style = {styles.moneyStyle}> {balance === ""? "$0.00": `$${balance}`}</Text>
             </View>
 
             <View style = {styles.containerView}>
-                <CustomTextInput placeholder="Name" isValid={true} onChangeText={(text) => setName(text)}/>
+                <CustomTextInput 
+                    inputConfig={{
+                        placeholder: "Name",
+                        onChangeText: (text) => setName(text),
+                        value: name,
+                    }}
+                    isValid={true} 
+                />
+
                 <DropDownBox 
                     title="Account Type" 
                     children={[["Bank",0], ["Paypall",1], ["Venmo",2], ["Cashapp",3]]}
                     isPressed={isPressed}
                     onPress={() => setIsPressed(!isPressed)}
                 />
+
                 {!isPressed? <CustomTextInput 
-                    placeholder="Balance" 
+                    inputConfig={{
+                        placeholder: "Balance", 
+                        onChangeText: (text) => setBalance(text),
+                        value: balance,
+                        keyboardType: "numeric"
+                    }}
                     isValid={true} 
-                    onChangeText={(text) => setBalance(text)}
-                    keyBoard="numeric"
                 />: null}
-                {!isPressed? <CustomButton text={"Add Account"} onPress={() => navigation.navigate("AddAccount")}/>: null}
+
+                {!isPressed? <CustomButton 
+                    text={"Add Account"} 
+                    onPress={() => navigation.navigate("AddAccount")}
+                />: null}
             </View>
 
         </>
@@ -59,7 +75,6 @@ const styles = StyleSheet.create({
         fontSize: 64,
         fontWeight: '600',
         color: 'white',
-        marginLeft: 5,
     },
 
     containerView: {

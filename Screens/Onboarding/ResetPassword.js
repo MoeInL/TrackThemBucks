@@ -38,8 +38,22 @@ export default function ForgotPassword({navigation}){
 
     return(
         <View style = {styles.screenStyle}>
-            <CustomTextInput placeholder = "New Password" onChangeText={(text) => setPass(text)} isValid={true} value={pass}/>
-            <CustomTextInput placeholder = "Retype new Password" onChangeText={(text) => setPassword(text)} isValid={passwordValid} value={password}/>
+            <CustomTextInput 
+                inputConfig={{
+                    placeholder: "New Password", 
+                    onChangeText: (text) => setPass(text),
+                    value: pass,
+                }}
+                isValid={true} 
+            />
+            <CustomTextInput 
+                inputConfig={{
+                    placeholder: "Retype new Password", 
+                    onChangeText: (text) => setPassword(text),
+                    value: password,
+                }}
+                isValid={passwordValid} 
+            />
             <CustomButton text = "Continue" onPress={isEqual}/>
         </View>
     )
