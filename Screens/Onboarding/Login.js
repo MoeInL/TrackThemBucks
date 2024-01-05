@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
 import CustomTextInput from "../../Components/OnboardingComponents/CustomTextInput";
 import PasswordBox from "../../Components/OnboardingComponents/PasswordBox";
-import LoadingOverlay from "../../Components/AuthUI/LoadingOverlay";
+import LoadingOverlay from "../../Components/AuthUIComponents/LoadingOverlay";
 
 import { loginUser } from "../../Requests/auth";
 

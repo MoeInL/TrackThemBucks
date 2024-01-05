@@ -1,7 +1,7 @@
 import {View, Text, StyleSheet, Alert} from "react-native";
 import { useState, useEffect } from "react";
 
-import LoadingOverlay from "../../Components/AuthUI/LoadingOverlay";
+import LoadingOverlay from "../../Components/AuthUIComponents/LoadingOverlay";
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
 import CustomTextInput from "../../Components/OnboardingComponents/CustomTextInput";
 

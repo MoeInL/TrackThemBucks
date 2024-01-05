@@ -1,7 +1,7 @@
 import { View, StyleSheet, Text, TouchableOpacity, Alert } from "react-native";
 import { useState, useEffect } from "react";
 
-import LoadingOverlay from "../../Components/AuthUI/LoadingOverlay";
+import LoadingOverlay from "../../Components/AuthUIComponents/LoadingOverlay";
 import CustomTextInput from "../../Components/OnboardingComponents/CustomTextInput";
 import CustomCheckBox from "../../Components/OnboardingComponents/CustomCheckBox";
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
