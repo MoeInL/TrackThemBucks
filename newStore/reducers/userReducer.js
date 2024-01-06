@@ -1,11 +1,11 @@
-import { DISPLAY_STATE, USER_ACCOUNT_TYPE, USER_BALANCE, USER_NAME, USER_TOKEN, USER_WALLET } from "../actions/types"
+import { USER_ACCOUNT_TYPE, USER_BALANCE, USER_NAME, USER_TOKEN, USER_WALLET } from "../actions/types"
 
 const initialState = {
-        name: "",
-        accountType: "",
-        balance: "",
-        token: "",
-        walletCreated: false,
+    name: "",
+    accountType: "",
+    balance: "",
+    token: "",
+    walletCreated: false,
 }
 
 export default (state = initialState, action) => {
@@ -34,10 +34,6 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 walletCreated: action.payload
-            }
-        case DISPLAY_STATE:
-            return {
-                ...state,
             }
         default:
             return state

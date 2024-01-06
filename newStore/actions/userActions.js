@@ -1,4 +1,4 @@
-import { DISPLAY_STATE, USER_ACCOUNT_TYPE, USER_BALANCE, USER_NAME, USER_TOKEN, USER_WALLET } from "./types"
+import { USER_ACCOUNT_TYPE, USER_BALANCE, USER_NAME, USER_TOKEN, USER_WALLET } from "./types"
 
 export const pushNameToRedux = (name) => {
     return {
@@ -32,12 +32,6 @@ export const updateWalletStateInRedux = (walletCreated) => {
     return {
         type: USER_WALLET,
         payload: walletCreated
-    }
-}
-
-export const displayReduxState = () => {
-    return {
-        type: DISPLAY_STATE
     }
 }
 
