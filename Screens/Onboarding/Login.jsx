@@ -8,7 +8,7 @@ import PasswordBox from "../../Components/OnboardingComponents/PasswordBox";
 import LoadingOverlay from "../../Components/AuthUIComponents/LoadingOverlay";
 
 import { loginUser } from "../../Requests/auth";
-import { pushTokenToRedux } from "../../States/UserInfoSlice";
+import { pushTokenToRedux } from "../../States/actions/userActions";
 
 export default function Login({navigation}){
     const [email, setEmail] = useState("")

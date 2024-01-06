@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer} from '@react-navigation/native'
+import { NavigationContainer } from '@react-navigation/native'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {Provider} from 'react-redux';
 
 import OnBoarding from "./Screens/Onboarding/OnBoarding";
@@ -16,9 +17,11 @@ import SetupSuccess from './Screens/Setup/SetupSuccess';
 
 import Home from './Screens/Core/Home';
 
-import {store} from './newStore/reducers/index';
+import {store} from './States/reducers/index';
+import { Ionicons } from '@expo/vector-icons';
 
 const Stack = createNativeStackNavigator();
+const BottomTab = createBottomTabNavigator();
 
 export default function App() {
 
@@ -54,9 +57,14 @@ export default function App() {
 
   function CoreNavigation() {
     return (
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={Home} options={{headerShown:false}}/>
-      </Stack.Navigator>
+      <BottomTab.Navigator>
+        <BottomTab.Screen name="Home" component={Home} options={{
+          headerShown:false,
+          tabBarIcon: () => <Ionicons name="home" size = {24} color={"#7F3DFF"}/>,
+        }}/>
+
+        
+      </BottomTab.Navigator>
     )
   }
   let testing = true
@@ -68,13 +76,12 @@ export default function App() {
 
           <Stack.Navigator screenOptions={{contentStyle: {backgroundColor: 'white'}}}>
             {!testing?<Stack.Screen name="OnBoardingNavigation" component={OnBoardingNavigation} options={{headerShown:false}}/>: null}
-            {testing?<Stack.Screen name="SetupNavigation" component={SetupNavigation} options={{headerShown:false}}/>: null}
+            {!testing?<Stack.Screen name="SetupNavigation" component={SetupNavigation} options={{headerShown:false}}/>: null}
             <Stack.Screen name="CoreNavigation" component={CoreNavigation} options={{headerShown:false}}/>
           </Stack.Navigator>
 
         </NavigationContainer>
       </Provider>
-      
     </>
   );
 }

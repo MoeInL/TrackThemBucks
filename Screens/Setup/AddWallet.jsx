@@ -1,7 +1,7 @@
 import {View, Text, StyleSheet, Alert} from 'react-native';
 import { useState,useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { pushNameToRedux, pushAccountTypeToRedux, pushBalanceToredux } from '../../newStore/actions/userActions';
+import { pushNameToRedux, pushAccountTypeToRedux, pushBalanceToredux } from '../../States/actions/userActions';
 import { pushToBackend } from '../../Requests/https';
 
 import CustomButton from '../../Components/OnboardingComponents/CustomButton';

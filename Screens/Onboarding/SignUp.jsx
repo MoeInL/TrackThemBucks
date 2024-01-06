@@ -8,7 +8,7 @@ import CustomCheckBox from "../../Components/OnboardingComponents/CustomCheckBox
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
 
 import { createUser } from "../../Requests/auth";
-import { pushTokenToRedux } from "../../States/UserInfoSlice";
+import { pushTokenToRedux } from "../../States/actions/userActions";
 
 export default function SignUp({navigation}){
     const [name, setName] = useState("")
