@@ -1,7 +1,8 @@
 import {View, Text, StyleSheet, Alert} from 'react-native';
 import { useState,useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { pushNameToRedux, pushAccountTypeToRedux, pushBalanceToredux, displayReduxState } from '../../States/UserInfoSlice';
+// import { pushNameToRedux, pushAccountTypeToRedux, pushBalanceToredux, displayReduxState } from '../../States/UserInfoSlice';
+import { pushNameToRedux, pushAccountTypeToRedux, pushBalanceToredux, displayReduxState } from '../../newStore/actions';
 import { pushToBackend } from '../../Requests/https';
 
 import CustomButton from '../../Components/OnboardingComponents/CustomButton';
@@ -15,7 +16,7 @@ export default function AddWallet({navigation}) {
     const [isPressed, setIsPressed] = useState(false)
 
     const dispatch = useDispatch()
-    const {information} = useSelector(state => state.userInfoData)
+    const {information} = useSelector(state => state.userInfo)
 
     useEffect(() => {
         setIsPressed(false)

@@ -16,7 +16,8 @@ import SetupSuccess from './Screens/Setup/SetupSuccess';
 
 import Home from './Screens/Core/Home';
 
-import {store} from './States/Store';
+// import {store} from './States/Store';
+import {store} from './newStore/store';
 
 const Stack = createNativeStackNavigator();
 
