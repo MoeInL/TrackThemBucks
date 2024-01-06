@@ -11,12 +11,12 @@ import ForgotPassword from "./Screens/Onboarding/ForgotPassword";
 import ResetPassword from "./Screens/Onboarding/ResetPassword";
 
 import SetupWallet from './Screens/Setup/SetupWallet';
-import AddWallet from './Screens/Setup/AddAccount';
+import AddWallet from './Screens/Setup/AddWallet';
 import SetupSuccess from './Screens/Setup/SetupSuccess';
 
 import Home from './Screens/Core/Home';
 
-import {store} from './States/Store';
+import {store} from './newStore/reducers/index';
 
 const Stack = createNativeStackNavigator();
 
@@ -67,7 +67,7 @@ export default function App() {
         <NavigationContainer>
 
           <Stack.Navigator screenOptions={{contentStyle: {backgroundColor: 'white'}}}>
-            {testing?<Stack.Screen name="OnBoardingNavigation" component={OnBoardingNavigation} options={{headerShown:false}}/>: null}
+            {!testing?<Stack.Screen name="OnBoardingNavigation" component={OnBoardingNavigation} options={{headerShown:false}}/>: null}
             {testing?<Stack.Screen name="SetupNavigation" component={SetupNavigation} options={{headerShown:false}}/>: null}
             <Stack.Screen name="CoreNavigation" component={CoreNavigation} options={{headerShown:false}}/>
           </Stack.Navigator>

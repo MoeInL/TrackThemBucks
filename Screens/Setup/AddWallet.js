@@ -1,7 +1,7 @@
 import {View, Text, StyleSheet, Alert} from 'react-native';
 import { useState,useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { pushNameToRedux, pushAccountTypeToRedux, pushBalanceToredux, displayReduxState } from '../../States/UserInfoSlice';
+import { pushNameToRedux, pushAccountTypeToRedux, pushBalanceToredux } from '../../newStore/actions/userActions';
 import { pushToBackend } from '../../Requests/https';
 
 import CustomButton from '../../Components/OnboardingComponents/CustomButton';
@@ -15,28 +15,28 @@ export default function AddWallet({navigation}) {
     const [isPressed, setIsPressed] = useState(false)
 
     const dispatch = useDispatch()
-    const {information} = useSelector(state => state.userInfoData)
+    const information = useSelector(state => state.userInfo)
 
     useEffect(() => {
         setIsPressed(false)
     }, [accountType])
 
-    function AddAccount(){
+    function AddWallet(){
         dispatch(pushNameToRedux(name))
         dispatch(pushBalanceToredux(balance))
         dispatch(pushAccountTypeToRedux(accountType))
+
+        console.log("After pushing to redux")
+        console.log(information)
+
         pushToFirebase()
     }
 
-    function pushToFirebase() {
+    async function pushToFirebase() {
         let proceed = true;
         
         try {
-            console.log("This is the information inside redux")
-            dispatch(displayReduxState())
-            console.log("This is the information that was returned from useSelector")
-            console.log(information)
-            pushToBackend(information)
+            await pushToBackend(information)
         } catch (error) {
             Alert.alert("Error", "Could not connect to server. Please try again later.")
             proceed = false
@@ -82,7 +82,7 @@ export default function AddWallet({navigation}) {
 
                 {!isPressed? <CustomButton 
                     text={"Add Account"} 
-                    onPress={AddAccount}
+                    onPress={AddWallet}
                 />: null}
             </View>
 
