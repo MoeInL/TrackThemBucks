@@ -37,7 +37,6 @@ export default function App() {
 
   function SetupNavigation() {
     return (
-      <Provider store={store}>
         <Stack.Navigator>
           <Stack.Screen name="Setup Account" component={SetupWallet} options={{headerShown:false}}/>
           <Stack.Screen name="AddAccount" component={AddWallet} options={{
@@ -50,7 +49,6 @@ export default function App() {
           />
           <Stack.Screen name="SetupSuccess" component={SetupSuccess} options={{headerShown:false}}/>
         </Stack.Navigator>
-      </Provider>
     )
   }
 
@@ -65,16 +63,17 @@ export default function App() {
   return (
     <>
       <StatusBar style="auto" />
+      <Provider store={store}>
+        <NavigationContainer>
 
-      <NavigationContainer>
+          <Stack.Navigator screenOptions={{contentStyle: {backgroundColor: 'white'}}}>
+            {testing?<Stack.Screen name="OnBoardingNavigation" component={OnBoardingNavigation} options={{headerShown:false}}/>: null}
+            {testing?<Stack.Screen name="SetupNavigation" component={SetupNavigation} options={{headerShown:false}}/>: null}
+            <Stack.Screen name="CoreNavigation" component={CoreNavigation} options={{headerShown:false}}/>
+          </Stack.Navigator>
 
-        <Stack.Navigator screenOptions={{contentStyle: {backgroundColor: 'white'}}}>
-          {!testing?<Stack.Screen name="OnBoardingNavigation" component={OnBoardingNavigation} options={{headerShown:false}}/>: null}
-          {testing?<Stack.Screen name="SetupNavigation" component={SetupNavigation} options={{headerShown:false}}/>: null}
-          <Stack.Screen name="CoreNavigation" component={CoreNavigation} options={{headerShown:false}}/>
-        </Stack.Navigator>
-
-      </NavigationContainer>
+        </NavigationContainer>
+      </Provider>
       
     </>
   );
