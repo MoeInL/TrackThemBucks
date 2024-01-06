@@ -16,7 +16,7 @@ export async function authenticate(mode, email, password, name){
     return token
 }
 
-export async function creatUser(email, password, name){
+export async function createUser(email, password, name){
     await authenticate('signUp', email, password, name)
 }
 

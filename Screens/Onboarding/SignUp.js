@@ -7,7 +7,7 @@ import CustomTextInput from "../../Components/OnboardingComponents/CustomTextInp
 import CustomCheckBox from "../../Components/OnboardingComponents/CustomCheckBox";
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
 
-import { creatUser } from "../../Requests/auth";
+import { createUser } from "../../Requests/auth";
 import { pushTokenToRedux } from "../../States/UserInfoSlice";
 
 export default function SignUp({navigation}){
@@ -41,12 +41,12 @@ export default function SignUp({navigation}){
         setPressed(!pressed)
     }
 
-    async function signUpHandler(email, name, password){
+    async function signUpHandler(email, password, name){
         let proceed = true;
         setIsAuthenticating(true)
 
         try{
-            const token = await creatUser(email, name, password)
+            const token = await createUser(email, password, name)
             dispatch(pushTokenToRedux(token))
         }catch(error){
             if(error.code === 'ERR_BAD_REQUEST'){
@@ -93,8 +93,9 @@ export default function SignUp({navigation}){
             setEmail("")
             setPassword("")
             setName("")
+            setPressed(false)
 
-            signUpHandler(email, name, password)
+            signUpHandler(email, password, name)
         }
     }
 
