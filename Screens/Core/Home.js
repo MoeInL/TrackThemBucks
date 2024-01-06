@@ -6,7 +6,7 @@ import { pullFromBackend } from '../../Requests/https';
 export default function Home() {
     async function test(){
         const response = await pullFromBackend()
-        console.log("This was inside firebase")
+        console.log("This is the information inside firebase")
         console.log(response)
     }
 

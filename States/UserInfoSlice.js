@@ -33,6 +33,10 @@ const UserInfoSlice = createSlice({
         updateWalletStateInRedux(state, action) {
             state.information.walletCreated = action.payload
         },
+
+        displayReduxState(state) {
+            console.log(state.information)
+        }
     }
 })
 
@@ -42,3 +46,5 @@ export const { pushAccountTypeToRedux } = UserInfoSlice.actions
 export const { pushBalanceToredux } = UserInfoSlice.actions
 export const { pushTokenToRedux } = UserInfoSlice.actions
 export const { updateWalletStateInRedux } = UserInfoSlice.actions
+export const { displayReduxState } = UserInfoSlice.actions
+

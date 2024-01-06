@@ -15,7 +15,7 @@ export default function AddWallet({navigation}) {
     const [isPressed, setIsPressed] = useState(false)
 
     const dispatch = useDispatch()
-    const information = useSelector((state) => state.userInfoData)
+    const {information} = useSelector(state => state.userInfoData)
 
     useEffect(() => {
         setIsPressed(false)
@@ -32,6 +32,10 @@ export default function AddWallet({navigation}) {
         let proceed = true;
         
         try {
+            console.log("This is the information inside redux")
+            dispatch(displayReduxState())
+            console.log("This is the information that was returned from useSelector")
+            console.log(information)
             pushToBackend(information)
         } catch (error) {
             Alert.alert("Error", "Could not connect to server. Please try again later.")
