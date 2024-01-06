@@ -16,7 +16,10 @@ export default function AddWallet({navigation}) {
     const [isPressed, setIsPressed] = useState(false)
 
     const dispatch = useDispatch()
-    const {information} = useSelector(state => state.userInfo)
+    const information = useSelector(state => state.userInfo)
+    // const {email, token, } = useSelector(state => state.userInfo)
+    // const email = useSelector(state => state.userInfo.email)
+    // const token = useSelector(state => state.userInfo.token)
 
     useEffect(() => {
         setIsPressed(false)
