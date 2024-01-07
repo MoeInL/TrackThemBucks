@@ -8,7 +8,7 @@ import PasswordBox from "../../Components/OnboardingComponents/PasswordBox";
 import LoadingOverlay from "../../Components/AuthUIComponents/LoadingOverlay";
 
 import { loginUser } from "../../Requests/auth";
-import { pushTokenToRedux } from "../../States/actions/userActions";
+import { pushTokenToRedux, pushIdToRedux } from "../../States/actions/userActions";
 import { pushToBackend } from "../../Requests/https";
 
 export default function Login({navigation}){
@@ -44,7 +44,9 @@ export default function Login({navigation}){
             const token = await loginUser(email, password)
             dispatch(pushTokenToRedux(token))
             tempObject.token = token
-            await pushToBackend(tempObject)
+            const id = await pushToBackend(tempObject)
+            console.log(id)
+            dispatch(pushIdToRedux(id))
         }catch(error){
             Alert.alert(
                 'Authentication Failed', 

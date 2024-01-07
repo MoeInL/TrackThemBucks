@@ -2,7 +2,7 @@ import {View, Text, StyleSheet, Alert} from 'react-native';
 import { useState,useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { pushNameToRedux, pushAccountTypeToRedux, pushBalanceToredux, updateWalletStateInRedux } from '../../States/actions/userActions';
-import { pushToBackend } from '../../Requests/https';
+import { updateBackend } from '../../Requests/https';
 
 import CustomButton from '../../Components/OnboardingComponents/CustomButton';
 import CustomTextInput from '../../Components/OnboardingComponents/CustomTextInput';
@@ -16,6 +16,7 @@ export default function AddWallet({navigation}) {
 
     const dispatch = useDispatch()
     const information = useSelector(state => state.userInfo)
+    const id = useSelector(state => state.userInfo.id) 
 
     const tempOnject={
         ...information,
@@ -41,7 +42,7 @@ export default function AddWallet({navigation}) {
         let proceed = true;
         
         try {
-            await pushToBackend(tempOnject)
+            await updateBackend(id, tempOnject)
         } catch (error) {
             Alert.alert("Error", "Could not connect to server. Please try again later.")
             proceed = false

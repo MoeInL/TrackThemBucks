@@ -8,7 +8,7 @@ import CustomCheckBox from "../../Components/OnboardingComponents/CustomCheckBox
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
 
 import { createUser } from "../../Requests/auth";
-import { pushTokenToRedux } from "../../States/actions/userActions";
+import { pushTokenToRedux, pushIdToRedux } from "../../States/actions/userActions";
 import { pushToBackend } from "../../Requests/https";
 
 export default function SignUp({navigation}){
@@ -54,7 +54,8 @@ export default function SignUp({navigation}){
             const token = await createUser(email, password, name)
             dispatch(pushTokenToRedux(token))
             tempObject.token = token
-            await pushToBackend(tempObject)
+            const id = await pushToBackend(tempObject)
+            dispatch(pushIdToRedux(id))
         }catch(error){
             if(error.code === 'ERR_BAD_REQUEST'){
                 Alert.alert('Creating Account Failed','Please use a valid email.')
