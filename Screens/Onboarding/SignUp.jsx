@@ -9,6 +9,7 @@ import CustomButton from "../../Components/OnboardingComponents/CustomButton";
 
 import { createUser } from "../../Requests/auth";
 import { pushTokenToRedux } from "../../States/actions/userActions";
+import { pushToBackend } from "../../Requests/https";
 
 export default function SignUp({navigation}){
     const [name, setName] = useState("")
@@ -22,6 +23,10 @@ export default function SignUp({navigation}){
 
     const [isAuthenticating, setIsAuthenticating] = useState(false)
     const dispatch = useDispatch()
+
+    const tempObject = {
+        token: "",
+    }
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('blur', () => {
@@ -48,6 +53,8 @@ export default function SignUp({navigation}){
         try{
             const token = await createUser(email, password, name)
             dispatch(pushTokenToRedux(token))
+            tempObject.token = token
+            await pushToBackend(tempObject)
         }catch(error){
             if(error.code === 'ERR_BAD_REQUEST'){
                 Alert.alert('Creating Account Failed','Please use a valid email.')

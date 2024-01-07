@@ -12,15 +12,16 @@ export async function authenticate(mode, email, password, name){
     })
 
     const token = response.data.idToken
-
     return token
 }
 
 export async function createUser(email, password, name){
-    await authenticate('signUp', email, password, name)
+    const token = await authenticate('signUp', email, password, name)
+    return token
 }
 
 export async function loginUser(email, password){
-    await authenticate('signInWithPassword', email, password)
+    const token = await authenticate('signInWithPassword', email, password)
+    return token
 }
 
