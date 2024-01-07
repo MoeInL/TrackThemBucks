@@ -12,8 +12,8 @@ import { pushUserInfoToRedux } from '../../States/actions/userActions';
 export default function Home() {    
     const dispatch = useDispatch()
     const [userBalance, setUserBalance] = useState(0)
-    const [expenses, setExpenses] = useState(1000)
-    const [income, setIncome] = useState(1000)
+    const [expenses, setExpenses] = useState(0)
+    const [income, setIncome] = useState(0)
 
     useEffect(() => {
         async function fetchData() {
