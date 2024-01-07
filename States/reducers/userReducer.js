@@ -1,4 +1,4 @@
-import { USER_ACCOUNT_TYPE, USER_BALANCE, USER_NAME, USER_TOKEN, USER_WALLET } from "../actions/types"
+import { USER_ACCOUNT_TYPE, USER_BALANCE, USER_ERROR, USER_NAME, USER_TOKEN, USER_WALLET } from "../actions/types"
 
 const initialState = {
     name: "",
@@ -6,6 +6,7 @@ const initialState = {
     balance: "",
     token: "",
     walletCreated: false,
+    error: ""
 }
 
 export default (state = initialState, action) => {
@@ -34,6 +35,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 walletCreated: action.payload
+            }
+        case USER_ERROR:
+            return {
+                ...state,
+                error: action.payload
             }
         default:
             return state

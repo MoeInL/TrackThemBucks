@@ -1,4 +1,6 @@
-import { USER_ACCOUNT_TYPE, USER_BALANCE, USER_NAME, USER_TOKEN, USER_WALLET } from "./types"
+import { USER_ACCOUNT_TYPE, USER_BALANCE, USER_ERROR, USER_NAME, USER_TOKEN, USER_WALLET } from "./types"
+
+const API_KEY = 'AIzaSyCtrx_HgsO9ZBKdc9I48OgZ7ho1yB5J97w'
 
 export const pushNameToRedux = (name) => {
     return {
@@ -21,11 +23,38 @@ export const pushBalanceToredux = (balance) => {
     }
 }
 
-export const pushTokenToRedux = (token) => {
-    return {
+// *************** THIS FUNCTION IS NOT BEING USED *************** //
+// export const pushTokenToRedux = (token) => {
+//     return {
+//         type: USER_TOKEN,
+//         payload: token
+//     }
+// }
+
+export const authenticate = (mode, email, password, name) => async (dispatch) => {
+    const url = `https://identitytoolkit.googleapis.com/v1/accounts:${mode}?key=${API_KEY}`
+   
+   try{ const response = await axios.post(url, {
+        email: email,
+        password: password,
+        name: name,
+        returnSecureToken: true
+    })
+
+    const token = response.data.idToken
+
+    dispatch({
         type: USER_TOKEN,
-        payload: token
-    }
+        payload: token,
+      });
+
+} catch (err) {
+    dispatch({
+        type: USER_ERROR,
+        payload: err.code,
+      });
+}
+    
 }
 
 export const updateWalletStateInRedux = (walletCreated) => {

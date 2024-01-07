@@ -8,7 +8,7 @@ import PasswordBox from "../../Components/OnboardingComponents/PasswordBox";
 import LoadingOverlay from "../../Components/AuthUIComponents/LoadingOverlay";
 
 import { loginUser } from "../../Requests/auth";
-import { pushTokenToRedux } from "../../States/actions/userActions";
+import { authenticate, pushTokenToRedux } from "../../States/actions/userActions";
 
 export default function Login({navigation}){
     const [email, setEmail] = useState("")
@@ -18,6 +18,9 @@ export default function Login({navigation}){
     const [passValid, setPassValid] = useState(true)
 
     const [isAuthenticating, setIsAuthenticating] = useState(false)
+
+    const token = useSelector(state => state.user.token)
+    const error = useSelector(state => state.user.error)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -31,23 +34,38 @@ export default function Login({navigation}){
         return unsubscribe;
     }, [navigation]);
 
-    async function logInHandler(email, password){
-        let proceed = true;
-        setIsAuthenticating(true)
-
-        try{
-            const token = await loginUser(email, password)
-            dispatch(pushTokenToRedux(token))
-        }catch(error){
-            Alert.alert(
-                'Authentication Failed', 
-                'Could not log you in. Please check your credentials.'
-            )
+    useEffect(() => {
+        if(token !== null){
+            navigation.navigate("SetupNavigation")
+        } else if(error !== null){
             setIsAuthenticating(false)
-            proceed = false
-        }
+            Alert.alert(
+                        'Authentication Failed', 
+                        'Could not log you in. Please check your credentials.'
+                    )
 
-        proceed? navigation.navigate("SetupNavigation"): null
+        }
+    }
+    , [token, error])
+
+    const logInHandler = async(email, password) => {
+        // let proceed = true;
+        setIsAuthenticating(true)
+        dispatch(authenticate('signInWithPassword', email, password))
+
+        // try{
+        //     const token = await loginUser(email, password)
+        //     dispatch(pushTokenToRedux(token))
+        // }catch(error){
+        //     Alert.alert(
+        //         'Authentication Failed', 
+        //         'Could not log you in. Please check your credentials.'
+        //     )
+        //     setIsAuthenticating(false)
+        //     proceed = false
+        // }
+
+        // proceed? navigation.navigate("SetupNavigation"): null
     }
 
     function confirmLogin(){

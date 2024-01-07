@@ -1,6 +1,6 @@
 import { View, StyleSheet, Text, TouchableOpacity, Alert } from "react-native";
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import LoadingOverlay from "../../Components/AuthUIComponents/LoadingOverlay";
 import CustomTextInput from "../../Components/OnboardingComponents/CustomTextInput";
@@ -8,7 +8,7 @@ import CustomCheckBox from "../../Components/OnboardingComponents/CustomCheckBox
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
 
 import { createUser } from "../../Requests/auth";
-import { pushTokenToRedux } from "../../States/actions/userActions";
+import { authenticate, pushTokenToRedux } from "../../States/actions/userActions";
 
 export default function SignUp({navigation}){
     const [name, setName] = useState("")
@@ -21,6 +21,9 @@ export default function SignUp({navigation}){
     const [passwordValid, setPasswordValid] = useState(true)
 
     const [isAuthenticating, setIsAuthenticating] = useState(false)
+
+    const token = useSelector(state => state.user.token)
+    const error = useSelector(state => state.user.error)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -36,29 +39,42 @@ export default function SignUp({navigation}){
     
         return unsubscribe;
     }, [navigation]);
+    
+    useEffect(() => {
+        if(token !== null){
+            navigation.navigate("SetupNavigation")
+        } else if(error !== null){
+            setIsAuthenticating(false)
+            if(error.code === 'ERR_BAD_REQUEST'){
+                Alert.alert('Creating Account Failed','Please use a valid email.')
+            }else
+                Alert.alert('Creating Account Failed','Could not sign you up. Please try again later.')
+
+        }
+    }, [token, error])
 
     function chkBoxPressed(){
         setPressed(!pressed)
     }
 
-    async function signUpHandler(email, password, name){
-        let proceed = true;
+    const signUpHandler = async(email, password, name) => {
+        // let proceed = true;
         setIsAuthenticating(true)
-
-        try{
-            const token = await createUser(email, password, name)
-            dispatch(pushTokenToRedux(token))
-        }catch(error){
-            if(error.code === 'ERR_BAD_REQUEST'){
-                Alert.alert('Creating Account Failed','Please use a valid email.')
-            }else
-                Alert.alert('Creating Account Failed','Could not sign you up. Please try again later.')
+        dispatch(authenticate('signUp', email, password, name))
+        // try{
+        //     // const token = await createUser(email, password, name)
+        //     // dispatch(pushTokenToRedux(token))
+        // }catch(error){
+        //     if(error.code === 'ERR_BAD_REQUEST'){
+        //         Alert.alert('Creating Account Failed','Please use a valid email.')
+        //     }else
+        //         Alert.alert('Creating Account Failed','Could not sign you up. Please try again later.')
             
-            setIsAuthenticating(false)
-            proceed = false
-        }
+        //     setIsAuthenticating(false)
+        //     proceed = false
+        // }
 
-        proceed? navigation.navigate("SetupNavigation"): null
+        // proceed? navigation.navigate("SetupNavigation"): null
     }
 
     function confirmSignUp(){
