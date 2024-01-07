@@ -52,8 +52,9 @@ export default function SignUp({navigation}){
 
         try{
             const token = await createUser(email, password, name)
-            dispatch(pushTokenToRedux(token))
             tempObject.token = token
+            
+            dispatch(pushTokenToRedux(token))
             const id = await pushToBackend(tempObject)
             dispatch(pushIdToRedux(id))
         }catch(error){

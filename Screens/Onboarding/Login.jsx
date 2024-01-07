@@ -42,10 +42,10 @@ export default function Login({navigation}){
 
         try{
             const token = await loginUser(email, password)
-            dispatch(pushTokenToRedux(token))
             tempObject.token = token
+
+            dispatch(pushTokenToRedux(token))
             const id = await pushToBackend(tempObject)
-            console.log(id)
             dispatch(pushIdToRedux(id))
         }catch(error){
             Alert.alert(
