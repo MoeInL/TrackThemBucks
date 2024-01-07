@@ -1,7 +1,7 @@
 import {View, Text, StyleSheet, Alert} from 'react-native';
 import { useState,useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { pushNameToRedux, pushAccountTypeToRedux, pushBalanceToredux } from '../../States/actions/userActions';
+import { pushNameToRedux, pushAccountTypeToRedux, pushBalanceToredux, updateWalletStateInRedux } from '../../States/actions/userActions';
 import { pushToBackend } from '../../Requests/https';
 
 import CustomButton from '../../Components/OnboardingComponents/CustomButton';
@@ -17,6 +17,14 @@ export default function AddWallet({navigation}) {
     const dispatch = useDispatch()
     const information = useSelector(state => state.userInfo)
 
+    const tempOnject={
+        ...information,
+        name: name,
+        accountType: accountType,
+        balance: balance,
+        walletCreated: true
+    }
+
     useEffect(() => {
         setIsPressed(false)
     }, [accountType])
@@ -26,9 +34,6 @@ export default function AddWallet({navigation}) {
         dispatch(pushBalanceToredux(balance))
         dispatch(pushAccountTypeToRedux(accountType))
 
-        console.log("After pushing to redux")
-        console.log(information)
-
         pushToFirebase()
     }
 
@@ -36,15 +41,13 @@ export default function AddWallet({navigation}) {
         let proceed = true;
         
         try {
-            await pushToBackend(information)
+            await pushToBackend(tempOnject)
         } catch (error) {
             Alert.alert("Error", "Could not connect to server. Please try again later.")
             proceed = false
         }
-
         proceed? navigation.navigate("SetupSuccess"): null
     }
-
     return(
         <>
             <View style = {styles.screenStyle}>

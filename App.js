@@ -1,9 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
+import { useEffect, useState } from 'react';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
+
+import SplashScreen from './Screens/SplashScreen';
 
 import OnBoarding from "./Screens/Onboarding/OnBoarding";
 import SignUp from "./Screens/Onboarding/SignUp";
@@ -17,13 +20,34 @@ import SetupSuccess from './Screens/Setup/SetupSuccess';
 
 import Home from './Screens/Core/Home';
 
-import {store} from './States/reducers/index';
+import {store} from './States/Store';
 import { Ionicons } from '@expo/vector-icons';
+import { pullFromBackend } from './Requests/https';
 
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
 
 export default function App() {
+  const [token, setToken] = useState("")
+  const [walletCreated, setWalletCreated] = useState(false)
+  const [appLoading, setAppLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await pullFromBackend()
+
+      if(response !== null) {
+        setToken(response[Object.keys(response)].token)
+        setWalletCreated(response[Object.keys(response)].walletCreated)
+      }
+    }
+
+    fetchData()
+    
+    setTimeout(() => {
+      setAppLoading(false)
+    }, 2000)
+  }, [])
 
   function OnBoardingNavigation() {
     return (
@@ -67,19 +91,19 @@ export default function App() {
       </BottomTab.Navigator>
     )
   }
-  let testing = true
+
   return (
     <>
       <StatusBar style="auto" />
+
       <Provider store={store}>
         <NavigationContainer>
-
-          <Stack.Navigator screenOptions={{contentStyle: {backgroundColor: 'white'}}}>
-            {!testing?<Stack.Screen name="OnBoardingNavigation" component={OnBoardingNavigation} options={{headerShown:false}}/>: null}
-            {!testing?<Stack.Screen name="SetupNavigation" component={SetupNavigation} options={{headerShown:false}}/>: null}
+          <Stack.Navigator initialRouteName='SpashScreen' screenOptions={{contentStyle: {backgroundColor: 'white'}}}>
+            {appLoading?<Stack.Screen name="SplashScreen" component={SplashScreen} options={{headerShown:false}}/>: null}
+            {token === ""?<Stack.Screen name="OnBoardingNavigation" component={OnBoardingNavigation} options={{headerShown:false}}/>: null}
+            {!walletCreated?<Stack.Screen name="SetupNavigation" component={SetupNavigation} options={{headerShown:false}}/>: null}
             <Stack.Screen name="CoreNavigation" component={CoreNavigation} options={{headerShown:false}}/>
           </Stack.Navigator>
-
         </NavigationContainer>
       </Provider>
     </>

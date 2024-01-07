@@ -5,10 +5,6 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/Images/LaunchScreen.png",
-      "resizeMode": "cover"
-    },
     "assetBundlePatterns": [
       "**/*"
     ],

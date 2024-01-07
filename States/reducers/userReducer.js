@@ -1,4 +1,4 @@
-import { USER_ACCOUNT_TYPE, USER_BALANCE, USER_NAME, USER_TOKEN, USER_WALLET } from "../actions/types"
+import { USER_ACCOUNT_TYPE, USER_BALANCE, USER_NAME, USER_TOKEN, USER_WALLET} from "../actions/types"
 
 const initialState = {
     name: "",
