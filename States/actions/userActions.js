@@ -1,4 +1,4 @@
-import { USER_ID, USER_ACCOUNT_TYPE, USER_BALANCE, USER_NAME, USER_TOKEN, USER_WALLET } from "./types"
+import { USER_INFO, USER_ID, USER_ACCOUNT_TYPE, USER_BALANCE, USER_NAME, USER_TOKEN, USER_WALLET } from "./types"
 
 export const pushNameToRedux = (name) => {
     return {
@@ -11,6 +11,13 @@ export const pushIdToRedux = (id) => {
     return {
         type: USER_ID,
         payload: id
+    }
+}
+
+export const pushUserInfoToRedux = (userInfo) => {
+    return {
+        type: USER_INFO,
+        payload: userInfo
     }
 }
 
