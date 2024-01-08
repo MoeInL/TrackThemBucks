@@ -8,7 +8,7 @@ import CustomCheckBox from "../../Components/OnboardingComponents/CustomCheckBox
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
 
 import { createUser } from "../../Requests/auth";
-import { pushTokenToRedux, pushIdToRedux } from "../../States/actions/userActions";
+import { pushTokenToRedux, pushIdToRedux } from "../../States/actions/userInfoActions";
 import { pushToBackend } from "../../Requests/https";
 
 export default function SignUp({navigation}){

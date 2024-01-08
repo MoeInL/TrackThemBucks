@@ -1,13 +1,14 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import { useState,useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import {LinearGradient } from 'expo-linear-gradient';
 
 import { pullFromBackend } from '../../Requests/https';
 
 import Header from '../../Components/CoreComponents/Header';
 import MoneyPreview from '../../Components/CoreComponents/moneyPreview';
 import CustomButton from '../../Components/CoreComponents/CustomButton';
-import { pushUserInfoToRedux } from '../../States/actions/userActions';
+import { pushUserInfoToRedux } from '../../States/actions/userInfoActions';
 
 export default function Home() {    
     const dispatch = useDispatch()
@@ -26,7 +27,8 @@ export default function Home() {
     }, [])
 
     return (
-        <View style = {styles.containerStyle}>
+        <LinearGradient colors={['#FFF6E5', 'white']} style = {styles.containerStyle}>
+
             <View>
                 <Header style = {styles.headerStyle}/>
 
@@ -41,6 +43,7 @@ export default function Home() {
                     <MoneyPreview title = "Expense" money = {income} icon = {require("../../assets/Images/expense.png")} color = "#FD3C4A"/>
             </View> 
 
+
             <View>
                 <View style = {styles.listHeaderContainer}>
                     <Text style = {styles.listHeaderStyle}>Recent Transaction</Text>
@@ -51,7 +54,7 @@ export default function Home() {
                     
                 </View>
             </View>
-        </View>
+        </LinearGradient>
     );
 }
 
@@ -59,7 +62,7 @@ const styles = StyleSheet.create({
     containerStyle: {
         flex: 1,
         padding: "5%",
-        marginTop: 50,
+        paddingTop: 50,
         gap: 20,
     },
 

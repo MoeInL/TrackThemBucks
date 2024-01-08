@@ -46,7 +46,7 @@ export default function App() {
     
     setTimeout(() => {
       setAppLoading(false)
-    }, 2000)
+    }, 3000)
   }, [])
 
   function OnBoardingNavigation() {

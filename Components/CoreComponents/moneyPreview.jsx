@@ -17,17 +17,18 @@ export default function MoneyPreview({title, money, icon, color}) {
 
 const styles = StyleSheet.create({
     containerStyle:{
-        borderRadius: 35,
-        padding: 20,
+        borderRadius: 25,
+        paddingVertical: 15,
+        paddingHorizontal: 20,
         flexDirection: "row",
         alignItems: "center", 
-        justifyContent: "space-around",
+        gap: 10,
         minWidth:"48%",
     },
 
     imgContainer: {
         backgroundColor: "white",
-        padding: 15,
+        padding: 14,
         borderRadius: 16,
         justifyContent: "center",
         alignItems: "center",
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
     },
 
     titleStyle: {
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: "500",
         color: "white",
     },

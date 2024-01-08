@@ -1,4 +1,4 @@
-import { USER_INFO, USER_ID, USER_ACCOUNT_TYPE, USER_BALANCE, USER_NAME, USER_TOKEN, USER_WALLET } from "./types"
+import { USER_INFO, USER_ID, USER_ACCOUNT_TYPE, USER_BALANCE, USER_NAME, USER_TOKEN, USER_WALLET } from "./userInfoTypes"
 
 export const pushNameToRedux = (name) => {
     return {

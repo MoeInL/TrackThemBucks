@@ -14,7 +14,7 @@ export default function Header({navigation}) {
     return(
         <View style = {styles.componentStyle}>
             <TouchableOpacity style = {[styles.iconContainer, styles.profileContainerStyle]}>
-                <SimpleLineIcons name="user" size={24}/>
+                <SimpleLineIcons name="user" size={24} color={'white'}/>
             </TouchableOpacity>
 
             <Text style = {styles.monthStyle}>{getCurrentMonth()}</Text>
@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
     profileContainerStyle: {
         borderWidth: 2,
         borderColor: "#7F3DFF",
+        backgroundColor: "#7F3DFF",
     },
 
     monthStyle: {

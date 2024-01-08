@@ -8,7 +8,7 @@ import PasswordBox from "../../Components/OnboardingComponents/PasswordBox";
 import LoadingOverlay from "../../Components/AuthUIComponents/LoadingOverlay";
 
 import { loginUser } from "../../Requests/auth";
-import { pushTokenToRedux, pushIdToRedux } from "../../States/actions/userActions";
+import { pushTokenToRedux, pushIdToRedux } from "../../States/actions/userInfoActions";
 import { pushToBackend } from "../../Requests/https";
 
 export default function Login({navigation}){
