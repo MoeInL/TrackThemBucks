@@ -1,14 +1,15 @@
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import {LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { pullFromBackend } from '../../Requests/https';
+import { pushUserInfoToRedux } from '../../States/actions/userInfoActions';
 
 import Header from '../../Components/CoreComponents/Header';
 import MoneyPreview from '../../Components/CoreComponents/moneyPreview';
 import CustomButton from '../../Components/CoreComponents/CustomButton';
-import { pushUserInfoToRedux } from '../../States/actions/userInfoActions';
+import Transaction from '../../Components/CoreComponents/Transaction';
 
 export default function Home() {    
     const dispatch = useDispatch()
@@ -39,8 +40,8 @@ export default function Home() {
             </View>
 
             <View style = {styles.moneyContainerStyle}>
-                    <MoneyPreview title = "Income" money = {expenses} icon = {require("../../assets/Images/income.png")} color = "#00A86B"/>
-                    <MoneyPreview title = "Expense" money = {income} icon = {require("../../assets/Images/expense.png")} color = "#FD3C4A"/>
+                <MoneyPreview title = "Income" money = {expenses} icon = {require("../../assets/Images/income.png")} color = "#00A86B"/>
+                <MoneyPreview title = "Expense" money = {income} icon = {require("../../assets/Images/expense.png")} color = "#FD3C4A"/>
             </View> 
 
 
@@ -50,9 +51,10 @@ export default function Home() {
                     <CustomButton title = "See All"/>
                 </View>
 
-                <View>
+                <ScrollView style = {styles.scrollViewStyle}>
+                    <Transaction isExpense={true}/>
                     
-                </View>
+                </ScrollView>
             </View>
         </LinearGradient>
     );
@@ -103,6 +105,11 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
+    },
+
+    scrollViewStyle: {
+        marginTop: 10,
+        marginRight: 10,
     },
 });
  
