@@ -1,8 +1,8 @@
 import {TouchableOpacity, View, Text, StyleSheet, Image} from 'react-native';
 
-export default function MoneyPreview({title, money, icon, color}) {
+export default function MoneyPreview({title, money, icon, color, onPress}) {
     return (
-        <TouchableOpacity style = {[styles.containerStyle, {backgroundColor: color}]}>
+        <TouchableOpacity style = {[styles.containerStyle, {backgroundColor: color}]} onPress={onPress}>
             <View style = {styles.imgContainer}>
                 <Image source = {icon}/>
             </View>

@@ -11,7 +11,7 @@ import MoneyPreview from '../../Components/CoreComponents/moneyPreview';
 import CustomButton from '../../Components/CoreComponents/CustomButton';
 import Transaction from '../../Components/CoreComponents/Transaction';
 
-export default function Home() {    
+export default function Home({navigation}) {    
     const dispatch = useDispatch()
     const [userBalance, setUserBalance] = useState(0)
     const [expenses, setExpenses] = useState(0)
@@ -29,7 +29,6 @@ export default function Home() {
 
     return (
         <LinearGradient colors={['#FFF6E5', 'white']} style = {styles.containerStyle}>
-
             <View>
                 <Header style = {styles.headerStyle}/>
 
@@ -41,7 +40,7 @@ export default function Home() {
 
             <View style = {styles.moneyContainerStyle}>
                 <MoneyPreview title = "Income" money = {expenses} icon = {require("../../assets/Images/income.png")} color = "#00A86B"/>
-                <MoneyPreview title = "Expense" money = {income} icon = {require("../../assets/Images/expense.png")} color = "#FD3C4A"/>
+                <MoneyPreview title = "Expense" money = {income} icon = {require("../../assets/Images/expense.png")} color = "#FD3C4A" onPress ={() => navigation.navigate("AddExpense")}/>
             </View> 
 
 

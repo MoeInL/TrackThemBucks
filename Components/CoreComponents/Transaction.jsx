@@ -1,5 +1,4 @@
 import { TouchableOpacity, Text, View, StyleSheet } from "react-native";
-import { useEffect } from "react";
 
 import { useSelector } from "react-redux";
 
@@ -7,10 +6,6 @@ import {Ionicons} from '@expo/vector-icons'
 
 export default function Transaction({isExpense}) {
     const transaction = useSelector(state => state.transactions)
-
-    useEffect(() => {
-        console.log(transaction)
-    }, [])
 
     return (
         <TouchableOpacity style = {styles.componentContainer}> 

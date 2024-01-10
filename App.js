@@ -19,6 +19,7 @@ import AddWallet from './Screens/Setup/AddWallet';
 import SetupSuccess from './Screens/Setup/SetupSuccess';
 
 import Home from './Screens/Core/Home';
+import AddExpense from './Screens/Core/AddExpense';
 
 import {store} from './States/Store';
 import { Ionicons } from '@expo/vector-icons';
@@ -103,6 +104,16 @@ export default function App() {
             {token === ""?<Stack.Screen name="OnBoardingNavigation" component={OnBoardingNavigation} options={{headerShown:false}}/>: null}
             {!walletCreated?<Stack.Screen name="SetupNavigation" component={SetupNavigation} options={{headerShown:false}}/>: null}
             <Stack.Screen name="CoreNavigation" component={CoreNavigation} options={{headerShown:false}}/>
+            <Stack.Screen 
+              name="AddExpense" 
+              component={AddExpense} 
+              options ={{
+                contentStyle: {backgroundColor: '#FD3C4A'}, 
+                headerStyle: {backgroundColor: '#FD3C4A'},
+                headerTintColor: 'white',
+                title: "Add Expense",
+              }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
