@@ -1,26 +1,42 @@
-import { View, StyleSheet, Text, TouchableOpacity, TextInput } from "react-native";
+import { View, StyleSheet, Text, TextInput, Alert } from "react-native";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
+import { updateBackend, pullFromBackend } from "../../Requests/https";
+ 
 import DropDownBox from "../../Components/CoreComponents/DropDownBox";
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
+import LoadingOverlay from "../../Components/AuthUIComponents/LoadingOverlay";
 
-export default function AddExpense() {
+export default function AddExpense({navigation}) {
     const [expense, setExpense] = useState("0")
     const [iconChosen, setIconChosen] = useState("")
     const [description, setDescription] = useState("")
-    const [time, setTime] = useState("")
     const [title, setTitle] = useState("")
 
     const [isPressed, setIsPressed] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
-    const tempExpense = {
-        iconName: iconChosen.name,
-        iconColor: iconChosen.foreground,
-        iconBackgroundColor: iconChosen.background,
-        title: title,
-        description: description,
-        amount: expense,
-        time: time,
+    const userinformation = useSelector(state => state.userInfo)
+    const expenseListInRedux = useSelector(state => state.transactions)
+
+    useEffect(() => {
+        console.log(expenseListInRedux)
+    }, [])
+
+    const dataInDatabse = {
+        userInfo: userinformation.state,
+        expenseList: [expenseListInRedux,
+            {
+                iconName: iconChosen.name,
+                iconColor: iconChosen.foreground,
+                iconBackgroundColor: iconChosen.background,
+                title: title,
+                description: description,
+                amount: expense,
+                time: getTime(),
+            }
+        ]
     }
 
     function getTime(){
@@ -45,10 +61,22 @@ export default function AddExpense() {
 
     }
 
-    function addExpense(){
-        setTime(getTime())
-        //push to redux
-        //push to backend
+    async function addExpense(){
+        setIsLoading(true)
+
+        try{
+            await updateBackend(userinformation.state.id, dataInDatabse)
+            navigation.navigate("Home")
+        }
+        catch(error){
+            Alert.alert("Error", 'Could not add expense, pls try again later')
+        }
+
+        setIsLoading(false)
+    }
+
+    if(isLoading){
+        return <LoadingOverlay/>
     }
 
     return (
@@ -81,7 +109,7 @@ export default function AddExpense() {
 
                     {!isPressed? <TextInput 
                         placeholder="Title" 
-                        maxLength={10}
+                        maxLength={16}
                         style = {styles.textInputStyle}
                         onChangeText={(text) => setTitle(text)}
                     />: null}
@@ -94,7 +122,7 @@ export default function AddExpense() {
                     />: null}
                 </View>
 
-                <CustomButton text = "Continue" onPress={() => {}}/>
+                <CustomButton text = "Continue" onPress={addExpense}/>
             </View>
         </View>
     )

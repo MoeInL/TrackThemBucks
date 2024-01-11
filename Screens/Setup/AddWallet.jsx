@@ -1,7 +1,7 @@
 import {View, Text, StyleSheet, Alert} from 'react-native';
 import { useState,useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { pushNameToRedux, pushAccountTypeToRedux, pushBalanceToredux, updateWalletStateInRedux } from '../../States/actions/userInfoActions';
+import { pushNameToRedux, pushAccountTypeToRedux, pushBalanceToredux } from '../../States/actions/userInfoActions';
 import { updateBackend } from '../../Requests/https';
 
 import CustomButton from '../../Components/OnboardingComponents/CustomButton';
@@ -16,14 +16,15 @@ export default function AddWallet({navigation}) {
 
     const dispatch = useDispatch()
     const information = useSelector(state => state.userInfo)
-    const id = useSelector(state => state.userInfo.id) 
-
-    const tempOnject={
-        ...information,
-        name: name,
-        accountType: accountType,
-        balance: balance,
-        walletCreated: true
+    
+    const tempOnject = {
+        userInfo: {
+            ...information,
+            name: name,
+            accountType: accountType,
+            balance: balance,
+            walletCreated: true
+        }, 
     }
 
     useEffect(() => {
@@ -42,7 +43,7 @@ export default function AddWallet({navigation}) {
         let proceed = true;
         
         try {
-            await updateBackend(id, tempOnject)
+            await updateBackend(information.id, tempOnject)
         } catch (error) {
             Alert.alert("Error", "Could not connect to server. Please try again later.")
             proceed = false

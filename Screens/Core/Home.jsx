@@ -5,11 +5,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import { pullFromBackend } from '../../Requests/https';
 import { pushUserInfoToRedux } from '../../States/actions/userInfoActions';
+import { createTransaction } from '../../States/actions/transaction/transactionActions';
 
 import Header from '../../Components/CoreComponents/Header';
 import MoneyPreview from '../../Components/CoreComponents/moneyPreview';
 import CustomButton from '../../Components/CoreComponents/CustomButton';
-import Transaction from '../../Components/CoreComponents/Transaction';
 
 export default function Home({navigation}) {    
     const dispatch = useDispatch()
@@ -20,12 +20,17 @@ export default function Home({navigation}) {
     useEffect(() => {
         async function fetchData() {
             const response = await pullFromBackend()
-            dispatch(pushUserInfoToRedux(response[Object.keys(response)]))
-            setUserBalance(response[Object.keys(response)].balance)
+            const userIdFromDatabase = Object.keys(response)[0] // Eventually, we need to traverse Object.keys(response) and get the data of the key saved on the user device
+
+            dispatch(pushUserInfoToRedux(response[userIdFromDatabase].userInfo)) 
+            setUserBalance(response[userIdFromDatabase].userInfo.balance)
+            //dispatch(createTransaction(response[userIdFromDatabase].expenseList))
         }
-  
+
         fetchData()
     }, [])
+
+    //console.log(transactions)
 
     return (
         <LinearGradient colors={['#FFF6E5', 'white']} style = {styles.containerStyle}>
@@ -51,7 +56,6 @@ export default function Home({navigation}) {
                 </View>
 
                 <ScrollView style = {styles.scrollViewStyle}>
-                    <Transaction isExpense={true}/>
                     
                 </ScrollView>
             </View>
@@ -64,7 +68,7 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: "5%",
         paddingTop: 50,
-        gap: 20,
+        gap: 30,
     },
 
     headerStyle: {
@@ -75,6 +79,7 @@ const styles = StyleSheet.create({
     balanceContainerStyle: {
         justifyContent: "center",
         alignItems: "center",
+        gap: 10,
     },
 
     titleStyle: {

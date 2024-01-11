@@ -22,7 +22,9 @@ export default function Login({navigation}){
     const dispatch = useDispatch()
 
     const tempObject = {
-        token: "",
+        userInfo: {
+            token: "",
+        }
     }
 
     useEffect(() => {
@@ -42,7 +44,7 @@ export default function Login({navigation}){
 
         try{
             const token = await loginUser(email, password)
-            tempObject.token = token
+            tempObject.userInfo.token = token
 
             dispatch(pushTokenToRedux(token))
             const id = await pushToBackend(tempObject)

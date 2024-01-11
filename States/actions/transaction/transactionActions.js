@@ -1,4 +1,4 @@
-import {CREATE_TRANSACTION} from "./transactionTypes"
+import { CREATE_TRANSACTION } from "./transactionTypes"
 
 export const createTransaction = (transaction) => {
     return {

@@ -37,9 +37,11 @@ export default function App() {
     async function fetchData() {
       const response = await pullFromBackend()
 
-      if(response !== null) {
-        setToken(response[Object.keys(response)].token)
-        setWalletCreated(response[Object.keys(response)].walletCreated)
+      if(response !== null) {  
+        const userIdFromDatabase = Object.keys(response)[0] // Eventually, we need to traverse Object.keys(response) and get the data of the key saved on the user device
+
+        setToken(response[userIdFromDatabase].userInfo.token)
+        setWalletCreated(response[userIdFromDatabase].userInfo.walletCreated)
       }
     }
 

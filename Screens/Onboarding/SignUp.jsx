@@ -25,7 +25,9 @@ export default function SignUp({navigation}){
     const dispatch = useDispatch()
 
     const tempObject = {
-        token: "",
+        userInfo: {
+            token: "",
+        }
     }
 
     useEffect(() => {
@@ -52,7 +54,7 @@ export default function SignUp({navigation}){
 
         try{
             const token = await createUser(email, password, name)
-            tempObject.token = token
+            tempObject.userInfo.token = token
             
             dispatch(pushTokenToRedux(token))
             const id = await pushToBackend(tempObject)

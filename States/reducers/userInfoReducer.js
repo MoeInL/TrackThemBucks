@@ -9,36 +9,36 @@ const initialState = {
     walletCreated: false,
 }
 
-export default (state = initialState, action) => {
+export default (userInfo = initialState, action) => {
     switch (action.type) {
         case USER_NAME:
             return {
-                ...state,
+                ...userInfo,
                 name: action.payload
             }
         case USER_ACCOUNT_TYPE:
             return {
-                ...state,
+                ...userInfo,
                 accountType: action.payload
             }
         case USER_BALANCE:
             return {
-                ...state,
+                ...userInfo,
                 balance: action.payload
             }
         case USER_TOKEN:
             return {
-                ...state,
+                ...userInfo,
                 token: action.payload
             }
         case USER_WALLET:
             return {
-                ...state,
+                ...userInfo,
                 walletCreated: action.payload
             }
         case USER_ID:
             return {
-                ...state,
+                ...userInfo,
                 id: action.payload
             }
         case USER_INFO:
@@ -46,6 +46,6 @@ export default (state = initialState, action) => {
                 state: action.payload
             }
         default:
-            return state
+            return userInfo
     }
 }
