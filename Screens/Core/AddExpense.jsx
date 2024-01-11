@@ -1,5 +1,5 @@
 import { View, StyleSheet, Text, TextInput, Alert } from "react-native";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 
 import { updateBackend, pullFromBackend } from "../../Requests/https";
@@ -16,27 +16,13 @@ export default function AddExpense({navigation}) {
 
     const [isPressed, setIsPressed] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-    const [expenseList, setExpenseList] = useState([])
 
     const userinformation = useSelector(state => state.userInfo)
+    const transactionList = useSelector(state => state.transactions)
     
-    useEffect(() => {
-        async function fetchData() {
-            const response = await pullFromBackend()
-            const userIdFromDatabase = Object.keys(response)[0] // Eventually, we need to traverse Object.keys(response) and get the data of the key saved on the user device
-            
-            Object.keys(response[userIdFromDatabase]).forEach((key) => {
-                if(key === "expenseList"){
-                  setExpenseList([...response[userIdFromDatabase].expenseList])
-                }
-            })
-        }
-        fetchData()
-    }, [])
-
     const dataInDatabse = {
         userInfo: userinformation.state,
-        expenseList: [...expenseList,
+        expenseList: [...transactionList,
             {
                 iconName: iconChosen.name,
                 iconColor: iconChosen.foreground,
@@ -45,6 +31,7 @@ export default function AddExpense({navigation}) {
                 description: description,
                 amount: expense,
                 time: getTime(),
+                isExpense: iconChosen.name === "cash"? false: true,
             }
         ]
     }

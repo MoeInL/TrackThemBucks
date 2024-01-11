@@ -1,27 +1,23 @@
 import { TouchableOpacity, Text, View, StyleSheet } from "react-native";
 
-import { useSelector } from "react-redux";
-
 import {Ionicons} from '@expo/vector-icons'
 
-export default function Transaction({isExpense}) {
-    const transaction = useSelector(state => state.transactions)
-
+export default function Transaction({isExpense, iconName, iconColor, iconBackgroundColor, title, amount, description, time}) {
     return (
         <TouchableOpacity style = {styles.componentContainer}> 
-            <View style = {[styles.iconContainer, {backgroundColor: transaction.iconBackgroundColor}]}>
-                <Ionicons name = {transaction.iconName} size = {35} color = {transaction.iconColor}/>
+            <View style = {[styles.iconContainer, {backgroundColor: iconBackgroundColor}]}>
+                <Ionicons name = {iconName} size = {35} color = {iconColor}/>
             </View>
             
             <View style = {styles.textStyle}>
                 <View style = {styles.topText}>
-                    <Text style = {styles.titleText}>{transaction.title}</Text>
-                    <Text style = {isExpense?[styles.amountText, {color: 'red'}]:[styles.amountText, {color: 'green'}]}>{isExpense? `- $${transaction.amount}`: `+ $${transaction.amount}`}</Text>
+                    <Text style = {styles.titleText}>{title}</Text>
+                    <Text style = {isExpense?[styles.amountText, {color: 'red'}]:[styles.amountText, {color: 'green'}]}>{isExpense? `- $${amount}`: `+ $${amount}`}</Text>
                 </View>
 
                 <View style = {styles.bottomText}>
-                    <Text style = {styles.text}>{transaction.description}</Text>
-                    <Text style = {styles.text}>{transaction.time}</Text>
+                    <Text style = {styles.text}>{description}</Text>
+                    <Text style = {styles.text}>{time}</Text>
                 </View>
             </View>
         </TouchableOpacity>

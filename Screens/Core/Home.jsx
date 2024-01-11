@@ -1,15 +1,19 @@
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native';
+import React from 'react';
+
+import { useDispatch, useSelector } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { pullFromBackend } from '../../Requests/https';
 import { pushUserInfoToRedux } from '../../States/actions/userInfoActions';
-import { createTransaction } from '../../States/actions/transaction/transactionActions';
+import { addTransaction } from '../../States/reducers/transactionSlice';
 
 import Header from '../../Components/CoreComponents/Header';
 import MoneyPreview from '../../Components/CoreComponents/moneyPreview';
 import CustomButton from '../../Components/CoreComponents/CustomButton';
+import Transaction from '../../Components/CoreComponents/Transaction';
 
 export default function Home({navigation}) {    
     const dispatch = useDispatch()
@@ -17,19 +21,27 @@ export default function Home({navigation}) {
     const [expenses, setExpenses] = useState(0)
     const [income, setIncome] = useState(0)
 
-    useEffect(() => {
-        async function fetchData() {
-            const response = await pullFromBackend()
-            const userIdFromDatabase = Object.keys(response)[0] // Eventually, we need to traverse Object.keys(response) and get the data of the key saved on the user device
+    const transactionList = useSelector(state => state.transactions)
 
-            dispatch(pushUserInfoToRedux(response[userIdFromDatabase].userInfo)) 
-            setUserBalance(response[userIdFromDatabase].userInfo.balance)
-        }
+    useFocusEffect(
+        React.useCallback(() => {
+            async function fetchData() {
+                const response = await pullFromBackend()
+                const userIdFromDatabase = Object.keys(response)[0] // Eventually, we need to traverse Object.keys(response) and get the data of the key saved on the user device
 
-        fetchData()
-    }, [])
+                dispatch(pushUserInfoToRedux(response[userIdFromDatabase].userInfo)) 
+                setUserBalance(response[userIdFromDatabase].userInfo.balance)
 
-    //console.log(transactions)
+                Object.keys(response[userIdFromDatabase]).forEach((key) => {
+                    if(key === "expenseList"){
+                        dispatch(addTransaction(response[userIdFromDatabase].expenseList))
+                    }
+                })
+            }
+
+            fetchData()
+        }, [])
+    )
 
     return (
         <LinearGradient colors={['#FFF6E5', 'white']} style = {styles.containerStyle}>
@@ -54,9 +66,24 @@ export default function Home({navigation}) {
                     <CustomButton title = "See All"/>
                 </View>
 
-                <ScrollView style = {styles.scrollViewStyle}>
-                    
-                </ScrollView>
+                <View>
+                    <ScrollView style = {styles.scrollViewStyle} scrollEnabled = {true}>
+                        {transactionList.filter((element) => element !== null).map((transaction) => {
+                        return (
+                                <Transaction 
+                                    isExpense = {transaction.isExpense}
+                                    iconName = {transaction.iconName}
+                                    iconColor = {transaction.iconColor}
+                                    iconBackgroundColor = {transaction.iconBackgroundColor}
+                                    title = {transaction.title}
+                                    amount = {transaction.amount}
+                                    description = {transaction.description}
+                                    time = {transaction.time}
+                                />
+                            )
+                        })}
+                    </ScrollView>
+                </View>
             </View>
         </LinearGradient>
     );
