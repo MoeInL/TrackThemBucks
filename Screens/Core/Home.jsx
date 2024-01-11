@@ -24,7 +24,6 @@ export default function Home({navigation}) {
 
             dispatch(pushUserInfoToRedux(response[userIdFromDatabase].userInfo)) 
             setUserBalance(response[userIdFromDatabase].userInfo.balance)
-            //dispatch(createTransaction(response[userIdFromDatabase].expenseList))
         }
 
         fetchData()

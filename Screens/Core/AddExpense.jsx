@@ -16,17 +16,27 @@ export default function AddExpense({navigation}) {
 
     const [isPressed, setIsPressed] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [expenseList, setExpenseList] = useState([])
 
     const userinformation = useSelector(state => state.userInfo)
-    const expenseListInRedux = useSelector(state => state.transactions)
-
+    
     useEffect(() => {
-        console.log(expenseListInRedux)
+        async function fetchData() {
+            const response = await pullFromBackend()
+            const userIdFromDatabase = Object.keys(response)[0] // Eventually, we need to traverse Object.keys(response) and get the data of the key saved on the user device
+            
+            Object.keys(response[userIdFromDatabase]).forEach((key) => {
+                if(key === "expenseList"){
+                  setExpenseList([...response[userIdFromDatabase].expenseList])
+                }
+            })
+        }
+        fetchData()
     }, [])
 
     const dataInDatabse = {
         userInfo: userinformation.state,
-        expenseList: [expenseListInRedux,
+        expenseList: [...expenseList,
             {
                 iconName: iconChosen.name,
                 iconColor: iconChosen.foreground,
@@ -63,7 +73,7 @@ export default function AddExpense({navigation}) {
 
     async function addExpense(){
         setIsLoading(true)
-
+       
         try{
             await updateBackend(userinformation.state.id, dataInDatabse)
             navigation.navigate("Home")

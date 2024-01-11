@@ -5,7 +5,7 @@ const initialState = []
 export default (expenseList = initialState, action) => {
     switch (action.type) {
         case CREATE_TRANSACTION:
-            return expenseList.push(action.payload)
+            return [...expenseList, action.payload];
         default:
             return expenseList
     }
