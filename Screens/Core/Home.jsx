@@ -14,37 +14,52 @@ import Header from '../../Components/CoreComponents/Header';
 import MoneyPreview from '../../Components/CoreComponents/moneyPreview';
 import CustomButton from '../../Components/CoreComponents/CustomButton';
 import Transaction from '../../Components/CoreComponents/Transaction';
+import SplashScreen from '../../Screens/SplashScreen';
 
 export default function Home({navigation}) {    
     const dispatch = useDispatch()
     const [userBalance, setUserBalance] = useState(0)
     const [expenses, setExpenses] = useState(0)
     const [income, setIncome] = useState(0)
+    const [SplashScreenLoaded, setSplashScreenLoaded] = useState(false)
 
     const transactionList = useSelector(state => state.transactions)
 
-    useFocusEffect(
-        React.useCallback(() => {
-            async function fetchData() {
-                const response = await pullFromBackend()
-                const userIdFromDatabase = Object.keys(response)[0] // Eventually, we need to traverse Object.keys(response) and get the data of the key saved on the user device
+    useEffect(() => {
+        async function fetchData() {
+            setSplashScreenLoaded(true)
 
-                dispatch(pushUserInfoToRedux(response[userIdFromDatabase].userInfo)) 
-                setUserBalance(response[userIdFromDatabase].userInfo.balance)
+            const response = await pullFromBackend()
+            const userIdFromDatabase = Object.keys(response)[0] // Eventually, we need to traverse Object.keys(response) and get the data of the key saved on the user device
 
-                Object.keys(response[userIdFromDatabase]).forEach((key) => {
-                    if(key === "expenseList"){
-                        dispatch(addTransaction(response[userIdFromDatabase].expenseList))
-                    }
-                })
-            }
+            dispatch(pushUserInfoToRedux(response[userIdFromDatabase].userInfo)) 
+            setUserBalance(response[userIdFromDatabase].userInfo.balance)
 
-            fetchData()
-        }, [])
-    )
+            Object.keys(response[userIdFromDatabase]).forEach((key) => {
+                if(key === "expenseList"){
+                    dispatch(addTransaction(response[userIdFromDatabase].expenseList))
+                }
+            })
+            setSplashScreenLoaded(false)
+        }
+
+        fetchData()
+    }, [])
+
+    function noTransaction(){
+        return(
+            <View style = {styles.noTransactionContainerStyle}>
+                <Text style = {styles.noTransactionTextStyle}>No Transaction</Text>
+            </View>
+        )
+    }
+
+    if(SplashScreenLoaded){
+        return <SplashScreen/>
+    }
 
     return (
-        <LinearGradient colors={['#FFF6E5', 'white']} style = {styles.containerStyle}>
+        <LinearGradient colors={['#FFF6F9', 'white']} style = {styles.containerStyle}>
             <View>
                 <Header style = {styles.headerStyle}/>
 
@@ -60,29 +75,31 @@ export default function Home({navigation}) {
             </View> 
 
 
-            <View>
+            <View style = {styles.bottomContainer}>
                 <View style = {styles.listHeaderContainer}>
                     <Text style = {styles.listHeaderStyle}>Recent Transaction</Text>
                     <CustomButton title = "See All"/>
                 </View>
 
-                <View>
-                    <ScrollView style = {styles.scrollViewStyle} scrollEnabled = {true}>
-                        {transactionList.filter((element) => element !== null).map((transaction) => {
-                        return (
-                                <Transaction 
-                                    isExpense = {transaction.isExpense}
-                                    iconName = {transaction.iconName}
-                                    iconColor = {transaction.iconColor}
-                                    iconBackgroundColor = {transaction.iconBackgroundColor}
-                                    title = {transaction.title}
-                                    amount = {transaction.amount}
-                                    description = {transaction.description}
-                                    time = {transaction.time}
-                                />
-                            )
-                        })}
-                    </ScrollView>
+                <View style = {styles.transactionContainer}>
+                    {transactionList.length === 0? noTransaction():
+                        <ScrollView style = {styles.scrollViewStyle}>
+                            {transactionList.map((transaction) => {
+                            return (
+                                    <Transaction 
+                                        isExpense = {transaction.isExpense}
+                                        iconName = {transaction.iconName}
+                                        iconColor = {transaction.iconColor}
+                                        iconBackgroundColor = {transaction.iconBackgroundColor}
+                                        title = {transaction.title}
+                                        amount = {transaction.amount}
+                                        description = {transaction.description}
+                                        time = {transaction.time}
+                                        key = {transaction.title}
+                                    />
+                                )
+                            })}
+                        </ScrollView>}
                 </View>
             </View>
         </LinearGradient>
@@ -140,6 +157,27 @@ const styles = StyleSheet.create({
     scrollViewStyle: {
         marginTop: 10,
         marginRight: 10,
+    },
+
+    bottomContainer:{
+        flex: 1, 
+    },
+
+    transactionContainer: {
+        marginTop: 10,
+        flex: 1,
+    },
+
+    noTransactionContainerStyle: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+
+    noTransactionTextStyle: {
+        fontSize: 18,
+        fontWeight: "600",
+        color: "#91919F",
     },
 });
  

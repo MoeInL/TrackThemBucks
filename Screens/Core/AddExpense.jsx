@@ -1,9 +1,10 @@
 import { View, StyleSheet, Text, TextInput, Alert } from "react-native";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
-import { updateBackend, pullFromBackend } from "../../Requests/https";
- 
+import { updateBackend } from "../../Requests/https";
+import { addTransaction } from "../../States/reducers/transactionSlice";
+
 import DropDownBox from "../../Components/CoreComponents/DropDownBox";
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
 import LoadingOverlay from "../../Components/AuthUIComponents/LoadingOverlay";
@@ -19,7 +20,8 @@ export default function AddExpense({navigation}) {
 
     const userinformation = useSelector(state => state.userInfo)
     const transactionList = useSelector(state => state.transactions)
-    
+    const dispatch = useDispatch()
+
     const dataInDatabse = {
         userInfo: userinformation.state,
         expenseList: [...transactionList,
@@ -63,10 +65,13 @@ export default function AddExpense({navigation}) {
        
         try{
             await updateBackend(userinformation.state.id, dataInDatabse)
+            dispatch(addTransaction(dataInDatabse.expenseList))
             navigation.navigate("Home")
         }
         catch(error){
             Alert.alert("Error", 'Could not add expense, pls try again later')
+            setExpense("0")
+            setIconChosen("")
         }
 
         setIsLoading(false)
