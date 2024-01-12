@@ -1,5 +1,5 @@
 import { View, StyleSheet, Text, TextInput, Alert } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { updateBackend } from "../../Requests/https";
@@ -25,6 +25,13 @@ export default function AddExpense({navigation}) {
     const userinformation = useSelector(state => state.userInfo)
     const transactionList = useSelector(state => state.transactions)
     const dispatch = useDispatch()
+    
+    useEffect(() => {
+        navigation.setOptions({
+            contentStyle: {backgroundColor: iconChosen.name === "cash"? "#00A86B": "#FD3C4A"},
+            headerStyle: {backgroundColor: iconChosen.name === "cash"? "#00A86B": "#FD3C4A"}
+        })
+    }, [iconChosen])
 
     const dataInDatabse = {
         userInfo: userinformation.state,

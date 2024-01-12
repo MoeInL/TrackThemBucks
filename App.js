@@ -113,7 +113,8 @@ export default function App() {
                 contentStyle: {backgroundColor: '#FD3C4A'}, 
                 headerStyle: {backgroundColor: '#FD3C4A'},
                 headerTintColor: 'white',
-                title: "Add Expense",
+                title: "Add Transaction",
+                headerShadowVisible: false,
               }}
             />
           </Stack.Navigator>
