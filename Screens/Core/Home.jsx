@@ -25,6 +25,11 @@ export default function Home({navigation}) {
     const transactionList = useSelector(state => state.transactions)
     const userInformation = useSelector(state => state.userInfo)
 
+    const tempObject = {
+        expenseList: [],
+        userInfo: userInformation.state,
+    }
+
     useEffect(() => {
         async function fetchData() {
             const response = await pullFromBackend()
@@ -61,8 +66,8 @@ export default function Home({navigation}) {
             }
         })
 
-        setExpenses(totalExpenses)
-        setIncome(totalIncome)
+        setExpenses(totalExpenses <= 9999? totalExpenses: 9999)
+        setIncome(totalIncome <= 9999? totalIncome: 9999)
     }
 
     function noTransaction(){
@@ -75,10 +80,6 @@ export default function Home({navigation}) {
 
     async function deleteTransaction(id){
         setIsAuthenticating(true)
-        const tempObject = {
-            expenseList: [],
-            userInfo: userInformation.state,
-        }
 
         try{
             dispatch(deleteTransactionInRedux(id))
@@ -90,12 +91,8 @@ export default function Home({navigation}) {
         setIsAuthenticating(false)
     }
 
-    if(isAuthenticating){
-        return <LoadingOverlay/>
-    }
-
     return (
-        <LinearGradient colors={['#FFF6F9', 'white']} style = {styles.containerStyle}>
+        <LinearGradient colors={['#F5F5DC', 'white']} style = {styles.containerStyle}>
             <View>
                 <Header style = {styles.headerStyle}/>
 
@@ -117,7 +114,7 @@ export default function Home({navigation}) {
                     <CustomButton title = "See All"/>
                 </View>
 
-                <View style = {styles.transactionContainer}>
+                {!isAuthenticating? <View style = {styles.transactionContainer}>
                     {transactionList.length === 0? noTransaction():
                         <ScrollView style = {styles.scrollViewStyle}>
                             {[...transactionList].reverse().slice(0,6).map((transaction) => {
@@ -150,7 +147,7 @@ export default function Home({navigation}) {
                             })}
                         </ScrollView>
                     }
-                </View>
+                </View>: <LoadingOverlay/>}
             </View>
         </LinearGradient>
     );
