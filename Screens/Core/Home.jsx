@@ -1,6 +1,5 @@
 import {View, Text, StyleSheet, ScrollView, Alert} from 'react-native';
 import { useState, useEffect } from 'react';
-import React from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -21,10 +20,10 @@ export default function Home({navigation}) {
     const [expenses, setExpenses] = useState(0)
     const [income, setIncome] = useState(0)
     const [isAuthenticating, setIsAuthenticating] = useState(false) 
-    
+
     const transactionList = useSelector(state => state.transactions)
     const userInformation = useSelector(state => state.userInfo)
-
+    
     const tempObject = {
         expenseList: [],
         userInfo: userInformation.state,
