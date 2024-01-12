@@ -13,7 +13,6 @@ import Header from '../../Components/CoreComponents/Header';
 import MoneyPreview from '../../Components/CoreComponents/moneyPreview';
 import CustomButton from '../../Components/CoreComponents/CustomButton';
 import Transaction from '../../Components/CoreComponents/Transaction';
-import SplashScreen from '../../Screens/SplashScreen';
 import LoadingOverlay from '../../Components/AuthUIComponents/LoadingOverlay';
 
 export default function Home({navigation}) {    
@@ -21,21 +20,13 @@ export default function Home({navigation}) {
     const [userBalance, setUserBalance] = useState(0)
     const [expenses, setExpenses] = useState(0)
     const [income, setIncome] = useState(0)
-    const [splashScreenLoaded, setSplashScreenLoaded] = useState(false)
     const [isAuthenticating, setIsAuthenticating] = useState(false) 
-
+    
     const transactionList = useSelector(state => state.transactions)
     const userInformation = useSelector(state => state.userInfo)
 
-    const tempObject = {
-        expenseList: [],
-        userInfo: userInformation.state,
-    }
-
     useEffect(() => {
         async function fetchData() {
-            setSplashScreenLoaded(true)
-
             const response = await pullFromBackend()
             const userIdFromDatabase = Object.keys(response)[0] // Eventually, we need to traverse Object.keys(response) and get the data of the key saved on the user device
 
@@ -47,7 +38,6 @@ export default function Home({navigation}) {
                     dispatch(addTransaction(response[userIdFromDatabase].expenseList))
                 }
             })
-            setSplashScreenLoaded(false)
         }
 
         fetchData()
@@ -84,20 +74,20 @@ export default function Home({navigation}) {
     }
 
     async function deleteTransaction(id){
-        // not working, data from backend is not updating
         setIsAuthenticating(true)
-        dispatch(deleteTransactionInRedux(id))
+        const tempObject = {
+            expenseList: [],
+            userInfo: userInformation.state,
+        }
+
         try{
-            tempObject.expenseList = transactionList
+            dispatch(deleteTransactionInRedux(id))
+            tempObject.expenseList = transactionList.filter((transaction) => transaction.id !== id)
             await updateBackend(userInformation.state.id, tempObject)
         }catch(error){
             Alert.alert("Error", "Something went wrong. Please try again later.")
         }
         setIsAuthenticating(false)
-    }
-
-    if(splashScreenLoaded){
-        return <SplashScreen/>
     }
 
     if(isAuthenticating){
