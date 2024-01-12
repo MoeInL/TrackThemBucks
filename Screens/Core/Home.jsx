@@ -1,6 +1,5 @@
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import { useState, useEffect } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
 import React from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -49,6 +48,7 @@ export default function Home({navigation}) {
 
     useEffect(() => {
         calculateExpenses()
+        calculateIncome()
     }, [transactionList])
 
     function calculateExpenses(){
@@ -61,6 +61,18 @@ export default function Home({navigation}) {
         })
 
         setExpenses(total)
+    }
+
+    function calculateIncome(){
+        let total = 0
+
+        transactionList.forEach((transaction) => {
+            if(!transaction.isExpense){
+                total += Number(transaction.amount)
+            }
+        })
+
+        setIncome(total)
     }
 
     function noTransaction(){
@@ -101,7 +113,7 @@ export default function Home({navigation}) {
                 <View style = {styles.transactionContainer}>
                     {transactionList.length === 0? noTransaction():
                         <ScrollView style = {styles.scrollViewStyle}>
-                            {[...transactionList].reverse().slice(0,6).map((transaction, index) => {
+                            {[...transactionList].reverse().slice(0,6).map((transaction) => {
                                 return (
                                     <Transaction 
                                         isExpense = {transaction.isExpense}
@@ -112,7 +124,7 @@ export default function Home({navigation}) {
                                         amount = {transaction.amount}
                                         description = {transaction.description}
                                         time = {transaction.time}
-                                        key = {index}
+                                        key = {transaction.id}
                                     />
                                 )
                             })}

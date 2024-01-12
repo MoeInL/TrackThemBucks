@@ -38,6 +38,7 @@ export default function AddExpense({navigation}) {
                 amount: expense,
                 time: getTime(),
                 isExpense: iconChosen.name === "cash"? false: true,
+                id: title + getTime()
             }
         ]
     }
@@ -78,7 +79,7 @@ export default function AddExpense({navigation}) {
             Alert.alert("Error", "Please enter an amount")
         }
         else{
-            addExpense()
+            addExpense() 
         }
     }
 
