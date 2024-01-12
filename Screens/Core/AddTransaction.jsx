@@ -10,7 +10,7 @@ import CustomButton from "../../Components/OnboardingComponents/CustomButton";
 import LoadingOverlay from "../../Components/AuthUIComponents/LoadingOverlay";
 import CustomTextInput from "../../Components/OnboardingComponents/CustomTextInput";
 
-export default function AddExpense({navigation}) {
+export default function AddTransaction({navigation}) {
     const [expense, setExpense] = useState("0")
     const [iconChosen, setIconChosen] = useState("")
     const [description, setDescription] = useState("")
