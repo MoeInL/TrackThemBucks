@@ -44,7 +44,24 @@ export default function Home({navigation}) {
         }
 
         fetchData()
+        calculateExpenses()
     }, [])
+
+    useEffect(() => {
+        calculateExpenses()
+    }, [transactionList])
+
+    function calculateExpenses(){
+        let total = 0
+
+        transactionList.forEach((transaction) => {
+            if(transaction.isExpense){
+                total += Number(transaction.amount)
+            }
+        })
+
+        setExpenses(total)
+    }
 
     function noTransaction(){
         return(
@@ -70,8 +87,8 @@ export default function Home({navigation}) {
             </View>
 
             <View style = {styles.moneyContainerStyle}>
-                <MoneyPreview title = "Income" money = {expenses} icon = {require("../../assets/Images/income.png")} color = "#00A86B"/>
-                <MoneyPreview title = "Expense" money = {income} icon = {require("../../assets/Images/expense.png")} color = "#FD3C4A" onPress ={() => navigation.navigate("AddExpense")}/>
+                <MoneyPreview title = "Income" money = {income} icon = {require("../../assets/Images/income.png")} color = "#00A86B"/>
+                <MoneyPreview title = "Expense" money = {expenses} icon = {require("../../assets/Images/expense.png")} color = "#FD3C4A" onPress ={() => navigation.navigate("AddExpense")}/>
             </View> 
 
 
@@ -84,8 +101,8 @@ export default function Home({navigation}) {
                 <View style = {styles.transactionContainer}>
                     {transactionList.length === 0? noTransaction():
                         <ScrollView style = {styles.scrollViewStyle}>
-                            {transactionList.map((transaction) => {
-                            return (
+                            {[...transactionList].reverse().slice(0,6).map((transaction, index) => {
+                                return (
                                     <Transaction 
                                         isExpense = {transaction.isExpense}
                                         iconName = {transaction.iconName}
@@ -95,11 +112,12 @@ export default function Home({navigation}) {
                                         amount = {transaction.amount}
                                         description = {transaction.description}
                                         time = {transaction.time}
-                                        key = {transaction.title}
+                                        key = {index}
                                     />
                                 )
                             })}
-                        </ScrollView>}
+                        </ScrollView>
+                    }
                 </View>
             </View>
         </LinearGradient>

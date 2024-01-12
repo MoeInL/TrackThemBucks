@@ -142,7 +142,8 @@ export default function AddExpense({navigation}) {
                             value: title,
                             placeholder: "Title",
                             maxLength: 16,
-                            onChangeText: (text) => setTitle(text)
+                            onChangeText: (text) => setTitle(text),
+                            autoCapitalize: "words",
                         }} 
                         isValid = {titleValid}
                         errorTxt = "Title cannot be empty"
