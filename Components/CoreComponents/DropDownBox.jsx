@@ -1,4 +1,4 @@
-import {Text, StyleSheet, TouchableOpacity, View, ScrollView} from "react-native";
+import {Text, StyleSheet, TouchableOpacity, View, ScrollView, Keyboard} from "react-native";
 import { useState } from 'react';
 import { useSelector } from "react-redux";
 
@@ -7,11 +7,12 @@ import {Ionicons} from '@expo/vector-icons'
 
 export default function CustomButton({title, isPressed, onPress, onPick}){
     const [childChosen, setChildChosen] = useState(false)
+
     const icons = useSelector(state => state.icons)
 
     function chooseChild(child){
-        setChildChosen(!childChosen)
-        {!childChosen? onPick(child): onPick("")}
+        setChildChosen(true)
+        onPick(child)
     }
 
     function dropBoxMenu(){
@@ -22,7 +23,7 @@ export default function CustomButton({title, isPressed, onPress, onPick}){
                         <TouchableOpacity 
                             style = {[styles.childrenContainer, {backgroundColor: child.background}]} 
                             key={child.name} 
-                            onPress={() =>chooseChild(child)}
+                            onPress={() => chooseChild(child)}
                         > 
                             <Ionicons name = {child.name} size={35} color={child.foreground}/>
                         </TouchableOpacity>
@@ -34,7 +35,13 @@ export default function CustomButton({title, isPressed, onPress, onPick}){
 
     return(
         <View>
-            <TouchableOpacity onPress={onPress} style ={styles.containerStyle}>
+            <TouchableOpacity 
+                onPress={() => {
+                    onPress()
+                    Keyboard.dismiss()
+                }} 
+                style ={styles.containerStyle}
+            >
                 <Text style = {childChosen? styles.textInputStyleChosen: styles.textInputStyle}>{title}</Text>
                 {isPressed? <AntDesign name="caretup" style = {styles.textInputStyle} size={16} marginTop = {2}/>:
                     <AntDesign name="caretdown" style = {styles.textInputStyle} size={16}/>}

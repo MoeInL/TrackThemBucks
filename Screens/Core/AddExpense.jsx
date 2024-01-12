@@ -8,12 +8,16 @@ import { addTransaction } from "../../States/reducers/transactionSlice";
 import DropDownBox from "../../Components/CoreComponents/DropDownBox";
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
 import LoadingOverlay from "../../Components/AuthUIComponents/LoadingOverlay";
+import CustomTextInput from "../../Components/OnboardingComponents/CustomTextInput";
 
 export default function AddExpense({navigation}) {
     const [expense, setExpense] = useState("0")
     const [iconChosen, setIconChosen] = useState("")
     const [description, setDescription] = useState("")
     const [title, setTitle] = useState("")
+
+    const [titleValid, setTitleValid] = useState(true)
+    const [descriptionValid, setDescriptionValid] = useState(true)
 
     const [isPressed, setIsPressed] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
@@ -60,6 +64,24 @@ export default function AddExpense({navigation}) {
 
     }
 
+    function confirmInput(){
+        setTitleValid(true)
+        setDescriptionValid(true)
+
+        if(title === ""){
+            setTitleValid(false)
+        }else if(description === "")
+            setDescriptionValid(false)
+        else if(iconChosen === "")
+            Alert.alert("Error", "Please choose an icon")
+        else if(expense === "0"){
+            Alert.alert("Error", "Please enter an amount")
+        }
+        else{
+            addExpense()
+        }
+    }
+
     async function addExpense(){
         setIsLoading(true)
        
@@ -104,27 +126,41 @@ export default function AddExpense({navigation}) {
                 <View style = {styles.upperHalf}>
                     <DropDownBox 
                         title = {iconChosen === ""? "Choose Category": iconChosen.displayName}
-                        onPress={() => setIsPressed(!isPressed)}
+                        onPress={() => {
+                            setIsPressed(!isPressed)
+                            setIconChosen("")
+                        }}
                         isPressed={isPressed}
-                        onPick = {(icon) => setIconChosen(icon)}
+                        onPick = {(icon) => {
+                            setIconChosen(icon)
+                            setIsPressed(false)
+                        }}
                     />
 
-                    {!isPressed? <TextInput 
-                        placeholder="Title" 
-                        maxLength={16}
-                        style = {styles.textInputStyle}
-                        onChangeText={(text) => setTitle(text)}
+                    {!isPressed? <CustomTextInput
+                        inputConfig={{ 
+                            value: title,
+                            placeholder: "Title",
+                            maxLength: 16,
+                            onChangeText: (text) => setTitle(text)
+                        }} 
+                        isValid = {titleValid}
+                        errorTxt = "Title cannot be empty"
                     />: null}
 
-                    {!isPressed? <TextInput 
-                        placeholder="Description" 
-                        maxLength={30}
-                        style = {styles.textInputStyle}
-                        onChangeText={(text) => setDescription(text)}
+                    {!isPressed? <CustomTextInput
+                        inputConfig={{
+                            value: description,
+                            placeholder: "Description",
+                            maxLength: 30,
+                            onChangeText: (text) => setDescription(text)
+                        }} 
+                        isValid={descriptionValid}
+                        errorTxt = "Description cannot be empty"
                     />: null}
                 </View>
 
-                <CustomButton text = "Continue" onPress={addExpense}/>
+                <CustomButton text = "Continue" onPress={confirmInput}/>
             </View>
         </View>
     )
