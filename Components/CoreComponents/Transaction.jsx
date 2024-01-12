@@ -2,9 +2,9 @@ import { TouchableOpacity, Text, View, StyleSheet } from "react-native";
 
 import {Ionicons} from '@expo/vector-icons'
 
-export default function Transaction({isExpense, iconName, iconColor, iconBackgroundColor, title, amount, description, time}) {
+export default function Transaction({isExpense, iconName, iconColor, iconBackgroundColor, title, amount, description, time, onPress}) {
     return (
-        <TouchableOpacity style = {styles.componentContainer}> 
+        <TouchableOpacity style = {styles.componentContainer} onPress = {onPress}> 
             <View style = {[styles.iconContainer, {backgroundColor: iconBackgroundColor}]}>
                 <Ionicons name = {iconName} size = {35} color = {iconColor}/>
             </View>

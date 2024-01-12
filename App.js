@@ -106,16 +106,15 @@ export default function App() {
             {token === ""?<Stack.Screen name="OnBoardingNavigation" component={OnBoardingNavigation} options={{headerShown:false}}/>: null}
             {!walletCreated?<Stack.Screen name="SetupNavigation" component={SetupNavigation} options={{headerShown:false}}/>: null}
             <Stack.Screen name="CoreNavigation" component={CoreNavigation} options={{headerShown:false}}/>
-            <Stack.Screen 
-              name="AddTransaction" 
-              component={AddTransaction} 
-              options ={{
-                contentStyle: {backgroundColor: '#FD3C4A'}, 
-                headerStyle: {backgroundColor: '#FD3C4A'},
-                headerTintColor: 'white',
-                title: "Add Transaction",
-                headerShadowVisible: false,
-              }}
+            <Stack.Screen name="AddTransaction" component={AddTransaction} 
+                options ={{
+                  contentStyle: {backgroundColor: '#FD3C4A'}, 
+                  headerStyle: {backgroundColor: '#FD3C4A'},
+                  headerTintColor: 'white',
+                  title: "Add Transaction",
+                  headerShadowVisible: false,
+                }
+              }
             />
           </Stack.Navigator>
         </NavigationContainer>

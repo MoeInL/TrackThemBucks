@@ -1,28 +1,36 @@
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Alert} from 'react-native';
 import { useState, useEffect } from 'react';
 import React from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { pullFromBackend } from '../../Requests/https';
+import { pullFromBackend, updateBackend } from '../../Requests/https';
 import { pushUserInfoToRedux } from '../../States/actions/userInfoActions';
-import { addTransaction } from '../../States/reducers/transactionSlice';
+import { addTransaction, deleteTransactionInRedux } from '../../States/reducers/transactionSlice';
 
 import Header from '../../Components/CoreComponents/Header';
 import MoneyPreview from '../../Components/CoreComponents/moneyPreview';
 import CustomButton from '../../Components/CoreComponents/CustomButton';
 import Transaction from '../../Components/CoreComponents/Transaction';
 import SplashScreen from '../../Screens/SplashScreen';
+import LoadingOverlay from '../../Components/AuthUIComponents/LoadingOverlay';
 
 export default function Home({navigation}) {    
     const dispatch = useDispatch()
     const [userBalance, setUserBalance] = useState(0)
     const [expenses, setExpenses] = useState(0)
     const [income, setIncome] = useState(0)
-    const [SplashScreenLoaded, setSplashScreenLoaded] = useState(false)
+    const [splashScreenLoaded, setSplashScreenLoaded] = useState(false)
+    const [isAuthenticating, setIsAuthenticating] = useState(false) 
 
     const transactionList = useSelector(state => state.transactions)
+    const userInformation = useSelector(state => state.userInfo)
+
+    const tempObject = {
+        expenseList: [],
+        userInfo: userInformation.state,
+    }
 
     useEffect(() => {
         async function fetchData() {
@@ -43,36 +51,28 @@ export default function Home({navigation}) {
         }
 
         fetchData()
-        calculateExpenses()
+        calculateExpensesAndIcome()
     }, [])
 
     useEffect(() => {
-        calculateExpenses()
-        calculateIncome()
+        calculateExpensesAndIcome()
     }, [transactionList])
 
-    function calculateExpenses(){
-        let total = 0
+    function calculateExpensesAndIcome(){
+        let totalExpenses = 0
+        let totalIncome = 0
 
         transactionList.forEach((transaction) => {
             if(transaction.isExpense){
-                total += Number(transaction.amount)
+                totalExpenses += Number(transaction.amount)
+            }
+            else{
+                totalIncome += Number(transaction.amount)
             }
         })
 
-        setExpenses(total)
-    }
-
-    function calculateIncome(){
-        let total = 0
-
-        transactionList.forEach((transaction) => {
-            if(!transaction.isExpense){
-                total += Number(transaction.amount)
-            }
-        })
-
-        setIncome(total)
+        setExpenses(totalExpenses)
+        setIncome(totalIncome)
     }
 
     function noTransaction(){
@@ -83,8 +83,25 @@ export default function Home({navigation}) {
         )
     }
 
-    if(SplashScreenLoaded){
+    async function deleteTransaction(id){
+        // not working, data from backend is not updating
+        setIsAuthenticating(true)
+        dispatch(deleteTransactionInRedux(id))
+        try{
+            tempObject.expenseList = transactionList
+            await updateBackend(userInformation.state.id, tempObject)
+        }catch(error){
+            Alert.alert("Error", "Something went wrong. Please try again later.")
+        }
+        setIsAuthenticating(false)
+    }
+
+    if(splashScreenLoaded){
         return <SplashScreen/>
+    }
+
+    if(isAuthenticating){
+        return <LoadingOverlay/>
     }
 
     return (
@@ -100,7 +117,7 @@ export default function Home({navigation}) {
 
             <View style = {styles.moneyContainerStyle}>
                 <MoneyPreview title = "Income" money = {income} icon = {require("../../assets/Images/income.png")} color = "#00A86B"/>
-                <MoneyPreview title = "Expense" money = {expenses} icon = {require("../../assets/Images/expense.png")} color = "#FD3C4A" onPress ={() => navigation.navigate("AddExpense")}/>
+                <MoneyPreview title = "Expense" money = {expenses} icon = {require("../../assets/Images/expense.png")} color = "#FD3C4A" onPress ={() => navigation.navigate("AddTransaction")}/>
             </View> 
 
 
@@ -115,17 +132,30 @@ export default function Home({navigation}) {
                         <ScrollView style = {styles.scrollViewStyle}>
                             {[...transactionList].reverse().slice(0,6).map((transaction) => {
                                 return (
-                                    <Transaction 
-                                        isExpense = {transaction.isExpense}
-                                        iconName = {transaction.iconName}
-                                        iconColor = {transaction.iconColor}
-                                        iconBackgroundColor = {transaction.iconBackgroundColor}
-                                        title = {transaction.title}
-                                        amount = {transaction.amount}
-                                        description = {transaction.description}
-                                        time = {transaction.time}
-                                        key = {transaction.id}
-                                    />
+                                    <View key = {transaction.id}>
+                                        <Transaction 
+                                            isExpense = {transaction.isExpense}
+                                            iconName = {transaction.iconName}
+                                            iconColor = {transaction.iconColor}
+                                            iconBackgroundColor = {transaction.iconBackgroundColor}
+                                            title = {transaction.title}
+                                            amount = {transaction.amount}
+                                            description = {transaction.description}
+                                            time = {transaction.time}
+                                            onPress = {() => {
+                                                Alert.alert('Delete Transaction', 'Are you sure you want to delete this transaction?', [
+                                                    {
+                                                      text: 'Cancel',    
+                                                      style: 'cancel',
+                                                    },
+                                                    {
+                                                        text: 'OK', 
+                                                        onPress: () => deleteTransaction(transaction.id),
+                                                    }
+                                                ]);
+                                            }}
+                                        />
+                                    </View>
                                 )
                             })}
                         </ScrollView>
@@ -190,7 +220,7 @@ const styles = StyleSheet.create({
     },
 
     bottomContainer:{
-        flex: 1, 
+        height: "54%", 
     },
 
     transactionContainer: {

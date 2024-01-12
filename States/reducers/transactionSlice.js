@@ -11,18 +11,17 @@ const TransactionSlice = createSlice({
             state.push(...action.payload)
         },
 
-        editTransaction: (state, action) => {
-            const index = state.findIndex(item => item.id === action.payload.id)
-            state[index] = action.payload
-        },
-        
-        deleteTransaction: (state, action) => {
+        deleteTransactionInRedux: (state, action) => {
             state = state.filter(item => item.id !== action.payload)
         },
+
+        setTransactions: (state, action) => {
+            state = action.payload
+        }  
     }
 })
 
 export const { addTransaction } = TransactionSlice.actions
-export const { editTransaction } = TransactionSlice.actions
-export const { deleteTransaction } = TransactionSlice.actions
+export const { deleteTransactionInRedux } = TransactionSlice.actions
+export const { setTransactions } = TransactionSlice.actions
 export default TransactionSlice.reducer
