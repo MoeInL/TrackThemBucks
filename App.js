@@ -20,6 +20,7 @@ import SetupSuccess from './Screens/Setup/SetupSuccess';
 
 import Home from './Screens/Core/Home';
 import AddTransaction from './Screens/Core/AddTransaction';
+import AddIncome from './Screens/Core/AddIncome';
 
 import {store} from './States/Store';
 import { Ionicons } from '@expo/vector-icons';
@@ -107,14 +108,21 @@ export default function App() {
             {!walletCreated?<Stack.Screen name="SetupNavigation" component={SetupNavigation} options={{headerShown:false}}/>: null}
             <Stack.Screen name="CoreNavigation" component={CoreNavigation} options={{headerShown:false}}/>
             <Stack.Screen name="AddTransaction" component={AddTransaction} 
-                options ={{
-                  contentStyle: {backgroundColor: '#FD3C4A'}, 
-                  headerStyle: {backgroundColor: '#FD3C4A'},
-                  headerTintColor: 'white',
-                  title: "Add Transaction",
-                  headerShadowVisible: false,
-                }
-              }
+              options ={{
+                contentStyle: {backgroundColor: '#FD3C4A'}, 
+                headerStyle: {backgroundColor: '#FD3C4A'},
+                headerTintColor: 'white',
+                title: "Add Transaction",
+                headerShadowVisible: false,
+              }}
+            />
+            <Stack.Screen name="AddIncome" component={AddIncome} options ={{
+                contentStyle: {backgroundColor: '#00A86B'}, 
+                headerStyle: {backgroundColor: '#00A86B'},
+                headerTintColor: 'white',
+                title: "Monthly Income",
+                headerShadowVisible: false,
+              }}
             />
           </Stack.Navigator>
         </NavigationContainer>

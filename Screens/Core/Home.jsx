@@ -35,8 +35,9 @@ export default function Home({navigation}) {
             const userIdFromDatabase = Object.keys(response)[0] // Eventually, we need to traverse Object.keys(response) and get the data of the key saved on the user device
 
             dispatch(pushUserInfoToRedux(response[userIdFromDatabase].userInfo)) 
-            setUserBalance(response[userIdFromDatabase].userInfo.balance)
-
+            setUserBalance(response[userIdFromDatabase].userInfo.balance.replace(/\B(?=(\d{3})+(?!\d))/g, ','))
+            setIncome(Number(response[userIdFromDatabase].userInfo.monthlyIncome))
+          
             Object.keys(response[userIdFromDatabase]).forEach((key) => {
                 if(key === "expenseList"){
                     dispatch(addTransaction(response[userIdFromDatabase].expenseList))
@@ -50,11 +51,11 @@ export default function Home({navigation}) {
 
     useEffect(() => {
         calculateExpensesAndIcome()
-    }, [transactionList])
+    }, [transactionList, userInformation])
 
     function calculateExpensesAndIcome(){
         let totalExpenses = 0
-        let totalIncome = 0
+        let totalIncome = income
 
         transactionList.forEach((transaction) => {
             if(transaction.isExpense){
@@ -66,7 +67,10 @@ export default function Home({navigation}) {
         })
 
         setExpenses(totalExpenses <= 9999? totalExpenses: 9999)
-        setIncome(totalIncome <= 9999? totalIncome: 9999)
+
+        if(totalIncome <= 9999){
+            setIncome(totalIncome - totalExpenses >= 0? totalIncome - totalExpenses: 0)
+        }
     }
 
     function noTransaction(){
@@ -74,6 +78,41 @@ export default function Home({navigation}) {
             <View style = {styles.noTransactionContainerStyle}>
                 <Text style = {styles.noTransactionTextStyle}>No Transaction</Text>
             </View>
+        )
+    }
+
+    function transactionExist(){
+        return(
+            <ScrollView style = {styles.scrollViewStyle}>
+                {[...transactionList].reverse().slice(0,6).map((transaction) => {
+                    return (
+                        <View key = {transaction.id}>
+                            <Transaction 
+                                isExpense = {transaction.isExpense}
+                                iconName = {transaction.iconName}
+                                iconColor = {transaction.iconColor}
+                                iconBackgroundColor = {transaction.iconBackgroundColor}
+                                title = {transaction.title}
+                                amount = {transaction.amount}
+                                description = {transaction.description}
+                                time = {transaction.time}
+                                onPress = {() => {
+                                    Alert.alert('Delete Transaction', 'Are you sure you want to delete this transaction?', [
+                                        {
+                                            text: 'Cancel',    
+                                            style: 'cancel',
+                                        },
+                                        {
+                                            text: 'OK', 
+                                            onPress: () => deleteTransaction(transaction.id),
+                                        }
+                                    ]);
+                                }}
+                            />
+                        </View>
+                    )
+                })}
+            </ScrollView>
         )
     }
 
@@ -102,7 +141,7 @@ export default function Home({navigation}) {
             </View>
 
             <View style = {styles.moneyContainerStyle}>
-                <MoneyPreview title = "Income" money = {income} icon = {require("../../assets/Images/income.png")} color = "#00A86B"/>
+                <MoneyPreview title = "Income" money = {income} icon = {require("../../assets/Images/income.png")} color = "#00A86B" onPress ={() => navigation.navigate("AddIncome")}/>
                 <MoneyPreview title = "Expense" money = {expenses} icon = {require("../../assets/Images/expense.png")} color = "#FD3C4A" onPress ={() => navigation.navigate("AddTransaction")}/>
             </View> 
 
@@ -113,40 +152,11 @@ export default function Home({navigation}) {
                     <CustomButton title = "See All"/>
                 </View>
 
-                {!isAuthenticating? <View style = {styles.transactionContainer}>
-                    {transactionList.length === 0? noTransaction():
-                        <ScrollView style = {styles.scrollViewStyle}>
-                            {[...transactionList].reverse().slice(0,6).map((transaction) => {
-                                return (
-                                    <View key = {transaction.id}>
-                                        <Transaction 
-                                            isExpense = {transaction.isExpense}
-                                            iconName = {transaction.iconName}
-                                            iconColor = {transaction.iconColor}
-                                            iconBackgroundColor = {transaction.iconBackgroundColor}
-                                            title = {transaction.title}
-                                            amount = {transaction.amount}
-                                            description = {transaction.description}
-                                            time = {transaction.time}
-                                            onPress = {() => {
-                                                Alert.alert('Delete Transaction', 'Are you sure you want to delete this transaction?', [
-                                                    {
-                                                      text: 'Cancel',    
-                                                      style: 'cancel',
-                                                    },
-                                                    {
-                                                        text: 'OK', 
-                                                        onPress: () => deleteTransaction(transaction.id),
-                                                    }
-                                                ]);
-                                            }}
-                                        />
-                                    </View>
-                                )
-                            })}
-                        </ScrollView>
-                    }
-                </View>: <LoadingOverlay/>}
+                {!isAuthenticating? 
+                    <View style = {styles.transactionContainer}>
+                        {transactionList.length === 0? noTransaction():transactionExist()}
+                    </View>: <LoadingOverlay/>
+                }
             </View>
         </LinearGradient>
     );

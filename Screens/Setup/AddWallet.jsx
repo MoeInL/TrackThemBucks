@@ -23,7 +23,8 @@ export default function AddWallet({navigation}) {
             name: name,
             accountType: accountType,
             balance: balance,
-            walletCreated: true
+            walletCreated: true,
+            monthlyIncome: 0,
         }, 
     }
 
