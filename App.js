@@ -21,6 +21,7 @@ import SetupSuccess from './Screens/Setup/SetupSuccess';
 import Home from './Screens/Core/Home';
 import AddTransaction from './Screens/Core/AddTransaction';
 import AddIncome from './Screens/Core/AddIncome';
+import Notification from './Screens/Core/Notification';
 
 import {store} from './States/Store';
 import { Ionicons } from '@expo/vector-icons';
@@ -124,6 +125,7 @@ export default function App() {
                 headerShadowVisible: false,
               }}
             />
+            <Stack.Screen name="Notification" component={Notification}/>
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>

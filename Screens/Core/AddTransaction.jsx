@@ -4,11 +4,13 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { updateBackend } from "../../Requests/https";
 import { addTransaction } from "../../States/reducers/transactionSlice";
+import { getCurrentTime } from '../../Requests/getTime';
 
 import DropDownBox from "../../Components/CoreComponents/DropDownBox";
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
 import LoadingOverlay from "../../Components/AuthUIComponents/LoadingOverlay";
 import CustomTextInput from "../../Components/OnboardingComponents/CustomTextInput";
+
 
 export default function AddTransaction({navigation}) {
     const [expense, setExpense] = useState("0")
@@ -43,33 +45,11 @@ export default function AddTransaction({navigation}) {
                 title: title,
                 description: description,
                 amount: expense,
-                time: getTime(),
+                time: getCurrentTime(),
                 isExpense: iconChosen.name === "cash"? false: true,
-                id: title + getTime()
+                id: title + getCurrentTime()
             }
         ]
-    }
-
-    function getTime(){
-        const now = new Date();
-        let currentHour = now.getHours();
-        const currentMinutes = String(now.getMinutes()).padStart(2, '0');
-        let periodOfDay;
-
-        if (currentHour >= 12) {
-            periodOfDay = 'PM';
-            if (currentHour > 12) {
-                currentHour -= 12;
-            }
-        } else {
-            periodOfDay = 'AM';
-            if (currentHour === 0) {
-                currentHour = 12;
-            }
-        }
-
-        return `${currentHour}:${currentMinutes} ${periodOfDay}`;
-
     }
 
     function confirmInput(){

@@ -7,6 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { pullFromBackend, updateBackend } from '../../Requests/https';
 import { pushUserInfoToRedux } from '../../States/actions/userInfoActions';
 import { addTransaction, deleteTransactionInRedux } from '../../States/reducers/transactionSlice';
+import { getCurrentTime } from '../../Requests/getTime';
 
 import Header from '../../Components/CoreComponents/Header';
 import MoneyPreview from '../../Components/CoreComponents/moneyPreview';
@@ -27,6 +28,7 @@ export default function Home({navigation}) {
     const tempObject = {
         expenseList: [],
         userInfo: userInformation.state,
+        notificationList: {},
     }
 
     useEffect(() => {
@@ -51,8 +53,9 @@ export default function Home({navigation}) {
 
     useEffect(() => {
         calculateExpensesAndIcome()
-    }, [transactionList, userInformation])
+    }, [transactionList])
 
+    // income isnt immediatly updating when income is added, and the logic for sending notification is wrong
     function calculateExpensesAndIcome(){
         let totalExpenses = 0
         let totalIncome = income
@@ -71,6 +74,8 @@ export default function Home({navigation}) {
         if(totalIncome <= 9999){
             setIncome(totalIncome - totalExpenses >= 0? totalIncome - totalExpenses: 0)
         }
+
+        income === 0 & expenses != 0? pushNotification(): null
     }
 
     function noTransaction(){
@@ -86,36 +91,35 @@ export default function Home({navigation}) {
             <ScrollView style = {styles.scrollViewStyle}>
                 {[...transactionList].reverse().slice(0,6).map((transaction) => {
                     return (
-                        <View key = {transaction.id}>
-                            <Transaction 
-                                isExpense = {transaction.isExpense}
-                                iconName = {transaction.iconName}
-                                iconColor = {transaction.iconColor}
-                                iconBackgroundColor = {transaction.iconBackgroundColor}
-                                title = {transaction.title}
-                                amount = {transaction.amount}
-                                description = {transaction.description}
-                                time = {transaction.time}
-                                onPress = {() => {
-                                    Alert.alert('Delete Transaction', 'Are you sure you want to delete this transaction?', [
-                                        {
-                                            text: 'Cancel',    
-                                            style: 'cancel',
-                                        },
-                                        {
-                                            text: 'OK', 
-                                            onPress: () => deleteTransaction(transaction.id),
-                                        }
-                                    ]);
-                                }}
-                            />
-                        </View>
+                        <Transaction 
+                            isExpense = {transaction.isExpense}
+                            iconName = {transaction.iconName}
+                            iconColor = {transaction.iconColor}
+                            iconBackgroundColor = {transaction.iconBackgroundColor}
+                            title = {transaction.title}
+                            amount = {transaction.amount}
+                            description = {transaction.description}
+                            time = {transaction.time}
+                            key = {transaction.id}
+                            onPress = {() => {
+                                Alert.alert('Delete Transaction', 'Are you sure you want to delete this transaction?', [
+                                    {
+                                        text: 'Cancel',    
+                                        style: 'cancel',
+                                    },
+                                    {
+                                        text: 'OK', 
+                                        onPress: () => deleteTransaction(transaction.id),
+                                    }
+                                ]);
+                            }}
+                        />
                     )
                 })}
             </ScrollView>
         )
     }
-
+    //List isn't updating when transaction is deleted
     async function deleteTransaction(id){
         setIsAuthenticating(true)
 
@@ -129,10 +133,23 @@ export default function Home({navigation}) {
         setIsAuthenticating(false)
     }
 
+    async function pushNotification(){
+        const notification = {
+            title: "Expenses Exceeded Monthly Income",
+            message: "Your expenses for this month has exceeded your monthly income. You better watch out!!",
+            time: getCurrentTime(),
+        }
+
+        tempObject.notificationList = notification
+        tempObject.transactionList = transactionList
+        await updateBackend(userInformation.state.id, tempObject)
+        
+    }
+
     return (
         <LinearGradient colors={['#F5F5DC', 'white']} style = {styles.containerStyle}>
             <View>
-                <Header style = {styles.headerStyle}/>
+                <Header style = {styles.headerStyle} onNotificationPress={() => navigation.navigate("Notification")}/>
 
                 <View style = {styles.balanceContainerStyle}>
                     <Text style = {styles.titleStyle}>Account Balance</Text>
