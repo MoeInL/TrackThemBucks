@@ -72,7 +72,7 @@ export default function Home({navigation}) {
             setIncome(totalIncome - totalExpenses >= 0? totalIncome - totalExpenses: 0)
         }
 
-        income === 0 & expenses != 0? pushNotification(): null
+        //income === 0 & expenses != 0? pushNotification(): null
     }
 
     function noTransaction(){
