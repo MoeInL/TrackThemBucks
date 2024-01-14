@@ -17,7 +17,6 @@ import LoadingOverlay from '../../Components/AuthUIComponents/LoadingOverlay';
 
 export default function Home({navigation}) {    
     const dispatch = useDispatch()
-    const [userBalance, setUserBalance] = useState(0)
     const [expenses, setExpenses] = useState(0)
     const [income, setIncome] = useState(0)
     const [isAuthenticating, setIsAuthenticating] = useState(false) 
@@ -27,7 +26,7 @@ export default function Home({navigation}) {
     
     const tempObject = {
         expenseList: [],
-        userInfo: userInformation.state,
+        userInfo: userInformation,
         notificationList: {},
     }
 
@@ -37,7 +36,6 @@ export default function Home({navigation}) {
             const userIdFromDatabase = Object.keys(response)[0] // Eventually, we need to traverse Object.keys(response) and get the data of the key saved on the user device
 
             dispatch(pushUserInfoToRedux(response[userIdFromDatabase].userInfo)) 
-            setUserBalance(response[userIdFromDatabase].userInfo.balance.replace(/\B(?=(\d{3})+(?!\d))/g, ','))
             setIncome(Number(response[userIdFromDatabase].userInfo.monthlyIncome))
           
             Object.keys(response[userIdFromDatabase]).forEach((key) => {
@@ -126,7 +124,7 @@ export default function Home({navigation}) {
         try{
             dispatch(deleteTransactionInRedux(id))
             tempObject.expenseList = transactionList.filter((transaction) => transaction.id !== id)
-            await updateBackend(userInformation.state.id, tempObject)
+            await updateBackend(userInformation.id, tempObject)
         }catch(error){
             Alert.alert("Error", "Something went wrong. Please try again later.")
         }
@@ -153,7 +151,7 @@ export default function Home({navigation}) {
 
                 <View style = {styles.balanceContainerStyle}>
                     <Text style = {styles.titleStyle}>Account Balance</Text>
-                    <Text style = {styles.moneyStyle}>${userBalance}</Text>
+                    <Text style = {styles.moneyStyle}>${userInformation.balance}</Text>
                 </View>
             </View>
 

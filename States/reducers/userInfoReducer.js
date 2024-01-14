@@ -44,7 +44,7 @@ export default (userInfo = initialState, action) => {
             }
         case USER_INFO:
             return {
-                state: action.payload
+                ...action.payload
             }
         default:
             return userInfo
