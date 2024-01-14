@@ -34,10 +34,6 @@ export default function Login({navigation}){
         return unsubscribe;
     }, [navigation]);
 
-    useEffect(() => {
-        console.log(userInformation)    
-    },[])
-
     async function logInHandler(email, password){
         let proceed = true;
         setIsAuthenticating(true)

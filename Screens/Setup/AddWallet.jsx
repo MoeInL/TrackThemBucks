@@ -24,7 +24,6 @@ export default function AddWallet({navigation}) {
             accountType: accountType,
             balance: balance,
             walletCreated: true,
-            monthlyIncome: 0,
         }, 
     }
 
