@@ -19,6 +19,7 @@ export default function Home({navigation}) {
     const dispatch = useDispatch()
     const [expenses, setExpenses] = useState(0)
     const [income, setIncome] = useState(0)
+    const [hasNotification, setHasNotification] = useState(false)
     const [isAuthenticating, setIsAuthenticating] = useState(false) 
 
     const transactionListInRedux = useSelector(state => state.transactions)
@@ -33,6 +34,10 @@ export default function Home({navigation}) {
         async function fetchData() {
             const response = await pullFromBackend()
             const userIdFromDatabase = Object.keys(response)[0] // Eventually, we need to traverse Object.keys(response) and get the data of the key saved on the user device
+
+            if(response[userIdFromDatabase].userInformation.monthlyIncome === 0){
+                navigation.navigate("AddIncome")
+            }
 
             dispatch(pushUserInfoToRedux(response[userIdFromDatabase].userInformation)) 
             setIncome(Number(response[userIdFromDatabase].userInformation.monthlyIncome))

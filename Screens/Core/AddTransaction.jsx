@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, TextInput, Alert } from "react-native";
+import { View, StyleSheet, Text, TextInput, Alert, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -94,73 +94,77 @@ export default function AddTransaction({navigation}) {
     }
 
     return (
-        <View style = {styles.ScreenStyle}>
-            <View style = {styles.textContainer}>
-                <Text style = {styles.titleTxt}>How much?</Text>
+        <KeyboardAvoidingView  behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style = {{flex: 1}}> 
+            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+                <View style = {styles.ScreenStyle}>
+                    <View style = {styles.textContainer}>
+                        <Text style = {styles.titleTxt}>How much?</Text>
 
-                <View style = {styles.moneyContainer}>
-                    <Text style = {styles.moneyTxt}>$</Text>
-                    <TextInput 
-                        style = {[styles.moneyTxt, {flex: 1}]}
-                        value = {expense}
-                        keyboardType="numeric"
-                        onChangeText = {(text) => setExpense(text)}
-                        onFocus={() => setExpense("")}
-                        onBlur={() => {setExpense(expense === "" ? "0" : expense)}}
-                        maxLength={4}
-                    />
+                        <View style = {styles.moneyContainer}>
+                            <Text style = {styles.moneyTxt}>$</Text>
+                            <TextInput 
+                                style = {[styles.moneyTxt, {flex: 1}]}
+                                value = {expense}
+                                keyboardType="numeric"
+                                onChangeText = {(text) => setExpense(text)}
+                                onFocus={() => setExpense("")}
+                                onBlur={() => {setExpense(expense === "" ? "0" : expense)}}
+                                maxLength={4}
+                            />
+                        </View>
+                    </View>
+    
+                    <View style = {styles.containerView}> 
+                            <View style = {styles.upperHalf}>
+                                <DropDownBox 
+                                    title = {iconChosen === ""? "Choose Category": iconChosen.displayName}
+                                    onPress={() => {
+                                        setIsPressed(!isPressed)
+                                        setIconChosen("")
+                                    }}
+                                    isPressed={isPressed}
+                                    onPick = {(icon) => {
+                                        setIconChosen(icon)
+                                        setIsPressed(false)
+                                    }}
+                                />
+
+                                {!isPressed? <CustomTextInput
+                                    inputConfig={{ 
+                                        value: title,
+                                        placeholder: "Title",
+                                        maxLength: 16,
+                                        onChangeText: (text) => setTitle(text),
+                                        autoCapitalize: "words",
+                                    }} 
+                                    isValid = {titleValid}
+                                    errorTxt = "Title cannot be empty"
+                                />: null}
+
+                                {!isPressed? <CustomTextInput
+                                    inputConfig={{
+                                        value: description,
+                                        placeholder: "Description",
+                                        maxLength: 30,
+                                        onChangeText: (text) => setDescription(text)
+                                    }} 
+                                    isValid={descriptionValid}
+                                    errorTxt = "Description cannot be empty"
+                                />: null}
+                            </View>
+
+                        <CustomButton text = "Continue" onPress={confirmInput}/>
+                    </View>
                 </View>
-            </View>
-
-            <View style = {styles.containerView}>
-                <View style = {styles.upperHalf}>
-                    <DropDownBox 
-                        title = {iconChosen === ""? "Choose Category": iconChosen.displayName}
-                        onPress={() => {
-                            setIsPressed(!isPressed)
-                            setIconChosen("")
-                        }}
-                        isPressed={isPressed}
-                        onPick = {(icon) => {
-                            setIconChosen(icon)
-                            setIsPressed(false)
-                        }}
-                    />
-
-                    {!isPressed? <CustomTextInput
-                        inputConfig={{ 
-                            value: title,
-                            placeholder: "Title",
-                            maxLength: 16,
-                            onChangeText: (text) => setTitle(text),
-                            autoCapitalize: "words",
-                        }} 
-                        isValid = {titleValid}
-                        errorTxt = "Title cannot be empty"
-                    />: null}
-
-                    {!isPressed? <CustomTextInput
-                        inputConfig={{
-                            value: description,
-                            placeholder: "Description",
-                            maxLength: 30,
-                            onChangeText: (text) => setDescription(text)
-                        }} 
-                        isValid={descriptionValid}
-                        errorTxt = "Description cannot be empty"
-                    />: null}
-                </View>
-
-                <CustomButton text = "Continue" onPress={confirmInput}/>
-            </View>
-        </View>
+            </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     )
 }
 
 const styles = StyleSheet.create({
     ScreenStyle:{
         flex: 1,
-        gap: 20,
+        justifyContent: "space-between",
     },
 
     textContainer: {

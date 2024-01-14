@@ -1,4 +1,4 @@
-import {View, Text, TextInput, StyleSheet} from "react-native";
+import {View, Text, TextInput, StyleSheet, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard} from "react-native";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -43,35 +43,44 @@ export default function AddIncome({navigation}){
     }
 
     return(
-        <View style = {styles.screenContainer}>
-            <View style = {styles.textContainer}>
-                    <Text style = {styles.titleTxt}>How much?</Text>
+        <KeyboardAvoidingView  behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style = {{flex: 1}}> 
+                <TouchableWithoutFeedback onPress={() => 
+                    {
+                        setIsFocused(false)
+                        Keyboard.dismiss()
+                    }}
+                >
+                    <View style = {styles.screenContainer}>
+                        <View style = {styles.textContainer}>
+                            <Text style = {styles.titleTxt}>How much?</Text>
 
-                    <View style = {styles.moneyContainer}>
-                        <Text style = {styles.moneyTxt}>$</Text>
-                        <TextInput 
-                            style = {[styles.moneyTxt, {flex: 1}]}
-                            value = {income}
-                            keyboardType="numeric"
-                            onChangeText = {(text) => setIncome(text)}
-                            onFocus={() => {
-                                setIncome("") 
-                                setIsFocused(true)
-                            }}
-                            onBlur={() => {
-                                setIncome(income === "" ? "0" : income)
-                                setIsFocused(false)
-                            }}
-                            maxLength={4}
-                            autoFocus = {true}
-                        />
+                            <View style = {styles.moneyContainer}>
+                                <Text style = {styles.moneyTxt}>$</Text>
+                                <TextInput 
+                                    style = {[styles.moneyTxt, {flex: 1}]}
+                                    value = {income}
+                                    keyboardType="number-pad"
+                                    onChangeText = {(text) => setIncome(text)}
+                                    onFocus={() => {
+                                        setIncome("") 
+                                        setIsFocused(true)
+                                    }}
+                                    onBlur={() => {
+                                        setIncome(income === "" ? "0" : income)
+                                        setIsFocused(false)
+                                    }}
+                                    maxLength={4}
+                                    autoFocus = {true}
+                                />
+                            </View>
+                        </View>
+
+                        {isfocused? null:<View style = {styles.bttnContainer}>
+                            <CustomButton text = "Continue" onPress={handleContinue}/>
+                        </View>}
                     </View>
-            </View>
-
-            {!isfocused?<View style = {styles.bttnContainer}>
-                <CustomButton text = "Continue" onPress={handleContinue}/>
-            </View>: null}
-        </View>
+                </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -108,7 +117,7 @@ const styles = StyleSheet.create({
 
     bttnContainer: {
         padding: 16,
-        height: "13%",
-        backgroundColor: "white",
+        height: "15%",
+        backgroundColor: "#FCFCFC",
     },
 });

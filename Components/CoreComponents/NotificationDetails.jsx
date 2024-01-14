@@ -20,8 +20,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        height: 64,
-        paddingVertical: 4,
+        paddingVertical: 10,
         paddingHorizontal: 16,
         elevation: 1,
     },
@@ -30,12 +29,13 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         shadowOpacity: 5,
         shadowColor: 'black',
-        shadowOffset: {width: 0, height: 5},
+        shadowOffset: {width: 0, height: 0},
 		shadowRadius: 6,
     },
 
     txtContainer: {
-        width: "80%",
+        width: "85%",
+        gap: 7,
     },
 
     titleStyle: {

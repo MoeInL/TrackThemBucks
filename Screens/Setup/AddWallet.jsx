@@ -12,6 +12,7 @@ export default function AddWallet({navigation}) {
     //Fix the balance length to a number
     //make the UI more interactive friendly
     //fix the , code for the balance
+    //In need of a keyboard safe area view
     const [name, setName] = useState("")
     const [accountType, setAccountType] = useState("")
     const [balance, setBalance] = useState("")

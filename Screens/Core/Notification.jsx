@@ -6,7 +6,7 @@ import {pullFromBackend} from "../../Requests/https";
 import NotificationDetails from "../../Components/CoreComponents/NotificationDetails";
 
 export default function Notification(){
-    const [hasNotification, setNotification] = useState(true)
+    const [hasNotification, setNotification] = useState(false)
     const [tempObject, setTempObject] = useState({})
 
     useEffect(() => {
