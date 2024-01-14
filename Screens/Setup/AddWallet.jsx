@@ -9,6 +9,9 @@ import CustomTextInput from '../../Components/OnboardingComponents/CustomTextInp
 import DropDownBox from '../../Components/SetupComponents/DropDownBox';
 
 export default function AddWallet({navigation}) {
+    //Fix the balance length to a number
+    //make the UI more interactive friendly
+    //fix the , code for the balance
     const [name, setName] = useState("")
     const [accountType, setAccountType] = useState("")
     const [balance, setBalance] = useState("")
@@ -18,7 +21,7 @@ export default function AddWallet({navigation}) {
     const information = useSelector(state => state.userInfo)
     
     const tempOnject = {
-        userInfo: {
+        userInformation: {
             ...information,
             name: name,
             accountType: accountType,

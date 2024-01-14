@@ -27,7 +27,7 @@ export default function AddIncome({navigation}){
 
         async function handleData() {
             tempObject.userInfo = {...userInformationInRedux, monthlyIncome: income}
-            dispatch(pushUserInfoToRedux(tempObject.userInfo))
+            dispatch(pushUserInfoToRedux(tempObject.userInformation))
             
             await updateBackend(userInformationInRedux.id,tempObject)
         }

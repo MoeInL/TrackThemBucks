@@ -50,7 +50,7 @@ export default function Home({navigation}) {
 
     useEffect(() => {
         calculateExpensesAndIcome()
-    }, [transactionListInRedux])
+    }, [transactionListInRedux, userInformationInRedux])
 
     // income isnt immediatly updating when income is added, and the logic for sending notification is wrong
     function calculateExpensesAndIcome(){
