@@ -1,8 +1,8 @@
 import {View, Text, TextInput, StyleSheet} from "react-native";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { pullFromBackend, updateBackend } from '../../Requests/https';
+import { updateBackend } from '../../Requests/https';
 import { pushUserInfoToRedux } from '../../States/actions/userInfoActions';
 
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
@@ -14,26 +14,27 @@ export default function AddIncome({navigation}){
     const [isfocused, setIsFocused] = useState(true)
     const [isAuthenticating, setIsAuthenticating] = useState(false)
 
+    const userInformationInRedux = useSelector(state => state.userInfo)
+    const transactionListInRedux = useSelector(state => state.transactions)
+
     const tempObject = {
-        expenseList: [],
-        userInfo: { }
+        transactionList: transactionListInRedux,
+        userInformation: {},
     }
 
     function handleContinue(){
         setIsAuthenticating(true)
-        async function handleData() {
-            const response = await pullFromBackend()
-            const userIdFromDatabase = Object.keys(response)[0] // Eventually, we need to traverse Object.keys(response) and get the data of the key saved on the user device
 
-            tempObject.userInfo = {...response[userIdFromDatabase].userInfo, monthlyIncome: income}
-            tempObject.expenseList = response[userIdFromDatabase].expenseList
+        async function handleData() {
+            tempObject.userInfo = {...userInformationInRedux, monthlyIncome: income}
             dispatch(pushUserInfoToRedux(tempObject.userInfo))
             
-            await updateBackend(tempObject.userInfo.id,tempObject)
+            await updateBackend(userInformationInRedux.id,tempObject)
         }
 
         handleData()
         setIsAuthenticating(false)
+
         navigation.navigate("Home")
     }
 
