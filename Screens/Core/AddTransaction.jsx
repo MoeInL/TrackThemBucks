@@ -62,7 +62,7 @@ export default function AddTransaction({navigation}) {
             setDescriptionValid(false)
         else if(iconChosen === "")
             Alert.alert("Error", "Please choose an icon")
-        else if(expense === "0" || expense === 0){
+        else if(expense === "0" || expense === 0 || expense === ""){
             Alert.alert("Error", "Please enter an amount")
         }
         else{

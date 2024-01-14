@@ -24,7 +24,7 @@ export default function Home({navigation}) {
     const transactionListInRedux = useSelector(state => state.transactions)
     const userInformationInRedux = useSelector(state => state.userInfo)
     
-    const tempObject = {
+    let tempObject = {
         transactionList: [],
         userInformation: userInformationInRedux,
     }
@@ -45,34 +45,33 @@ export default function Home({navigation}) {
         }
 
         fetchData()
-        calculateExpensesAndIcome()
+        calculateExpenses()
     }, [])
 
     useEffect(() => {
-        calculateExpensesAndIcome()
-    }, [transactionListInRedux, userInformationInRedux])
+        calculateExpenses()
+    }, [transactionListInRedux])
 
-    // income isnt immediatly updating when income is added, and the logic for sending notification is wrong
-    function calculateExpensesAndIcome(){
+    useEffect(() => {
+        setIncome(Number(userInformationInRedux.monthlyIncome))
+    }, [userInformationInRedux])
+
+    useEffect(() => {
+        if(income !== 0){
+            expenses > income? pushNotification(): null
+        }
+    }, [expenses])
+
+    function calculateExpenses(){
         let totalExpenses = 0
-        let totalIncome = income
 
         transactionListInRedux.forEach((transaction) => {
             if(transaction.isExpense){
                 totalExpenses += Number(transaction.amount)
             }
-            else{
-                totalIncome += Number(transaction.amount)
-            }
         })
 
         setExpenses(totalExpenses <= 9999? totalExpenses: 9999)
-
-        if(totalIncome <= 9999){
-            setIncome(totalIncome - totalExpenses >= 0? totalIncome - totalExpenses: 0)
-        }
-
-        //income === 0 & expenses != 0? pushNotification(): null
     }
 
     function noTransaction(){
@@ -131,14 +130,14 @@ export default function Home({navigation}) {
     }
 
     async function pushNotification(){
+        //console.log("Pushing Notification")
         const notification = {
             title: "Expenses Exceeded Monthly Income",
             message: "Your expenses for this month has exceeded your monthly income. You better watch out!!",
             time: getCurrentTime(),
         }
 
-        tempObject.notificationList = notification
-        tempObject.transactionList = transactionListInRedux
+        tempObject = {...tempObject, transactionList: transactionListInRedux, notificationList: notification}
         await updateBackend(userInformationInRedux.id, tempObject)
         
     }
@@ -210,7 +209,7 @@ const styles = StyleSheet.create({
     moneyContainerStyle: {
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "space-between",
+        gap: 5,
     },
 
     listHeaderStyle:{

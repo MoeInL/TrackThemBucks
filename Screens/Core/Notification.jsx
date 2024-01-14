@@ -16,7 +16,7 @@ export default function Notification(){
 
             if(response[userIdFromDatabase].notificationList){
                 setNotification(true)
-               setTempObject(response[userIdFromDatabase].notificationList)
+                setTempObject(response[userIdFromDatabase].notificationList)
             }else
                 setNotification(false)
         }

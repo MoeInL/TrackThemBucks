@@ -26,7 +26,7 @@ export default function AddIncome({navigation}){
         setIsAuthenticating(true)
 
         async function handleData() {
-            tempObject.userInfo = {...userInformationInRedux, monthlyIncome: income}
+            tempObject.userInformation = {...userInformationInRedux, monthlyIncome: income}
             dispatch(pushUserInfoToRedux(tempObject.userInformation))
             
             await updateBackend(userInformationInRedux.id,tempObject)
