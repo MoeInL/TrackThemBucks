@@ -24,8 +24,8 @@ export default function AddTransaction({navigation}) {
     const [isPressed, setIsPressed] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
-    const userinformation = useSelector(state => state.userInfo)
-    const transactionList = useSelector(state => state.transactions)
+    const userInformationInRedux = useSelector(state => state.userInfo)
+    const transactionListFromRedux = useSelector(state => state.transactions)
     const dispatch = useDispatch()
     
     useEffect(() => {
@@ -36,8 +36,8 @@ export default function AddTransaction({navigation}) {
     }, [iconChosen])
 
     const dataInDatabse = {
-        userInfo: userinformation.state,
-        expenseList: [...transactionList,
+        userInformation: userInformationInRedux,
+        transactionList: [...transactionListFromRedux,
             {
                 iconName: iconChosen.name,
                 iconColor: iconChosen.foreground,
@@ -74,14 +74,16 @@ export default function AddTransaction({navigation}) {
         setIsLoading(true)
        
         try{
-            await updateBackend(userinformation.state.id, dataInDatabse)
-            dispatch(addTransaction(dataInDatabse.expenseList))
+            await updateBackend(userInformationInRedux.id, dataInDatabse)
+            dispatch(addTransaction(dataInDatabse.transactionList))
             navigation.navigate("Home")
         }
         catch(error){
-            Alert.alert("Error", 'Could not add expense, pls try again later')
+            Alert.alert("Error", 'Could not add transaction, pls try again later')
             setExpense("0")
             setIconChosen("")
+            setDescription("")
+            setTitle("")
         }
 
         setIsLoading(false)

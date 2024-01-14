@@ -21,13 +21,12 @@ export default function Home({navigation}) {
     const [income, setIncome] = useState(0)
     const [isAuthenticating, setIsAuthenticating] = useState(false) 
 
-    const transactionList = useSelector(state => state.transactions)
-    const userInformation = useSelector(state => state.userInfo)
+    const transactionListInRedux = useSelector(state => state.transactions)
+    const userInformationInRedux = useSelector(state => state.userInfo)
     
     const tempObject = {
-        expenseList: [],
-        userInfo: userInformation,
-        notificationList: {},
+        transactionList: [],
+        userInformation: userInformationInRedux,
     }
 
     useEffect(() => {
@@ -35,12 +34,12 @@ export default function Home({navigation}) {
             const response = await pullFromBackend()
             const userIdFromDatabase = Object.keys(response)[0] // Eventually, we need to traverse Object.keys(response) and get the data of the key saved on the user device
 
-            dispatch(pushUserInfoToRedux(response[userIdFromDatabase].userInfo)) 
-            setIncome(Number(response[userIdFromDatabase].userInfo.monthlyIncome))
+            dispatch(pushUserInfoToRedux(response[userIdFromDatabase].userInformation)) 
+            setIncome(Number(response[userIdFromDatabase].userInformation.monthlyIncome))
           
             Object.keys(response[userIdFromDatabase]).forEach((key) => {
-                if(key === "expenseList"){
-                    dispatch(addTransaction(response[userIdFromDatabase].expenseList))
+                if(key === "transactionList"){
+                    dispatch(addTransaction(response[userIdFromDatabase].transactionList))
                 }
             })
         }
@@ -51,14 +50,14 @@ export default function Home({navigation}) {
 
     useEffect(() => {
         calculateExpensesAndIcome()
-    }, [transactionList])
+    }, [transactionListInRedux])
 
     // income isnt immediatly updating when income is added, and the logic for sending notification is wrong
     function calculateExpensesAndIcome(){
         let totalExpenses = 0
         let totalIncome = income
 
-        transactionList.forEach((transaction) => {
+        transactionListInRedux.forEach((transaction) => {
             if(transaction.isExpense){
                 totalExpenses += Number(transaction.amount)
             }
@@ -87,7 +86,7 @@ export default function Home({navigation}) {
     function transactionExist(){
         return(
             <ScrollView style = {styles.scrollViewStyle}>
-                {[...transactionList].reverse().slice(0,6).map((transaction) => {
+                {[...transactionListInRedux].reverse().slice(0,6).map((transaction) => {
                     return (
                         <Transaction 
                             isExpense = {transaction.isExpense}
@@ -123,8 +122,8 @@ export default function Home({navigation}) {
 
         try{
             dispatch(deleteTransactionInRedux(id))
-            tempObject.expenseList = transactionList.filter((transaction) => transaction.id !== id)
-            await updateBackend(userInformation.id, tempObject)
+            tempObject.transactionList = transactionListInRedux.filter((transaction) => transaction.id !== id)
+            await updateBackend(userInformationInRedux.id, tempObject)
         }catch(error){
             Alert.alert("Error", "Something went wrong. Please try again later.")
         }
@@ -139,8 +138,8 @@ export default function Home({navigation}) {
         }
 
         tempObject.notificationList = notification
-        tempObject.transactionList = transactionList
-        await updateBackend(userInformation.state.id, tempObject)
+        tempObject.transactionList = transactionListInRedux
+        await updateBackend(userInformationInRedux.id, tempObject)
         
     }
 
@@ -151,7 +150,7 @@ export default function Home({navigation}) {
 
                 <View style = {styles.balanceContainerStyle}>
                     <Text style = {styles.titleStyle}>Account Balance</Text>
-                    <Text style = {styles.moneyStyle}>${userInformation.balance}</Text>
+                    <Text style = {styles.moneyStyle}>${userInformationInRedux.balance}</Text>
                 </View>
             </View>
 
@@ -169,7 +168,7 @@ export default function Home({navigation}) {
 
                 {!isAuthenticating? 
                     <View style = {styles.transactionContainer}>
-                        {transactionList.length === 0? noTransaction():transactionExist()}
+                        {transactionListInRedux.length === 0? noTransaction():transactionExist()}
                     </View>: <LoadingOverlay/>
                 }
             </View>

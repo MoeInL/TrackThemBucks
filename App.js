@@ -42,8 +42,8 @@ export default function App() {
       if(response !== null) {  
         const userIdFromDatabase = Object.keys(response)[0] // Eventually, we need to traverse Object.keys(response) and get the data of the key saved on the user device
 
-        setToken(response[userIdFromDatabase].userInfo.token)
-        setWalletCreated(response[userIdFromDatabase].userInfo.walletCreated)
+        setToken(response[userIdFromDatabase].userInformation.token)
+        setWalletCreated(response[userIdFromDatabase].userInformation.walletCreated)
       }
     }
 

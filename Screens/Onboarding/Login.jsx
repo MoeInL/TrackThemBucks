@@ -21,7 +21,7 @@ export default function Login({navigation}){
     const [isAuthenticating, setIsAuthenticating] = useState(false)
 
     const dispatch = useDispatch()
-    const userInformation = useSelector(state => state.userInfo)
+    const userInformationInRedux = useSelector(state => state.userInfo)
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('blur', () => {
@@ -42,7 +42,7 @@ export default function Login({navigation}){
             const tokenRetrieved = await loginUser(email, password)
 
             dispatch(pushTokenToRedux(tokenRetrieved))
-            const id = await pushToBackend({userinfo:{...userInformation, token: tokenRetrieved}})
+            const id = await pushToBackend({userInformation:{...userInformationInRedux, token: tokenRetrieved}})
             dispatch(pushIdToRedux(id))
         }catch(error){
             Alert.alert(

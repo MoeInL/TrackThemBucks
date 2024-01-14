@@ -1,6 +1,6 @@
 import { View, StyleSheet, Text, TouchableOpacity, Alert } from "react-native";
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import LoadingOverlay from "../../Components/AuthUIComponents/LoadingOverlay";
 import CustomTextInput from "../../Components/OnboardingComponents/CustomTextInput";
@@ -22,6 +22,7 @@ export default function SignUp({navigation}){
     const [passwordValid, setPasswordValid] = useState(true)
 
     const [isAuthenticating, setIsAuthenticating] = useState(false)
+    const userInformationInRedux = useSelector(state => state.userInfo)
     const dispatch = useDispatch()
     
     useEffect(() => {
@@ -50,7 +51,7 @@ export default function SignUp({navigation}){
             const tokenRetrieved = await createUser(email, password, name)
             
             dispatch(pushTokenToRedux(tokenRetrieved))
-            const id = await pushToBackend({userinfo:{...userInformation, token: tokenRetrieved}})
+            const id = await pushToBackend({userInformation:{...userInformationInRedux, token: tokenRetrieved}})
             dispatch(pushIdToRedux(id))
         }catch(error){
             if(error.code === 'ERR_BAD_REQUEST'){
