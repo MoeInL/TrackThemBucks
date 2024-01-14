@@ -1,6 +1,6 @@
 import { View, StyleSheet, Text, TouchableOpacity, Alert } from "react-native";
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import CustomButton from "../../Components/OnboardingComponents/CustomButton";
 import CustomTextInput from "../../Components/OnboardingComponents/CustomTextInput";
@@ -19,13 +19,9 @@ export default function Login({navigation}){
     const [passValid, setPassValid] = useState(true)
 
     const [isAuthenticating, setIsAuthenticating] = useState(false)
-    const dispatch = useDispatch()
 
-    const tempObject = {
-        userInfo: {
-            token: "",
-        }
-    }
+    const dispatch = useDispatch()
+    const userInformation = useSelector(state => state.userInfo)
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('blur', () => {
@@ -34,25 +30,28 @@ export default function Login({navigation}){
             setEmailValid(true)
             setPassValid(true)
         });
-    
+        
         return unsubscribe;
     }, [navigation]);
+
+    useEffect(() => {
+        console.log(userInformation)    
+    },[])
 
     async function logInHandler(email, password){
         let proceed = true;
         setIsAuthenticating(true)
 
         try{
-            const token = await loginUser(email, password)
-            tempObject.userInfo.token = token
+            const tokenRetrieved = await loginUser(email, password)
 
-            dispatch(pushTokenToRedux(token))
-            const id = await pushToBackend(tempObject)
+            dispatch(pushTokenToRedux(tokenRetrieved))
+            const id = await pushToBackend({userinfo:{...userInformation, token: tokenRetrieved}})
             dispatch(pushIdToRedux(id))
         }catch(error){
             Alert.alert(
                 'Authentication Failed', 
-                'Could not log you in. Please check your credentials.'
+                'Could not log you in. Please check your credentials or try again later.'
             )
             setIsAuthenticating(false)
             proceed = false

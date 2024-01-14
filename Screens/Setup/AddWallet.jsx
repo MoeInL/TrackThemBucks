@@ -79,7 +79,7 @@ export default function AddWallet({navigation}) {
                 {!isPressed? <CustomTextInput 
                     inputConfig={{
                         placeholder: "Balance", 
-                        onChangeText: (text) => setBalance(text),
+                        onChangeText: (text) => setBalance(text.replace(/\B(?=(\d{3})+(?!\d))/g, ',')),
                         value: balance,
                         keyboardType: "numeric"
                     }}

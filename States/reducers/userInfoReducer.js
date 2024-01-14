@@ -3,10 +3,11 @@ import { USER_INFO, USER_ID, USER_ACCOUNT_TYPE, USER_BALANCE, USER_NAME, USER_TO
 const initialState = {
     name: "",
     accountType: "",
-    balance: "",
+    balance: 0,
     token: "",
     id: "",
     walletCreated: false,
+    monthlyIncome: 0,
 }
 
 export default (userInfo = initialState, action) => {

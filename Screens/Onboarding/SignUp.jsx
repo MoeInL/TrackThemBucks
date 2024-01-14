@@ -23,13 +23,7 @@ export default function SignUp({navigation}){
 
     const [isAuthenticating, setIsAuthenticating] = useState(false)
     const dispatch = useDispatch()
-
-    const tempObject = {
-        userInfo: {
-            token: "",
-        }
-    }
-
+    
     useEffect(() => {
         const unsubscribe = navigation.addListener('blur', () => {
             setEmail("")
@@ -53,11 +47,10 @@ export default function SignUp({navigation}){
         setIsAuthenticating(true)
 
         try{
-            const token = await createUser(email, password, name)
-            tempObject.userInfo.token = token
+            const tokenRetrieved = await createUser(email, password, name)
             
-            dispatch(pushTokenToRedux(token))
-            const id = await pushToBackend(tempObject)
+            dispatch(pushTokenToRedux(tokenRetrieved))
+            const id = await pushToBackend({userinfo:{...userInformation, token: tokenRetrieved}})
             dispatch(pushIdToRedux(id))
         }catch(error){
             if(error.code === 'ERR_BAD_REQUEST'){
