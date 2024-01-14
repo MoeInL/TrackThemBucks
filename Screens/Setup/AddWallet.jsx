@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Alert} from 'react-native';
+import {View, Text, StyleSheet, Alert, Keyboard,KeyboardAvoidingView, Platform, TouchableWithoutFeedback} from 'react-native';
 import { useState,useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { pushNameToRedux, pushAccountTypeToRedux, pushBalanceToredux } from '../../States/actions/userInfoActions';
@@ -9,10 +9,8 @@ import CustomTextInput from '../../Components/OnboardingComponents/CustomTextInp
 import DropDownBox from '../../Components/SetupComponents/DropDownBox';
 
 export default function AddWallet({navigation}) {
-    //Fix the balance length to a number
     //make the UI more interactive friendly
-    //fix the , code for the balance
-    //In need of a keyboard safe area view
+    
     const [name, setName] = useState("")
     const [accountType, setAccountType] = useState("")
     const [balance, setBalance] = useState("")
@@ -26,7 +24,7 @@ export default function AddWallet({navigation}) {
             ...information,
             name: name,
             accountType: accountType,
-            balance: balance,
+            balance: balance.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
             walletCreated: true,
         }, 
     }
@@ -37,7 +35,7 @@ export default function AddWallet({navigation}) {
 
     function AddWallet(){
         dispatch(pushNameToRedux(name))
-        dispatch(pushBalanceToredux(balance))
+        dispatch(pushBalanceToredux(balance.replace(/\B(?=(\d{3})+(?!\d))/g, ',')))
         dispatch(pushAccountTypeToRedux(accountType))
 
         pushToFirebase()
@@ -55,56 +53,70 @@ export default function AddWallet({navigation}) {
         proceed? navigation.navigate("SetupSuccess"): null
     }
     return(
-        <>
-            <View style = {styles.screenStyle}>
-                <Text style = {styles.txtStyle}>Balance</Text>
-                <Text style = {styles.moneyStyle}> {balance === ""? "$0.00": `$${balance}`}</Text>
-            </View>
+        <KeyboardAvoidingView  behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style = {{flex: 1}}> 
+            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+                <View style = {styles.screenStyle}>
+                    <View style = {styles.txtContainer}>
+                        <Text style = {styles.txtStyle}>Balance</Text>
+                        <Text style = {styles.moneyStyle}> {balance === ""? "$0.00": `$${balance.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</Text>
+                    </View>
 
-            <View style = {styles.containerView}>
-                <CustomTextInput 
-                    inputConfig={{
-                        placeholder: "Name",
-                        onChangeText: (text) => setName(text),
-                        value: name,
-                    }}
-                    isValid={true} 
-                />
+                    <View style = {styles.containerView}>
+                        <View style = {styles.inputContainer}>
+                            <CustomTextInput 
+                                inputConfig={{
+                                    placeholder: "Name",
+                                    onChangeText: (text) => setName(text),
+                                    value: name,
+                                    onblur: Keyboard.dismiss(),
+                                }}
+                                isValid={true} 
+                            />
 
-                <DropDownBox 
-                    title={accountType === ""? "Account Type": accountType} 
-                    children={[["Bank",0], ["Paypall",1], ["Venmo",2], ["Cashapp",3]]}
-                    isPressed={isPressed}
-                    onPress={() => setIsPressed(!isPressed)}
-                    onPick={(text) => setAccountType(text)}
-                />
+                            <DropDownBox 
+                                title={accountType === ""? "Account Type": accountType} 
+                                children={[["Bank",0], ["Paypall",1], ["Venmo",2], ["Cashapp",3]]}
+                                isPressed={isPressed}
+                                onPress={() => {
+                                    setIsPressed(!isPressed)
+                                    Keyboard.dismiss()
+                                }}
+                                onblur={() => setIsPressed(false)}
+                                onPick={(text) => setAccountType(text)}
+                            />
 
-                {!isPressed? <CustomTextInput 
-                    inputConfig={{
-                        placeholder: "Balance", 
-                        onChangeText: (text) => setBalance(text.replace(/\B(?=(\d{3})+(?!\d))/g, ',')),
-                        value: balance,
-                        keyboardType: "numeric"
-                    }}
-                    isValid={true} 
-                />: null}
+                            {!isPressed? <CustomTextInput 
+                                inputConfig={{
+                                    placeholder: "Balance", 
+                                    onChangeText: (text) => setBalance(text),
+                                    value: balance,
+                                    keyboardType: "numeric",
+                                    maxLength: 7,
+                                    onblur: Keyboard.dismiss()
+                                }}
+                                isValid={true} 
+                            />: null}
+                        </View>
 
-                {!isPressed? <CustomButton 
-                    text={"Add Account"} 
-                    onPress={AddWallet}
-                />: null}
-            </View>
-
-        </>
+                        {!isPressed? <CustomButton 
+                            text={"Add Account"} 
+                            onPress={AddWallet}
+                        />: null}
+                    </View>
+                </View>
+            </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     )
 }
 
 const styles = StyleSheet.create({
     screenStyle: {
         flex: 1,
-        padding: "5%",
-        marginTop: 50,
-        justifyContent: 'flex-end'
+        justifyContent: "flex-end",
+    },
+
+    txtContainer: {
+        padding: 16,
     },
 
     txtStyle:{
@@ -122,11 +134,15 @@ const styles = StyleSheet.create({
 
     containerView: {
         backgroundColor: "white",
-        gap: 20,
+        justifyContent: "space-between",
         height: "50%",
         borderTopRightRadius: 32,
         borderTopLeftRadius: 32,
         paddingHorizontal: 16,
         paddingVertical: 24,
+    },
+
+    inputContainer: {
+        gap: 20,
     },
 })
