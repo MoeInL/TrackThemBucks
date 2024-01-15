@@ -133,7 +133,7 @@ export default function Home({navigation}) {
         }
         setIsAuthenticating(false)
     }
-
+    //Notification is being pushed to backend multiple usless times + it's ruining the actual time the notification was pushed
     async function pushNotification(){
         const notification = {
             title: "Expenses Exceeded Monthly Income",
@@ -143,7 +143,6 @@ export default function Home({navigation}) {
 
         tempObject = {...tempObject, transactionList: transactionListInRedux, notificationList: notification}
         await updateBackend(userInformationInRedux.id, tempObject)
-        
     }
 
     return (
