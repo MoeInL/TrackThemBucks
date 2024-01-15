@@ -104,10 +104,10 @@ export default function AddTransaction({navigation}) {
                             <Text style = {styles.moneyTxt}>$</Text>
                             <TextInput 
                                 style = {[styles.moneyTxt, {flex: 1}]}
-                                value = {expense}
+                                value = {expense.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                 keyboardType="numeric"
                                 onChangeText = {(text) => setExpense(text)}
-                                onFocus={() => setExpense("")}
+                                onFocus={() => setExpense(expense === "0" ? "" : expense)}
                                 onBlur={() => {setExpense(expense === "" ? "0" : expense)}}
                                 maxLength={4}
                             />

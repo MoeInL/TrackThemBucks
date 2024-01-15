@@ -116,7 +116,7 @@ export default function SignUp({navigation}){
                     onChangeText: (text) => setName(text),
                     value: name,
                     autoCapitalize: "words",
-                    maxLength: 10
+                    maxLength: 10,
                 }}
                 isValid = {nameValid}
                 errorTxt = {"* Name is invalid"}
@@ -127,7 +127,8 @@ export default function SignUp({navigation}){
                     placeholder:  "Email", 
                     onChangeText: (text) => setEmail(text),
                     value: email,
-                    inputMode: "email"
+                    inputMode: "email",
+                    autoCapitalize: "none",
                 }}
                 isValid = {emailValid}
                 errorTxt = {"* Email is invalid"}
@@ -137,7 +138,8 @@ export default function SignUp({navigation}){
                 inputConfig = {{
                     placeholder: "Password", 
                     onChangeText: (text) => setPassword(text),
-                    value: password
+                    value: password,
+                    autoCapitalize: "none",
                 }}
                 errorTxt = "* Must be 10 characters long, contains uppercase letters, numbers, special character"
                 isValid={passwordValid} 

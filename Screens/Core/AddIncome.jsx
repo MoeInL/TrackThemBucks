@@ -58,7 +58,7 @@ export default function AddIncome({navigation}){
                                 <Text style = {styles.moneyTxt}>$</Text>
                                 <TextInput 
                                     style = {[styles.moneyTxt, {flex: 1}]}
-                                    value = {income}
+                                    value = {income.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                     keyboardType="number-pad"
                                     onChangeText = {(text) => setIncome(text)}
                                     onFocus={() => {

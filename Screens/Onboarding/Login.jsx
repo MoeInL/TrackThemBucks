@@ -88,7 +88,8 @@ export default function Login({navigation}){
                     placeholder: "Email",
                     onChangeText: (text) => setEmail(text),
                     value: email,
-                    mode: "email"
+                    inputMode: "email",
+                    autoCapitalize: "none",
                 }}
                 isValid = {emailValid} 
                 errorTxt={"Please enter a valid email."}
@@ -99,6 +100,7 @@ export default function Login({navigation}){
                     placeholder: "Password",
                     onChangeText: (text) => setPassword(text),
                     value: password,
+                    autoCapitalize: "none",
                 }}
                 isValid={passValid} 
             />
