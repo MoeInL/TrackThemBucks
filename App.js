@@ -6,6 +6,11 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Provider } from 'react-redux';
 
+import {store} from './States/Store';
+import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { pullFromBackend } from './Requests/https';
+
 import SplashScreen from './Screens/SplashScreen';
 
 import OnBoarding from "./Screens/Onboarding/OnBoarding";
@@ -22,10 +27,7 @@ import Home from './Screens/Core/Home';
 import AddTransaction from './Screens/Core/AddTransaction';
 import AddIncome from './Screens/Core/AddIncome';
 import Notification from './Screens/Core/Notification';
-
-import {store} from './States/Store';
-import { Ionicons } from '@expo/vector-icons';
-import { pullFromBackend } from './Requests/https';
+import Transaction from './Screens/Core/Transaction';
 
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -87,11 +89,15 @@ export default function App() {
   function CoreNavigation() {
     return (
       <BottomTab.Navigator>
+        <BottomTab.Screen name="Transaction" component={Transaction} options={{
+          headerShown:false,
+          tabBarIcon: () => <FontAwesome5 name="people-arrows" size={24} color={"#7F3DFF"}/>,
+        }}/>
+
         <BottomTab.Screen name="Home" component={Home} options={{
           headerShown:false,
           tabBarIcon: () => <Ionicons name="home" size = {24} color={"#7F3DFF"}/>,
         }}/>
-
         
       </BottomTab.Navigator>
     )

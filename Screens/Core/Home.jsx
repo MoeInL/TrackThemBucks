@@ -135,7 +135,6 @@ export default function Home({navigation}) {
     }
 
     async function pushNotification(){
-        //console.log("Pushing Notification")
         const notification = {
             title: "Expenses Exceeded Monthly Income",
             message: "Your expenses for this month has exceeded your monthly income. You better watch out!!",
