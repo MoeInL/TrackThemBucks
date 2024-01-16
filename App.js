@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Provider } from 'react-redux';
 
-import {store} from './States/Store';
+import { store } from './States/Store';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { pullFromBackend } from './Requests/https';
@@ -23,11 +23,11 @@ import SetupWallet from './Screens/Setup/SetupWallet';
 import AddWallet from './Screens/Setup/AddWallet';
 import SetupSuccess from './Screens/Setup/SetupSuccess';
 
-import Home from './Screens/Core/Home';
-import AddTransaction from './Screens/Core/AddTransaction';
-import AddIncome from './Screens/Core/AddIncome';
-import Notification from './Screens/Core/Notification';
-import Transaction from './Screens/Core/Transaction';
+import Home from './Screens/Core/HomeScreen';
+import AddTransaction from './Screens/Core/AddTransactionScreen';
+import AddIncome from './Screens/Core/AddIncomeScreen';
+import Notification from './Screens/Core/NotificationScreen';
+import TransactionScreen from './Screens/Core/TransactionScreen';
 
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -88,16 +88,25 @@ export default function App() {
 
   function CoreNavigation() {
     return (
-      <BottomTab.Navigator>
-        <BottomTab.Screen name="Transaction" component={Transaction} options={{
-          headerShown:false,
-          tabBarIcon: () => <FontAwesome5 name="people-arrows" size={24} color={"#7F3DFF"}/>,
-        }}/>
+      <BottomTab.Navigator initialRouteName="Home">
+        <BottomTab.Screen 
+          name="Transaction" component={TransactionScreen} options={{
+            headerShown:false,
+            tabBarIcon: () => <FontAwesome5 name="people-arrows" size={24} color={"grey"}/>,
+            tabBarActiveTintColor: "#7F3DFF",
+            tabBarInactiveTintColor: "grey",
+          }}
+        />
 
-        <BottomTab.Screen name="Home" component={Home} options={{
-          headerShown:false,
-          tabBarIcon: () => <Ionicons name="home" size = {24} color={"#7F3DFF"}/>,
-        }}/>
+        <BottomTab.Screen 
+          name="Home" component={Home} options={{
+            headerShown:false,
+            tabBarIcon: () => <Ionicons name="home" size = {24} color={"grey"}/>,
+            tabBarActiveTintColor: "#7F3DFF",
+            tabBarInactiveTintColor: "grey",
+
+          }}
+        />
         
       </BottomTab.Navigator>
     )

@@ -3,7 +3,7 @@ import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SimpleLineIcons } from '@expo/vector-icons'; 
 
-export default function Header({onProfilePress, onNotificationPress}) {
+export default function Header({onProfilePress, onNotificationPress, hasNotification}) {
     function getCurrentMonth(){
         const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
@@ -21,6 +21,10 @@ export default function Header({onProfilePress, onNotificationPress}) {
 
             <TouchableOpacity style = {styles.iconContainer} onPress = {onNotificationPress}>
                 <Ionicons name="notifications" size={35} color="#7F3DFF" />
+                {hasNotification? 
+                    <View style = {styles.notificationIndicator}>
+                        <Text style = {styles.notificationTxt}>1</Text>
+                    </View>: null}
             </TouchableOpacity>
         </View>
     )
@@ -52,6 +56,24 @@ const styles = StyleSheet.create({
     monthStyle: {
         fontSize: 16,
         fontWeight: "500",
+    },
+
+    notificationIndicator:{
+        position: "absolute", 
+        top: 0, 
+        right: 0, 
+        width: 20, 
+        height: 20, 
+        borderRadius: 50, 
+        backgroundColor: "#7F3DFF",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+
+    notificationTxt:{
+        fontSize: 12,
+        fontWeight: "600",
+        color: "white",
     }
 })
 

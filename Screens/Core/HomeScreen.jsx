@@ -7,6 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { pullFromBackend, updateBackend } from '../../Requests/https';
 import { pushUserInfoToRedux } from '../../States/actions/userInfoActions';
 import { addTransaction, deleteTransactionInRedux } from '../../States/reducers/transactionSlice';
+import { addNotification } from '../../States/reducers/notificationSlice';
 import { getCurrentTime } from '../../Requests/getTime';
 
 import Header from '../../Components/CoreComponents/Header';
@@ -46,6 +47,11 @@ export default function Home({navigation}) {
                 if(key === "transactionList"){
                     dispatch(addTransaction(response[userIdFromDatabase].transactionList))
                 }
+
+                if(key === "notificationList"){
+                    setHasNotification(true)
+                    dispatch(addNotification(response[userIdFromDatabase].notificationList))
+                }
             })
         }
 
@@ -62,7 +68,7 @@ export default function Home({navigation}) {
     }, [userInformationInRedux])
 
     useEffect(() => {
-        if(income !== 0){
+        if(income !== 0 && !hasNotification){
             expenses > income? pushNotification(): null
         }
     }, [expenses])
@@ -133,8 +139,9 @@ export default function Home({navigation}) {
         }
         setIsAuthenticating(false)
     }
-    //Notification is being pushed to backend multiple usless times + it's ruining the actual time the notification was pushed
+    
     async function pushNotification(){
+        setHasNotification(true)
         const notification = {
             title: "Expenses Exceeded Monthly Income",
             message: "Your expenses for this month has exceeded your monthly income. You better watch out!!",
@@ -148,7 +155,14 @@ export default function Home({navigation}) {
     return (
         <LinearGradient colors={['#F5F5DC', 'white']} style = {styles.containerStyle}>
             <View>
-                <Header style = {styles.headerStyle} onNotificationPress={() => navigation.navigate("Notification")}/>
+                <Header 
+                    style = {styles.headerStyle} 
+                    onNotificationPress={() => {
+                        navigation.navigate("Notification")
+                        setHasNotification(false)
+                    }}
+                    hasNotification={hasNotification}
+                />
 
                 <View style = {styles.balanceContainerStyle}>
                     <Text style = {styles.titleStyle}>Account Balance</Text>
@@ -165,7 +179,7 @@ export default function Home({navigation}) {
             <View style = {styles.bottomContainer}>
                 <View style = {styles.listHeaderContainer}>
                     <Text style = {styles.listHeaderStyle}>Recent Transaction</Text>
-                    <CustomButton title = "See All"/>
+                    <CustomButton title = "See All" onPress={() => navigation.navigate('Transaction')}/>
                 </View>
 
                 {!isAuthenticating? 

@@ -16,8 +16,10 @@ export default function AddIncome({navigation}){
 
     const userInformationInRedux = useSelector(state => state.userInfo)
     const transactionListInRedux = useSelector(state => state.transactions)
+    const notificationListInRedux = useSelector(state => state.notifications)
 
     const tempObject = {
+        notificationList: notificationListInRedux? notificationListInRedux : null,
         transactionList: transactionListInRedux,
         userInformation: {},
     }
@@ -62,7 +64,7 @@ export default function AddIncome({navigation}){
                                     keyboardType="number-pad"
                                     onChangeText = {(text) => setIncome(text)}
                                     onFocus={() => {
-                                        setIncome("") 
+                                        setIncome(income === "0" ? "" : income) 
                                         setIsFocused(true)
                                     }}
                                     onBlur={() => {
