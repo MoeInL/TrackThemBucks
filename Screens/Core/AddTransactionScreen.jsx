@@ -26,6 +26,7 @@ export default function AddTransaction({navigation}) {
 
     const userInformationInRedux = useSelector(state => state.userInfo)
     const transactionListFromRedux = useSelector(state => state.transactions)
+    const notificationListFromRedux = useSelector(state => state.notification)
     const dispatch = useDispatch()
     
     useEffect(() => {
@@ -33,9 +34,11 @@ export default function AddTransaction({navigation}) {
             contentStyle: {backgroundColor: iconChosen.name === "cash"? "#00A86B": "#FD3C4A"},
             headerStyle: {backgroundColor: iconChosen.name === "cash"? "#00A86B": "#FD3C4A"}
         })
+        
     }, [iconChosen])
 
     const dataInDatabse = {
+        notificationList: notificationListFromRedux? notificationListFromRedux: null,
         userInformation: userInformationInRedux,
         transactionList: [...transactionListFromRedux,
             {

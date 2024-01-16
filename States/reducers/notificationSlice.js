@@ -10,7 +10,7 @@ const NotificationSlice = createSlice({
             state = action.payload
         },
 
-        deleteNotification: (state, action) => {
+        deleteNotification: (state) => {
             state = {}
         },
     }

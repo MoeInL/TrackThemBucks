@@ -25,7 +25,7 @@ export default function Home({navigation}) {
 
     const transactionListInRedux = useSelector(state => state.transactions)
     const userInformationInRedux = useSelector(state => state.userInfo)
-    
+
     let tempObject = {
         transactionList: [],
         userInformation: userInformationInRedux,
