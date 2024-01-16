@@ -7,42 +7,47 @@ import CustomCoreButton from './CustomCoreButton';
 import FilterButtons from './FilterButtons';
 import CustomButton from '../OnboardingComponents/CustomButton';
 
-export default function FilterModal({showModal, setShowModal, setPreviewTransactionList}) {
+export default function FilterModal({showModal, setShowModal, setPreviewTransactionList, setIsFiltering}) {
     const transactionListInRedux = useSelector(state => state.transactions)
     const [filterMode, setFilterMode] = useState("")
     const [sortMode, setSortMode] = useState("")
+    const [list, setList] = useState([])
 
-    function applyFilter(){
+    useEffect(() => {
+        setList(transactionListInRedux)
+    }, [transactionListInRedux])
+
+    useEffect(() => {
         switch(filterMode){
             case "income":
-                setPreviewTransactionList(transactionListInRedux.filter(transaction => transaction.isExpense === false))
+                setList(list.filter(transaction => transaction.isExpense === false))
                 break
             case "expense":
-                setPreviewTransactionList(transactionListInRedux.filter(transaction => transaction.isExpense === true))
+                setList(list.filter(transaction => transaction.isExpense === true))
                 break
             default:
-                setPreviewTransactionList(transactionListInRedux)
+                setList(transactionListInRedux)
         }
-    }
+    }, [filterMode])
 
-    function applySort(){
+   useEffect(() => {
         switch(sortMode){
             case "highest":
-                setPreviewTransactionList([...transactionListInRedux].sort((a, b) => b.amount - a.amount))
+                setList(list.sort((a, b) => Number(b.amount) - Number(a.amount)))
                 break
             case "lowest":
-                setPreviewTransactionList([...transactionListInRedux].sort((a, b) => a.amount - b.amount))
+                setList(list.sort((a, b) => Number(a.amount) - Number(b.amount)))
                 break
             case "newest":
-                setPreviewTransactionList([...transactionListInRedux].reverse())
+                setList(list.reverse())
                 break
             case "oldest":
-                setPreviewTransactionList(transactionListInRedux)
+                setList(transactionListInRedux)
                 break
             default:
-                setPreviewTransactionList(transactionListInRedux)
+                setList(transactionListInRedux)
         }
-    }
+    }, [sortMode])
 
     return(
         <Modal
@@ -64,6 +69,8 @@ export default function FilterModal({showModal, setShowModal, setPreviewTransact
                         <CustomCoreButton title = "Reset" onPress = {() => {
                             setFilterMode("")
                             setSortMode("")
+                            setIsFiltering(false)
+                            setPreviewTransactionList(transactionListInRedux)
                         }}/>
                     </View>
 
@@ -90,10 +97,13 @@ export default function FilterModal({showModal, setShowModal, setPreviewTransact
                     <CustomButton text = "Apply" onPress = {() => {
                             setShowModal(false)
                             if(filterMode !== ""){
-                                applyFilter()
+                                setIsFiltering(true)
+                                setPreviewTransactionList(list)
                             }
-                            else
-                                applySort()
+                            else if(sortMode !== ""){
+                                setIsFiltering(true)
+                                setPreviewTransactionList(list)
+                            }
                         }}
                     />
                 </View>

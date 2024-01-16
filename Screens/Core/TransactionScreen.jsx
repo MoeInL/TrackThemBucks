@@ -11,12 +11,12 @@ export default function TransactionScreen() {
     const [hasTransaction, setHasTransaction] = useState(false)
     const [modalVisible, setModalVisible] = useState(false)
     const [previewList, setPreviewList] = useState([])
+    const [isFiltering, setIsFiltering] = useState(false)
 
     useEffect(() => {
         if(transactionListInRedux.length !== 0){
             setHasTransaction(true)
             setPreviewList(transactionListInRedux)
-            console.log("i worked")
         }
     }
     , [transactionListInRedux])
@@ -36,6 +36,11 @@ export default function TransactionScreen() {
                     <TouchableOpacity style = {styles.iconStyle} onPress = {() => setModalVisible(true)}>
                         <Ionicons name="filter" size={30} color="black"/>
                     </TouchableOpacity>
+
+                    {isFiltering? 
+                    <View style = {styles.filterIndicator}>
+                        <Text style = {styles.filterTxt}>1</Text>
+                    </View>: null}
                 </View>
 
                 <View>
@@ -67,6 +72,7 @@ export default function TransactionScreen() {
                 showModal = {modalVisible} 
                 setShowModal = {setModalVisible}
                 setPreviewTransactionList = {setPreviewList}
+                setIsFiltering = {setIsFiltering}
             />
         </>
     )
@@ -119,4 +125,22 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         color: "#91919F",
     },
+
+    filterIndicator:{
+        position: "absolute", 
+        top: 0, 
+        right: 0, 
+        width: 20, 
+        height: 20, 
+        borderRadius: 50, 
+        backgroundColor: "#7F3DFF",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+
+    filterTxt:{
+        fontSize: 12,
+        fontWeight: "600",
+        color: "white",
+    }
 });
