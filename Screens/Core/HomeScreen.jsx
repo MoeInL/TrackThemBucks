@@ -12,8 +12,8 @@ import { getCurrentTime } from '../../Requests/getTime';
 
 import Header from '../../Components/CoreComponents/Header';
 import MoneyPreview from '../../Components/CoreComponents/moneyPreview';
-import CustomButton from '../../Components/CoreComponents/CustomButton';
-import Transaction from '../../Components/CoreComponents/Transaction';
+import CustomCoreButton from '../../Components/CoreComponents/CustomCoreButton';
+import Transaction from '../../Components/CoreComponents/TransactionDetails';
 import LoadingOverlay from '../../Components/AuthUIComponents/LoadingOverlay';
 
 export default function Home({navigation}) {    
@@ -179,7 +179,7 @@ export default function Home({navigation}) {
             <View style = {styles.bottomContainer}>
                 <View style = {styles.listHeaderContainer}>
                     <Text style = {styles.listHeaderStyle}>Recent Transaction</Text>
-                    <CustomButton title = "See All" onPress={() => navigation.navigate('Transaction')}/>
+                    <CustomCoreButton title = "See All" onPress={() => navigation.navigate('Transaction')}/>
                 </View>
 
                 {!isAuthenticating? 

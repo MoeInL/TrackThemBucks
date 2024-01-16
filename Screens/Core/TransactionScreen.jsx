@@ -3,15 +3,21 @@ import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 
 import { Ionicons } from '@expo/vector-icons';
-import Transaction from '../../Components/CoreComponents/Transaction';
- 
+import Transaction from '../../Components/CoreComponents/TransactionDetails';
+import FilterModal from "../../Components/CoreComponents/FilterModal";
+
 export default function TransactionScreen() {
     const transactionListInRedux = useSelector(state => state.transactions)
     const [hasTransaction, setHasTransaction] = useState(false)
+    const [modalVisible, setModalVisible] = useState(false)
+    const [previewList, setPreviewList] = useState([])
 
     useEffect(() => {
-        if(transactionListInRedux.length !== 0)
+        if(transactionListInRedux.length !== 0){
             setHasTransaction(true)
+            setPreviewList(transactionListInRedux)
+            console.log("i worked")
+        }
     }
     , [transactionListInRedux])
 
@@ -24,37 +30,45 @@ export default function TransactionScreen() {
     }
 
     return (
-        <View style={styles.container}>
-            <View style = {styles.header}>
-                <TouchableOpacity style = {styles.iconStyle}>
-                    <Ionicons name="filter" size={30} color="black"/>
-                </TouchableOpacity>
+        <>
+            <View style={styles.container}>
+                <View style = {styles.header}>
+                    <TouchableOpacity style = {styles.iconStyle} onPress = {() => setModalVisible(true)}>
+                        <Ionicons name="filter" size={30} color="black"/>
+                    </TouchableOpacity>
+                </View>
+
+                <View>
+                    <Text style = {styles.txtStyle}>See Your Transactions</Text>
+                </View>
+
+                <View style = {styles.transactionContainer}>
+                    {hasTransaction?<FlatList
+                        data = {previewList}
+                        keyExtractor = {(transaction) => transaction.id}
+                        contentContainerStyle = {{gap: 10}}
+                        renderItem = {(transaction) =>
+                            <Transaction
+                                isExpense = {transaction.item.isExpense}
+                                iconName = {transaction.item.iconName}
+                                iconColor = {transaction.item.iconColor}
+                                iconBackgroundColor = {transaction.item.iconBackgroundColor}
+                                title = {transaction.item.title}
+                                amount = {transaction.item.amount}
+                                description = {transaction.item.description}
+                                time = {transaction.item.time}
+                            />
+                        }
+                    />:noTransaction()}
+                </View>
             </View>
 
-            <View>
-                <Text style = {styles.txtStyle}>See Your Transactions</Text>
-            </View>
-
-            <View style = {styles.transactionContainer}>
-                {hasTransaction?<FlatList
-                    data = {transactionListInRedux}
-                    keyExtractor = {(transaction) => transaction.id}
-                    contentContainerStyle = {{gap: 10}}
-                    renderItem = {(transaction) =>
-                        <Transaction
-                            isExpense = {transaction.item.isExpense}
-                            iconName = {transaction.item.iconName}
-                            iconColor = {transaction.item.iconColor}
-                            iconBackgroundColor = {transaction.item.iconBackgroundColor}
-                            title = {transaction.item.title}
-                            amount = {transaction.item.amount}
-                            description = {transaction.item.description}
-                            time = {transaction.item.time}
-                        />
-                    }
-                />:noTransaction()}
-            </View>
-        </View>
+            <FilterModal 
+                showModal = {modalVisible} 
+                setShowModal = {setModalVisible}
+                setPreviewTransactionList = {setPreviewList}
+            />
+        </>
     )
 }
 
@@ -70,6 +84,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "flex-end",
         alignItems: "center",
+        marginVertical: 15,
     },
 
     iconStyle:{
