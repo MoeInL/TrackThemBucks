@@ -26,7 +26,6 @@ export default function AddTransaction({navigation}) {
 
     const userInformationInRedux = useSelector(state => state.userInfo)
     const transactionListFromRedux = useSelector(state => state.transactions)
-    const notificationListFromRedux = useSelector(state => state.notification)
     const dispatch = useDispatch()
     
     useEffect(() => {
@@ -38,7 +37,6 @@ export default function AddTransaction({navigation}) {
     }, [iconChosen])
 
     const dataInDatabse = {
-        notificationList: notificationListFromRedux? notificationListFromRedux: null,
         userInformation: userInformationInRedux,
         transactionList: [...transactionListFromRedux,
             {

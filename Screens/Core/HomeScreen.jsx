@@ -41,8 +41,7 @@ export default function Home({navigation}) {
             }
 
             dispatch(pushUserInfoToRedux(response[userIdFromDatabase].userInformation)) 
-            setIncome(Number(response[userIdFromDatabase].userInformation.monthlyIncome))
-          
+        
             Object.keys(response[userIdFromDatabase]).forEach((key) => {
                 if(key === "transactionList"){
                     dispatch(addTransaction(response[userIdFromDatabase].transactionList))
@@ -61,17 +60,30 @@ export default function Home({navigation}) {
 
     useEffect(() => {
         calculateExpenses()
+        calculateIncome()
     }, [transactionListInRedux])
 
     useEffect(() => {
-        setIncome(Number(userInformationInRedux.monthlyIncome))
-    }, [userInformationInRedux])
+        setIncome(calculateIncome())
+    }, [userInformationInRedux, transactionListInRedux])
 
     useEffect(() => {
         if(income !== 0 && !hasNotification){
-            expenses > income? pushNotification(): null
+            expenses > income? pushNotification(): deleteNotification()
         }
-    }, [expenses])
+    }, [expenses, income])
+
+    function calculateIncome(){
+        let totalIncome = Number(userInformationInRedux.monthlyIncome)
+        
+        transactionListInRedux.forEach((transaction) => {
+            if(!transaction.isExpense){
+                totalIncome += Number(transaction.amount)
+            }
+        })
+
+        return totalIncome <= 9999? totalIncome: 9999
+    }
 
     function calculateExpenses(){
         let totalExpenses = 0
@@ -149,6 +161,12 @@ export default function Home({navigation}) {
         }
 
         tempObject = {...tempObject, transactionList: transactionListInRedux, notificationList: notification}
+        await updateBackend(userInformationInRedux.id, tempObject)
+    }
+
+    async function deleteNotification(){
+        setHasNotification(false)
+        tempObject = {...tempObject, transactionList: transactionListInRedux}
         await updateBackend(userInformationInRedux.id, tempObject)
     }
 
