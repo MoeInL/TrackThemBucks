@@ -35,13 +35,13 @@ export default function FilterModal({showModal, setShowModal, setPreviewTransact
    useEffect(() => {
         switch(sortMode){
             case "highest":
-                setSortList(filterList.sort((a, b) => Number(b.amount) - Number(a.amount)))
+                setSortList([...filterList].sort((a, b) => Number(b.amount) - Number(a.amount)))
                 break
             case "lowest":
-                setSortList(filterList.sort((a, b) => Number(a.amount) - Number(b.amount)))
+                setSortList([...filterList].sort((a, b) => Number(a.amount) - Number(b.amount)))
                 break
             case "newest":
-                setSortList(filterList.reverse())
+                setSortList([...filterList].reverse())
                 break
             case "oldest":
                 setSortList(transactionListInRedux)
@@ -143,7 +143,8 @@ const styles = StyleSheet.create({
         padding: 16,
         borderTopLeftRadius: 24,
         borderTopRightRadius: 24,
-        gap: 16,
+        gap: 20,
+        paddingBottom: 40,
     },
 
     headerStyle: {

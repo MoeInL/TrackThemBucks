@@ -29,7 +29,9 @@ import AddTransaction from './Screens/Core/AddTransactionScreen';
 import AddIncome from './Screens/Core/AddIncomeScreen';
 import Notification from './Screens/Core/NotificationScreen';
 import TransactionScreen from './Screens/Core/TransactionScreen';
-import ProfileScreen from './Screens/Core/ProfileScreen';
+
+import ProfileScreen from './Screens/Profile/ProfileScreen';
+import EditProfileScreen from './Screens/Profile/EditProfileScreen';
 
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -151,6 +153,8 @@ export default function App() {
               }}
             />
             <Stack.Screen name="Notification" component={Notification}/>
+            <Stack.Screen name="EditProfile" component={EditProfileScreen} options={{title: "Edit Profile"}}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
