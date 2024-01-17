@@ -11,41 +11,43 @@ export default function FilterModal({showModal, setShowModal, setPreviewTransact
     const transactionListInRedux = useSelector(state => state.transactions)
     const [filterMode, setFilterMode] = useState("")
     const [sortMode, setSortMode] = useState("")
-    const [list, setList] = useState([])
+    const [filterList, setFilterList] = useState([])
+    const [sortList, setSortList] = useState([])
 
     useEffect(() => {
-        setList(transactionListInRedux)
+        setFilterList(transactionListInRedux)
+        setSortList(transactionListInRedux)
     }, [transactionListInRedux])
 
     useEffect(() => {
         switch(filterMode){
             case "income":
-                setList(list.filter(transaction => transaction.isExpense === false))
+                setFilterList(transactionListInRedux.filter(transaction => transaction.isExpense === false))
                 break
             case "expense":
-                setList(list.filter(transaction => transaction.isExpense === true))
+                setFilterList(transactionListInRedux.filter(transaction => transaction.isExpense === true))
                 break
             default:
-                setList(transactionListInRedux)
+                setFilterList(transactionListInRedux)
         }
     }, [filterMode])
 
    useEffect(() => {
         switch(sortMode){
             case "highest":
-                setList(list.sort((a, b) => Number(b.amount) - Number(a.amount)))
+                setSortList(filterList.sort((a, b) => Number(b.amount) - Number(a.amount)))
                 break
             case "lowest":
-                setList(list.sort((a, b) => Number(a.amount) - Number(b.amount)))
+                setSortList(filterList.sort((a, b) => Number(a.amount) - Number(b.amount)))
                 break
             case "newest":
-                setList(list.reverse())
+                setSortList(filterList.reverse())
                 break
             case "oldest":
-                setList(transactionListInRedux)
+                setSortList(transactionListInRedux)
                 break
             default:
-                setList(transactionListInRedux)
+                setSortList(transactionListInRedux)
         }
     }, [sortMode])
 
@@ -98,11 +100,11 @@ export default function FilterModal({showModal, setShowModal, setPreviewTransact
                             setShowModal(false)
                             if(filterMode !== ""){
                                 setIsFiltering(true)
-                                setPreviewTransactionList(list)
+                                setPreviewTransactionList(filterList)
                             }
                             else if(sortMode !== ""){
                                 setIsFiltering(true)
-                                setPreviewTransactionList(list)
+                                setPreviewTransactionList(sortList)
                             }
                         }}
                     />
