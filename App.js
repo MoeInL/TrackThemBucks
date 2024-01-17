@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import { store } from './States/Store';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { pullFromBackend } from './Requests/https';
 
 import SplashScreen from './Screens/SplashScreen';
@@ -28,6 +29,7 @@ import AddTransaction from './Screens/Core/AddTransactionScreen';
 import AddIncome from './Screens/Core/AddIncomeScreen';
 import Notification from './Screens/Core/NotificationScreen';
 import TransactionScreen from './Screens/Core/TransactionScreen';
+import ProfileScreen from './Screens/Core/ProfileScreen';
 
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -92,7 +94,7 @@ export default function App() {
         <BottomTab.Screen 
           name="Transaction" component={TransactionScreen} options={{
             headerShown:false,
-            tabBarIcon: () => <FontAwesome5 name="people-arrows" size={24} color={"grey"}/>,
+            tabBarIcon: ({focused}) => <FontAwesome5 name="people-arrows" size={24} color={focused? "#7F3DFF": "grey"}/>,
             tabBarActiveTintColor: "#7F3DFF",
             tabBarInactiveTintColor: "grey",
           }}
@@ -101,10 +103,18 @@ export default function App() {
         <BottomTab.Screen 
           name="Home" component={Home} options={{
             headerShown:false,
-            tabBarIcon: () => <Ionicons name="home" size = {24} color={"grey"}/>,
+            tabBarIcon: ({focused}) => <Ionicons name="home" size = {25} color={focused? "#7F3DFF": "grey"}/>,
             tabBarActiveTintColor: "#7F3DFF",
             tabBarInactiveTintColor: "grey",
+          }}
+        />
 
+        <BottomTab.Screen 
+          name="Profile" component={ProfileScreen} options={{
+            headerShown:false,
+            tabBarIcon: ({focused}) => <MaterialCommunityIcons name="account" size={30} color={focused? "#7F3DFF": "grey"}/>,
+            tabBarActiveTintColor: "#7F3DFF",
+            tabBarInactiveTintColor: "grey",
           }}
         />
         

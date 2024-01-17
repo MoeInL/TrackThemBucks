@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
 
 import { pullFromBackend, updateBackend } from '../../Requests/https';
 import { pushUserInfoToRedux } from '../../States/actions/userInfoActions';
@@ -16,7 +17,7 @@ import CustomCoreButton from '../../Components/CoreComponents/CustomCoreButton';
 import Transaction from '../../Components/CoreComponents/TransactionDetails';
 import LoadingOverlay from '../../Components/AuthUIComponents/LoadingOverlay';
 
-export default function Home({navigation}) {    
+export default function Home({navigation, focused}) {    
     const dispatch = useDispatch()
     const [expenses, setExpenses] = useState(0)
     const [income, setIncome] = useState(0)
@@ -25,6 +26,7 @@ export default function Home({navigation}) {
 
     const transactionListInRedux = useSelector(state => state.transactions)
     const userInformationInRedux = useSelector(state => state.userInfo)
+    const isFocused = navigation.isFocused();
 
     let tempObject = {
         transactionList: [],
@@ -56,6 +58,7 @@ export default function Home({navigation}) {
 
         fetchData()
         calculateExpenses()
+        focused = isFocused
     }, [])
 
     useEffect(() => {

@@ -6,20 +6,22 @@ import { Ionicons } from '@expo/vector-icons';
 import Transaction from '../../Components/CoreComponents/TransactionDetails';
 import FilterModal from "../../Components/CoreComponents/FilterModal";
 
-export default function TransactionScreen() {
+export default function TransactionScreen({focused, navigation}) {
     const transactionListInRedux = useSelector(state => state.transactions)
     const [hasTransaction, setHasTransaction] = useState(false)
     const [modalVisible, setModalVisible] = useState(false)
     const [previewList, setPreviewList] = useState([])
     const [isFiltering, setIsFiltering] = useState(false)
-
+    const isFoused = navigation.isFocused()
+    
     useEffect(() => {
         if(transactionListInRedux.length !== 0){
             setHasTransaction(true)
             setPreviewList(transactionListInRedux)
         }
-    }
-    , [transactionListInRedux])
+
+        focused = isFoused
+    }, [transactionListInRedux])
 
     function noTransaction(){
         return(
