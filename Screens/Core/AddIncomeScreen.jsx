@@ -45,7 +45,7 @@ export default function AddIncome({navigation}){
     }
 
     return(
-        <KeyboardAvoidingView  behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style = {{flex: 1}}> 
+        <KeyboardAvoidingView  behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style = {{flex: 1}} keyboardVerticalOffset={100}> 
                 <TouchableWithoutFeedback onPress={() => 
                     {
                         setIsFocused(false)

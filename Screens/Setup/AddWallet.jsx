@@ -60,7 +60,7 @@ export default function AddWallet({navigation}) {
     }
     
     return(
-        <KeyboardAvoidingView  behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style = {{flex: 1}}> 
+        <KeyboardAvoidingView  behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style = {{flex: 1}} keyboardVerticalOffset={100}> 
             <TouchableWithoutFeedback onPress = {() => Keyboard.dismiss()}>
                 <View style = {styles.screenStyle}>
                     <View style = {styles.txtContainer}>

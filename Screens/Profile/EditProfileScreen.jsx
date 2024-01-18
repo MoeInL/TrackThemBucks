@@ -12,7 +12,7 @@ export default function EditProfileScreen({navigation}) {
     const userInformationInRedux = useSelector(state => state.userInfo);
     const transactionsInRedux = useSelector(state => state.transactions);
     //notificationInRedux is never working
-    const notificationsInRedux = useSelector(state => state.notifications);
+    const notificationsInRedux = useSelector(state => state.notification);
 
     const [name, setName] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
@@ -28,7 +28,7 @@ export default function EditProfileScreen({navigation}) {
     }
 
     return (
-        <KeyboardAvoidingView  behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style = {{flex: 1}}> 
+        <KeyboardAvoidingView  behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style = {{flex: 1}} keyboardVerticalOffset = {100}> 
             <TouchableWithoutFeedback onPress = {() => Keyboard.dismiss()}>
                 <View style = {styles.screenStyle}>
                     <View style = {styles.profilePicView}>
@@ -66,7 +66,7 @@ export default function EditProfileScreen({navigation}) {
                             />
                         </View>
 
-                        <View style = {{alignItems: 'center', flex: 1, justifyContent: 'flex-end'}}>
+                        <View style = {styles.bttnContainer}>
                             <TouchableOpacity 
                                 style = {styles.buttonStyle} 
                                 onPress = {() => {
@@ -89,10 +89,10 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: "5%",
         gap: 20,
+        justifyContent:"space-between",
     },
 
     profilePicView: {
-        height: '45%',
         alignItems: "center",
     },
 
@@ -113,10 +113,10 @@ const styles = StyleSheet.create({
     userInfo: {
         gap: 20,
         backgroundColor: "#7F3DFF",
-        flex: 1,
         borderTopRightRadius: 30,
         borderTopLeftRadius: 30,
         padding: "5%",
+        paddingBottom: "10%",
     },
 
     txtStyle: {
@@ -127,6 +127,13 @@ const styles = StyleSheet.create({
         marginBottom: "2%",
     },
 
+    bttnContainer: {
+        alignItems: 'center', 
+        flex: 1, 
+        justifyContent: 'flex-end',
+        marginTop: "15%",
+    },
+
     buttonStyle: {
         alignItems: "center",
         padding: 10,
@@ -135,6 +142,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         borderWidth: 1,
         borderColor: "white",
+        height: 45,
     },
 
     bttnTextStyle: {
