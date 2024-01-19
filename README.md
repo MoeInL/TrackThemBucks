@@ -1,9 +1,10 @@
 <div style="display: flex;">
-  <img src="https://github.com/MoeInL/WalletWatch/blob/main/Documentation%20Imgs/WhatsApp%20Image%202024-01-19%20at%203.46.01%20PM.jpeg?raw=true" width="180"/>
-  <img src="https://github.com/MoeInL/WalletWatch/blob/main/Documentation%20Imgs/WhatsApp%20Image%202024-01-19%20at%203.46.03%20PM.jpeg?raw=true" width="180"/>
-  <img src="https://github.com/MoeInL/WalletWatch/blob/main/Documentation%20Imgs/WhatsApp%20Image%202024-01-19%20at%203.46.03%20PM%20(1).jpeg?raw=true" width="180"/>
-  <img src="https://github.com/MoeInL/WalletWatch/blob/main/Documentation%20Imgs/WhatsApp%20Image%202024-01-19%20at%203.46.04%20PM.jpeg?raw=true" width ="180"/>
-  <img src="https://github.com/MoeInL/WalletWatch/blob/main/Documentation%20Imgs/WhatsApp%20Image%202024-01-19%20at%203.46.04%20PM%20(1).jpeg?raw=true" width ="180"/>
+  <img src="https://github.com/MoeInL/WalletWatch/blob/main/Documentation%20Imgs/WhatsApp%20Image%202024-01-19%20at%204.33.24%20PM.jpeg?raw=true" width="200"/>
+  <img src="https://github.com/MoeInL/WalletWatch/blob/main/Documentation%20Imgs/WhatsApp%20Image%202024-01-19%20at%203.46.01%20PM.jpeg?raw=true" width="200"/>
+  <img src="https://github.com/MoeInL/WalletWatch/blob/main/Documentation%20Imgs/WhatsApp%20Image%202024-01-19%20at%203.46.03%20PM.jpeg?raw=true" width="200"/>
+  <img src="https://github.com/MoeInL/WalletWatch/blob/main/Documentation%20Imgs/WhatsApp%20Image%202024-01-19%20at%203.46.03%20PM%20(1).jpeg?raw=true" width="200"/>
+  <img src="https://github.com/MoeInL/WalletWatch/blob/main/Documentation%20Imgs/WhatsApp%20Image%202024-01-19%20at%203.46.04%20PM.jpeg?raw=true" width ="200"/>
+  <img src="https://github.com/MoeInL/WalletWatch/blob/main/Documentation%20Imgs/WhatsApp%20Image%202024-01-19%20at%203.46.04%20PM%20(1).jpeg?raw=true" width ="200"/>
 </div>
 
   <h1>Overview</h1>
