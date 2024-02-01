@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Watch Wallet",
-    "slug": "Watch Wallet",
+    "slug": "wallet-watch",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
@@ -10,6 +10,12 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9ad8e30f-3001-4cba-ab4e-a7c33aa113f2"
+      }
+    },
+    "owner": "moeinl"
   }
 }
