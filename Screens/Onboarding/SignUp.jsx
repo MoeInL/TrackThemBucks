@@ -26,6 +26,12 @@ export default function SignUp({navigation}){
     const dispatch = useDispatch()
     
     useEffect(() => {
+        setNameValid(true)
+        setEmailValid(true)
+        setPasswordValid(true)
+    }, [name, email, password]);
+
+    useEffect(() => {
         const unsubscribe = navigation.addListener('blur', () => {
             setEmail("")
             setPassword("")
@@ -63,7 +69,13 @@ export default function SignUp({navigation}){
             proceed = false
         }
 
-        proceed? navigation.navigate("SetupNavigation"): null
+        if(proceed) {
+            setEmail("")
+            setPassword("")
+            setName("")
+            setPressed(false)
+            navigation.navigate("SetupNavigation")
+        }
     }
 
     function confirmSignUp(){
@@ -95,11 +107,6 @@ export default function SignUp({navigation}){
         }
 
         if(proceed){
-            setEmail("")
-            setPassword("")
-            setName("")
-            setPressed(false)
-
             signUpHandler(email, password, name)
         }
     }

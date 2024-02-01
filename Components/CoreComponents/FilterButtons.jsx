@@ -1,14 +1,10 @@
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
 
-export default function FilterButtons({title, onPress}) {
-    const [isPressed, setIsPressed] = useState(false)
-
+export default function FilterButtons({title, onPress, isPressed}) {
     return(
-        <TouchableOpacity style = {isPressed? [styles.buttonStyle, {backgroundColor:'#EEE5FF'}]: styles.buttonStyle} onPress = {() => {
-                onPress()
-                setIsPressed(!isPressed)
-            }}
+        <TouchableOpacity 
+            style = {isPressed? [styles.buttonStyle, {backgroundColor:'#EEE5FF'}]: styles.buttonStyle} 
+            onPress = {() => onPress()}
         >
             <Text style = {isPressed? [styles.textStyle, {color: '#7F3DFF'}]: styles.textStyle}>{title}</Text>
         </TouchableOpacity>

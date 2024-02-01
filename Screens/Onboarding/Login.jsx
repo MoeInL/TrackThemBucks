@@ -24,6 +24,11 @@ export default function Login({navigation}){
     const userInformationInRedux = useSelector(state => state.userInfo)
 
     useEffect(() => {
+        setEmailValid(true)
+        setPassValid(true)
+    }, [email, password]);
+
+    useEffect(() => {
         const unsubscribe = navigation.addListener('blur', () => {
             setEmail("")
             setPassword("")
@@ -49,11 +54,17 @@ export default function Login({navigation}){
                 'Authentication Failed', 
                 'Could not log you in. Please check your credentials or try again later.'
             )
+            setEmailValid(true)
+            setPassValid(true)
             setIsAuthenticating(false)
             proceed = false
         }
 
-        proceed? navigation.navigate("SetupNavigation"): null
+        if(proceed){
+            setEmail("")
+            setPassword("")
+            navigation.navigate("SetupNavigation")
+        }
     }
 
     function confirmLogin(){
@@ -69,10 +80,7 @@ export default function Login({navigation}){
             proceed = false
         }
 
-        if(proceed){
-            setEmail("")
-            setPassword("")
-            
+        if(proceed){        
             logInHandler(email, password)
         }
     }

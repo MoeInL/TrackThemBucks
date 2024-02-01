@@ -12,42 +12,77 @@ export default function FilterModal({showModal, setShowModal, setPreviewTransact
     const [filterMode, setFilterMode] = useState("")
     const [sortMode, setSortMode] = useState("")
     const [filterList, setFilterList] = useState([])
-    const [sortList, setSortList] = useState([])
+
+    const [incomebttn, setIncomeBttn] = useState(false)
+    const [expensebttn, setExpenseBttn] = useState(false)
+    const [highestbttn, setHighestBttn] = useState(false)
+    const [lowestbttn, setLowestBttn] = useState(false)
+    const [newestbttn, setNewestBttn] = useState(false)
+    const [oldestbttn, setOldestBttn] = useState(false)
+
 
     useEffect(() => {
         setFilterList(transactionListInRedux)
-        setSortList(transactionListInRedux)
     }, [transactionListInRedux])
 
     useEffect(() => {
-        switch(filterMode){
-            case "income":
+      switch(filterMode){
+            case "Income":  
+                console.log("Income")
+                setIncomeBttn(!incomebttn)
+                setExpenseBttn(false)
                 setFilterList(transactionListInRedux.filter(transaction => transaction.isExpense === false))
                 break
-            case "expense":
+            case "Expense":
+                setExpenseBttn(!expensebttn)
+                setIncomeBttn(false)
                 setFilterList(transactionListInRedux.filter(transaction => transaction.isExpense === true))
                 break
             default:
+                setIncomeBttn(false)
+                setExpenseBttn(false)
                 setFilterList(transactionListInRedux)
+                break
         }
-    }, [filterMode])
+    },[filterMode])
 
-   useEffect(() => {
+    useEffect(() => {
         switch(sortMode){
             case "highest":
-                setSortList([...filterList].sort((a, b) => Number(b.amount) - Number(a.amount)))
+                setHighestBttn(!highestbttn)
+                setLowestBttn(false)
+                setNewestBttn(false)
+                setOldestBttn(false)
+                setFilterList([...filterList].sort((a, b) => Number(b.amount) - Number(a.amount)))
                 break
             case "lowest":
-                setSortList([...filterList].sort((a, b) => Number(a.amount) - Number(b.amount)))
+                setLowestBttn(!lowestbttn)
+                setHighestBttn(false)  
+                setNewestBttn(false)
+                setOldestBttn(false)
+                setFilterList([...filterList].sort((a, b) => Number(a.amount) - Number(b.amount)))
                 break
             case "newest":
-                setSortList([...filterList].reverse())
+                setNewestBttn(!newestbttn)
+                setHighestBttn(false)
+                setLowestBttn(false)
+                setOldestBttn(false)
+                setFilterList([...filterList].reverse())
                 break
             case "oldest":
-                setSortList(transactionListInRedux)
+                setOldestBttn(!oldestbttn)
+                setHighestBttn(false)
+                setLowestBttn(false)
+                setNewestBttn(false)
+                setFilterList(filterList)
+                break 
+            default:   
+                setHighestBttn(false)
+                setLowestBttn(false)
+                setNewestBttn(false)
+                setOldestBttn(false)
+                setFilterList(transactionListInRedux)
                 break
-            default:
-                setSortList(transactionListInRedux)
         }
     }, [sortMode])
 
@@ -59,7 +94,12 @@ export default function FilterModal({showModal, setShowModal, setPreviewTransact
         >
             <View style = {styles.modalContainer}>
                 <View style = {styles.modalView}>
-                    <TouchableWithoutFeedback onPress = {() => setShowModal(false)}>
+                    <TouchableWithoutFeedback onPress = {() => {
+                        setShowModal(false)
+                        setFilterMode("")
+                        setSortMode("")
+                        setIsFiltering(false)
+                    }}>
                         <View style = {styles.swipeDownView}>
                             <Text style = {styles.swipeDown}>h</Text>
                         </View>
@@ -80,8 +120,8 @@ export default function FilterModal({showModal, setShowModal, setPreviewTransact
                         <Text style = {styles.txtStyle}>Filter by</Text>
 
                         <View style = {{flexDirection: 'row', gap: 8}}>
-                            <FilterButtons title = "Income" onPress = {() => setFilterMode("income")}/>
-                            <FilterButtons title = "Expense" onPress = {() => setFilterMode("expense")}/>
+                            <FilterButtons title = "Income" isPressed = {incomebttn} onPress = {() => setFilterMode("Income")}/>
+                            <FilterButtons title = "Expense" isPressed = {expensebttn} onPress = {() => setFilterMode("Expense")}/>
                         </View>
                     </View>
 
@@ -89,22 +129,18 @@ export default function FilterModal({showModal, setShowModal, setPreviewTransact
                         <Text style = {styles.txtStyle}>Sort By</Text>
 
                         <View style = {styles.sortView}>
-                            <FilterButtons title = "Highest" onPress = {() => setSortMode("highest")}/>
-                            <FilterButtons title = "Lowest" onPress = {() => setSortMode("lowest")}/>
-                            <FilterButtons title = "Newest" onPress = {() => setSortMode("newest")}/>
-                            <FilterButtons title = "Oldest" onPress = {() => setSortMode("oldest")}/>
+                            <FilterButtons title = "Highest" isPressed = {highestbttn} onPress = {() => setSortMode("highest")}/>
+                            <FilterButtons title = "Lowest" isPressed={lowestbttn} onPress = {() => setSortMode("lowest")}/>
+                            <FilterButtons title = "Newest" isPressed = {newestbttn} onPress = {() => setSortMode("newest")}/>
+                            <FilterButtons title = "Oldest" isPressed={oldestbttn} onPress = {() => setSortMode("oldest")}/>
                         </View>
                     </View>
 
                     <CustomButton text = "Apply" onPress = {() => {
                             setShowModal(false)
-                            if(filterMode !== ""){
+                            if(filterMode){
                                 setIsFiltering(true)
                                 setPreviewTransactionList(filterList)
-                            }
-                            else if(sortMode !== ""){
-                                setIsFiltering(true)
-                                setPreviewTransactionList(sortList)
                             }
                         }}
                     />

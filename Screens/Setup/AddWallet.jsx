@@ -60,7 +60,7 @@ export default function AddWallet({navigation}) {
     }
     
     return(
-        <KeyboardAvoidingView  behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style = {{flex: 1}} keyboardVerticalOffset={100}> 
+        <KeyboardAvoidingView  behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style = {styles.keyboardView} keyboardVerticalOffset={90}> 
             <TouchableWithoutFeedback onPress = {() => Keyboard.dismiss()}>
                 <View style = {styles.screenStyle}>
                     <View style = {styles.txtContainer}>
@@ -116,6 +116,11 @@ export default function AddWallet({navigation}) {
 }
 
 const styles = StyleSheet.create({
+    keyboardView: {
+        flex: 1,
+        justifyContent: "flex-end",
+    },
+
     screenStyle: {
         flex: 1,
         justifyContent: "flex-end",
