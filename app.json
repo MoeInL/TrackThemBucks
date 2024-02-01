@@ -16,6 +16,21 @@
         "projectId": "9ad8e30f-3001-4cba-ab4e-a7c33aa113f2"
       }
     },
-    "owner": "moeinl"
+    "plugins": [
+      [
+        "expo-updates",
+        {
+          "username": "moeinl"
+        }
+      ]
+    ],
+    "owner": "moeinl",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/9ad8e30f-3001-4cba-ab4e-a7c33aa113f2"
+    },
+    "android": {}
   }
 }
