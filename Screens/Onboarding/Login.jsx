@@ -9,7 +9,7 @@ import LoadingOverlay from "../../Components/AuthUIComponents/LoadingOverlay";
 
 import { loginUser } from "../../Requests/auth";
 import { pushTokenToRedux, pushIdToRedux } from "../../States/actions/userInfoActions";
-import { pushToBackend, updateBackend, pullFromBackend } from "../../Requests/https";
+import { pushToBackend } from "../../Requests/https";
 
 export default function Login({navigation}){
     const [email, setEmail] = useState("")

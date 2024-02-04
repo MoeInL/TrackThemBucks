@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
 
 import { pullFromBackend, updateBackend } from '../../Requests/https';
 import { pushUserInfoToRedux } from '../../States/actions/userInfoActions';
