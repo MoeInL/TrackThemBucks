@@ -21,8 +21,8 @@ export default function ProfileScreen({navigation}) {
     }
 
     function handleLogout() {
-        navigation.navigate("OnBoardingNavigation");
-        updateBackend(userInformationInRedux. id, tempObject);
+        navigation.navigate("OnBoardingNavigations");
+        updateBackend(userInformationInRedux.id, tempObject);
     }
 
     return (

@@ -71,7 +71,7 @@ export default function AddIncome({navigation}){
                                         setIncome(income === "" ? "0" : income)
                                         setIsFocused(false)
                                     }}
-                                    maxLength={4}
+                                    maxLength={5}
                                     autoFocus = {true}
                                 />
                             </View>

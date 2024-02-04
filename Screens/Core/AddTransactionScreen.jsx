@@ -110,7 +110,7 @@ export default function AddTransaction({navigation}) {
                                 onChangeText = {(text) => setExpense(text)}
                                 onFocus={() => setExpense(expense === "0" ? "" : expense)}
                                 onBlur={() => {setExpense(expense === "" ? "0" : expense)}}
-                                maxLength={4}
+                                maxLength={5}
                             />
                         </View>
                     </View>

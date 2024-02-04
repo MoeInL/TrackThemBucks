@@ -43,8 +43,14 @@ export default function App() {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await pullFromBackend()
+      let response = null
 
+      try{
+        response = await pullFromBackend()
+      } catch (error) {
+        response = null
+      }
+      
       if(response !== null) {  
         const userIdFromDatabase = Object.keys(response)[0] // Eventually, we need to traverse Object.keys(response) and get the data of the key saved on the user device
 
@@ -54,7 +60,7 @@ export default function App() {
     }
 
     fetchData()
-    
+
     setTimeout(() => {
       setAppLoading(false)
     }, 3000)
@@ -63,13 +69,13 @@ export default function App() {
   function OnBoardingNavigation() {
     return (
       <Stack.Navigator screenOptions={{contentStyle: {backgroundColor: 'white'}}}>
-          <Stack.Screen name="OnBoarding" component={OnBoarding} options={{headerShown:false}}/>
-          <Stack.Screen name="SignUp" component={SignUp} options={{title: "Sign Up"}}/>
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="ForgotPassword" component={ForgotPassword}  options={{title: "Forgot Password"}}/>
-          <Stack.Screen name="ResetPassword" component={ResetPassword} options={{title: "Reset Password"}}/>
-          <Stack.Screen name="SetupNavigation" component={SetupNavigation} options={{headerShown:false}}/>
-        </Stack.Navigator>
+        <Stack.Screen name="OnBoarding" component={OnBoarding} options={{headerShown:false}}/>
+        <Stack.Screen name="SignUp" component={SignUp} options={{title: "Sign Up"}}/>
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword}  options={{title: "Forgot Password"}}/>
+        <Stack.Screen name="ResetPassword" component={ResetPassword} options={{title: "Reset Password"}}/>
+        <Stack.Screen name="SetupNavigation" component={SetupNavigation} options={{headerShown:false}}/>
+      </Stack.Navigator>
     )
   }
 
@@ -119,7 +125,6 @@ export default function App() {
             tabBarInactiveTintColor: "grey",
           }}
         />
-        
       </BottomTab.Navigator>
     )
   }
@@ -132,9 +137,10 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator initialRouteName='SpashScreen' screenOptions={{contentStyle: {backgroundColor: 'white'}}}>
             {appLoading?<Stack.Screen name="SplashScreen" component={SplashScreen} options={{headerShown:false}}/>: null}
-            {token === ""?<Stack.Screen name="OnBoardingNavigation" component={OnBoardingNavigation} options={{headerShown:false}}/>: null}
+            {token === ""?<Stack.Screen name="OnBoardingNavigations" component={OnBoardingNavigation} options={{headerShown:false}}/>: null}
             {!walletCreated?<Stack.Screen name="SetupNavigation" component={SetupNavigation} options={{headerShown:false}}/>: null}
             <Stack.Screen name="CoreNavigation" component={CoreNavigation} options={{headerShown:false}}/>
+
             <Stack.Screen name="AddTransaction" component={AddTransaction} 
               options ={{
                 contentStyle: {backgroundColor: '#FD3C4A'}, 
@@ -153,8 +159,7 @@ export default function App() {
               }}
             />
             <Stack.Screen name="Notification" component={Notification}/>
-            <Stack.Screen name="EditProfile" component={EditProfileScreen} options={{title: "Edit Profile"}}
-            />
+            <Stack.Screen name="EditProfile" component={EditProfileScreen} options={{title: "Edit Profile"}}/>
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
